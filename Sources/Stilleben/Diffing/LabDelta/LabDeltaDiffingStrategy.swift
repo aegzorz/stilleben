@@ -6,17 +6,17 @@ public extension DiffingStrategy where Self == LabDeltaDiffingStrategy {
         labDelta(threshold: 2)
     }
     static func labDelta(threshold: Float32) -> LabDeltaDiffingStrategy {
-        LabDeltaDiffingStrategy(treshold: threshold)
+        LabDeltaDiffingStrategy(threshold: threshold)
     }
 }
 
 public struct LabDeltaDiffingStrategy: DiffingStrategy {
     public typealias Value = UIImage
 
-    public let treshold: Float32
+    public let threshold: Float32
 
-    public init(treshold: Float32) {
-        self.treshold = treshold
+    public init(threshold: Float32) {
+        self.threshold = threshold
     }
 
     public func diff(actual: UIImage, expected: UIImage) async throws -> Diff<UIImage> {
@@ -31,8 +31,8 @@ public struct LabDeltaDiffingStrategy: DiffingStrategy {
 
         if diff > threshold {
             return .different(artifacts: [
-                .init(value: actual, description: "Actual"),
-                .init(value: expected, description: "Expected"),
+                .init(value: UIImage(ciImage: actual), description: "Actual"),
+                .init(value: UIImage(ciImage: expected), description: "Expected"),
                 .init(value: UIImage(ciImage: deltaImage), description: "LabDelta")
             ])
         } else {
@@ -58,7 +58,7 @@ private struct MaxAreaFilter {
 
     func difference() throws -> Float32 {
         let filter = CIFilter.areaMaximum()
-        filter.inputImage = delta
+        filter.inputImage = image
 
         let maxImage = try filter.outputImage.unwrap()
 
