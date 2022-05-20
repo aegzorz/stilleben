@@ -13,5 +13,10 @@ public enum Diff<Value> {
     public struct Artifact {
         public let value: Value
         public let description: String
+
+        public init(value: Value, description: String) {
+            self.value = value
+            self.description = description
+        }
     }
 }
