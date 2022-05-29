@@ -4,7 +4,9 @@ import SwiftUI
 public extension Snapshot where Value: View {
     func inHostingController() -> Snapshot<UIHostingController<Value>> {
         map { @MainActor view in
-            UIHostingController(rootView: view)
+            let viewController = UIHostingController(rootView: view)
+            viewController.view.backgroundColor = .clear
+            return viewController
         }
     }
 
