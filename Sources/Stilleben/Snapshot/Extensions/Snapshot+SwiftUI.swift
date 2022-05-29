@@ -14,7 +14,7 @@ public extension Snapshot where Value: View {
         inHostingController()
             .inKeyWindow()
             .render()
-            .record(using: .png)
+            .record(using: .localFile)
             .diff(using: .labDelta)
     }
 }
