@@ -13,7 +13,7 @@ extension Snapshot where Value: UIViewController {
         map { viewController in
             if let strategy = strategy {
                 context.set(
-                    value: strategy.size(viewController: viewController),
+                    value: try await strategy.size(viewController: viewController),
                     for: .targetSize
                 )
             }

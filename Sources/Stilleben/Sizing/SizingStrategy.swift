@@ -2,5 +2,5 @@ import Foundation
 import UIKit
 
 public protocol SizingStrategy {
-    func size(viewController: UIViewController) -> CGSize
+    func size(viewController: UIViewController) async throws -> CGSize
 }
