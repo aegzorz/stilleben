@@ -3,7 +3,13 @@ import UIKit
 public extension Snapshot where Value: UIViewController {
     func inKeyWindow() -> Self {
         map { viewController in
-            let window = UIWindow(frame: UIScreen.main.bounds)
+            var frame = UIScreen.main.bounds
+
+            if let targetSize = context.value(for: .targetSize) {
+                frame = CGRect(origin: .zero, size: targetSize)
+            }
+
+            let window = UIWindow(frame: frame)
             window.rootViewController = viewController
             window.makeKeyAndVisible()
 
