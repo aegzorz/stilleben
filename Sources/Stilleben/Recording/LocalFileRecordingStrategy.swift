@@ -1,16 +1,22 @@
 import Foundation
 
 extension RecordingStrategy where Self == LocalFileRecordingStrategy {
-    public static func localFile(fileExtension: String) -> LocalFileRecordingStrategy {
-        LocalFileRecordingStrategy(fileExtension: fileExtension)
+    public static var localFile: Self {
+        LocalFileRecordingStrategy()
+    }
+}
+
+extension SnapshotContext.Key where Value == String {
+    public static var fileExtension: Self {
+        SnapshotContext.Key(name: "fileExtension")
     }
 }
 
 public struct LocalFileRecordingStrategy: RecordingStrategy {
-    public let fileExtension: String
+    public struct MissingFileExtensionError: Error { }
 
     public func read(context: SnapshotContext) async throws -> Data? {
-        let artifact = artifactUrl(context: context)
+        let artifact = try artifactUrl(context: context)
         guard fileManager.fileExists(atPath: artifact.path) else {
             return nil
         }
@@ -29,8 +35,10 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
     // MARK: - Private
     private let fileManager = FileManager()
 
-    private func artifactUrl(context: SnapshotContext) -> URL {
-        context.recordingDirectory.appendingPathComponent(
+    private func artifactUrl(context: SnapshotContext) throws -> URL {
+        let fileExtension = try context.value(for: .fileExtension).unwrap(error: MissingFileExtensionError())
+
+        return context.recordingDirectory.appendingPathComponent(
             context.baseName
         )
         .appendingPathExtension(fileExtension)
