@@ -1,7 +1,9 @@
 import Foundation
 
 extension Optional {
-    struct UnexpectedNilError: Error { }
+    struct UnexpectedNilError: LocalizedError {
+        var errorDescription: String? = "Unexpected nil value found during unwrapping"
+    }
 
     func unwrap(error: Error? = nil) throws -> Wrapped {
         switch self {

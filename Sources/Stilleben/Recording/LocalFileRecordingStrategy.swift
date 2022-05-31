@@ -13,7 +13,9 @@ extension SnapshotContext.Key where Value == String {
 }
 
 public struct LocalFileRecordingStrategy: RecordingStrategy {
-    public struct MissingFileExtensionError: Error { }
+    public struct MissingFileExtensionError: LocalizedError {
+        public var errorDescription: String? = "Unable to record snapshot, file extension was not set"
+    }
 
     public func read(context: SnapshotContext) async throws -> Data? {
         let artifact = try artifactUrl(context: context)
