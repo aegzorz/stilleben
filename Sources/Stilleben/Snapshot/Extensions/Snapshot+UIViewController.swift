@@ -13,6 +13,9 @@ public extension Snapshot where Value: UIViewController {
             window.rootViewController = viewController
             window.makeKeyAndVisible()
 
+            window.setNeedsLayout()
+            window.layoutIfNeeded()
+
             return viewController
         }
     }
