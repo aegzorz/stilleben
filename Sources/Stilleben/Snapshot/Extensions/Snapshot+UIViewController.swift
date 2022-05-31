@@ -19,4 +19,10 @@ public extension Snapshot where Value: UIViewController {
             return viewController
         }
     }
+
+    func inNavigationController() -> Snapshot<UINavigationController> {
+        map { viewController in
+            UINavigationController(rootViewController: viewController)
+        }
+    }
 }
