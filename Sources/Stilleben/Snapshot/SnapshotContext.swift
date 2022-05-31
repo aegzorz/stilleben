@@ -25,4 +25,8 @@ extension SnapshotContext {
     public func value<T>(for key: Key<T>) -> T? {
         configuration[key.name] as? T
     }
+
+    public func value(for key: Key<Bool>) -> Bool {
+        configuration[key.name] as? Bool ?? false
+    }
 }
