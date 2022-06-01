@@ -20,4 +20,4 @@ jobs:
           brew bundle
       - name: Test
         run: |
-             xcodebuild -scheme 'Stilleben' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8,OS=15.4' test | xcbeautify
+             xcodebuild -scheme 'Stilleben' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' test | xcbeautify
