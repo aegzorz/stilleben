@@ -27,8 +27,8 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
     }
 
     public func write(data: Data, context: SnapshotContext) async throws {
-        if !fileManager.fileExists(atPath: context.recordingDirectory.path) {
-            try fileManager.createDirectory(at: context.recordingDirectory, withIntermediateDirectories: true)
+        if !fileManager.fileExists(atPath: try context.recordingDirectory.path) {
+            try fileManager.createDirectory(at: try context.recordingDirectory, withIntermediateDirectories: true)
         }
 
         try data.write(to: artifactUrl(context: context))
@@ -40,8 +40,8 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
     private func artifactUrl(context: SnapshotContext) throws -> URL {
         let fileExtension = try context.value(for: .fileExtension).unwrap(error: MissingFileExtensionError())
 
-        return context.recordingDirectory.appendingPathComponent(
-            context.baseName
+        return try context.recordingDirectory.appendingPathComponent(
+            try context.baseName
         )
         .appendingPathExtension(fileExtension)
     }
@@ -49,17 +49,23 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
 
 private extension SnapshotContext {
     var recordingDirectory: URL {
-        let folder = callsite.fileUrl.deletingPathExtension().lastPathComponent
+        get throws {
+            let callsite = try value(for: .callsite).unwrap()
+            let folder = callsite.fileUrl.deletingPathExtension().lastPathComponent
 
-        return callsite.fileUrl.deletingLastPathComponent()
-            .appendingPathComponent("Snapshots")
-            .appendingPathComponent(folder)
+            return callsite.fileUrl.deletingLastPathComponent()
+                .appendingPathComponent("Snapshots")
+                .appendingPathComponent(folder)
+        }
     }
 
     var baseName: String {
-        callsite.functionName
-            .removingPrefix("test")
-            .removingSuffix("()")
-            .lowercaseFirstLetter()
+        get throws {
+            try value(for: .callsite).unwrap()
+                .functionName
+                .removingPrefix("test")
+                .removingSuffix("()")
+                .lowercaseFirstLetter()
+        }
     }
 }
