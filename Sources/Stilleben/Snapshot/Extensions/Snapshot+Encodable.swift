@@ -5,12 +5,18 @@ extension Snapshot where Value: Encodable {
         encodeJson().record(using: .localFile).diff(using: .text)
     }
 
-    public func encodeJson() -> Snapshot<Data> {
+    public typealias Configure = (JSONEncoder) -> Void
+
+    public func encodeJson(_ configure: Configure? = nil) -> Snapshot<Data> {
         context.set(value: "json", for: .fileExtension)
 
         return map { value in
             let encoder = JSONEncoder()
-            encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+            if let configure = configure {
+                configure(encoder)
+            } else {
+                encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+            }
             return try encoder.encode(value)
         }
     }
