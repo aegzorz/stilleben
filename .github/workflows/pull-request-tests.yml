@@ -1,0 +1,29 @@
+name: Pull Request Tests
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_13.4.app/Contents/Developer
+  NSUnbufferedIO: YES
+  
+jobs:
+  UnitTests:
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Brew
+        run: |
+          brew bundle
+      - name: Test
+        run: |
+          xcodebuild -scheme Stilleben -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 8"  -resultBundlePath TestResults.xcresult -enableCodeCoverage YES test | xcbeautify
+      - name: Report
+        uses: kishikawakatsumi/xcresulttool@v1
+        with:
+          path: TestResults.xcresult
+        if: success() || failure()
