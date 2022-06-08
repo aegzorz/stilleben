@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Pull Request Tests
 
 on:
   push:
@@ -27,4 +27,3 @@ jobs:
         with:
           path: TestResults.xcresult
         if: success() || failure()
-        
