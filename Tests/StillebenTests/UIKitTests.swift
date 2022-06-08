@@ -1,7 +1,6 @@
 import XCTest
 import SwiftUI
 import Stilleben
-import SnapKit
 
 final class UIKitTests: XCTestCase {
     func testSimpleLabel() async throws {
@@ -95,25 +94,20 @@ private class ItemListViewController: UIViewController {
         view.backgroundColor = .systemBackground
 
         let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
 
         let stackView = UIStackView()
         stackView.alignment = .fill
         stackView.axis = .vertical
-        scrollView.addSubview(stackView)
 
-        stackView.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(scrollView.frameLayoutGuide.snp.horizontalEdges)
-            make.verticalEdges.equalTo(scrollView.contentLayoutGuide.snp.verticalEdges)
-        }
+        scrollView.embedContent(view: stackView)
 
         for index in 0..<count {
             stackView.addArrangedSubview(ItemView(index: index))
         }
 
         view.addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        scrollView.constrainToEdges(of: view)
     }
 
     override func viewDidLayoutSubviews() {
@@ -135,10 +129,8 @@ private class ItemView: UIView {
         label.backgroundColor = colors[index % colors.count].withAlphaComponent(0.6)
         addSubview(label)
 
-        label.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.height.equalTo(60)
-        }
+        label.constrainToEdges(of: self)
+        label.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
 
     required init?(coder: NSCoder) {
