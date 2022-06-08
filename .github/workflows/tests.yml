@@ -7,11 +7,11 @@ on:
     branches: [develop]
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.4.app/Contents/Developer
 
 jobs:
-  unit_tests:
-    runs-on: macos-latest
+  UnitTests:
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,4 +20,4 @@ jobs:
           brew bundle
       - name: Test
         run: |
-             xcodebuild -scheme 'Stilleben' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' test | xcbeautify
+          xcodebuild -scheme Stilleben -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 8"  -resultBundlePath test.xcresult -enableCodeCoverage YES test | xcbeautify
