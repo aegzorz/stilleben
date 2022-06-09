@@ -2,7 +2,6 @@ import XCTest
 import SwiftUI
 import Stilleben
 
-
 final class SwiftUITests: XCTestCase {
     func testSimpleText() async throws {
         await Snapshot {
