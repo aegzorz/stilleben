@@ -9,6 +9,8 @@ final class SwiftUITests: XCTestCase {
                 .padding()
                 .background(Color(UIColor.systemBackground))
         }
+        .assertSimulator(modelIdentifier: "iPhone10,4")
+        .assertDisplayScale(2)
         .diffSwiftUI(sizing: .intrinsic)
         .match()
     }
