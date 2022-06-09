@@ -28,11 +28,7 @@ final class UIKitTests: XCTestCase {
         }
         .asViewController(title: "Title")
         .inNavigationController()
-        .inKeyWindow()
-        .size(using: .screen)
-        .render()
-        .record(using: .localFile)
-        .diff(using: .labDelta)
+        .diffUIKit()
         .match()
     }
 
@@ -41,10 +37,7 @@ final class UIKitTests: XCTestCase {
             ItemListViewController(count: 3)
         }
         .inKeyWindow()
-        .size(using: .dynamicHeight)
-        .render()
-        .record(using: .localFile)
-        .diff(using: .labDelta)
+        .diffUIKit(sizing: .dynamicHeight)
         .match()
     }
 
@@ -53,25 +46,26 @@ final class UIKitTests: XCTestCase {
             ItemListViewController(count: 25)
         }
         .inKeyWindow()
-        .size(using: .dynamicHeight)
-        .render()
-        .record(using: .localFile)
-        .diff(using: .labDelta)
+        .diffUIKit(sizing: .dynamicHeight)
         .match()
     }
 
     func testLongScrollviewInNavigationController() async throws {
         await Snapshot { @MainActor () -> UIViewController in
-            let viewController = ItemListViewController(count: 25)
-            viewController.title = "Items"
-            return viewController
+            ItemListViewController(count: 25)
         }
         .inNavigationController()
-        .inKeyWindow()
-        .size(using: .dynamicHeight)
-        .render()
-        .record(using: .localFile)
-        .diff(using: .labDelta)
+        .diffUIKit(sizing: .dynamicHeight)
+        .match()
+    }
+
+    func testLongScrollviewInTabView() async {
+        await Snapshot { @MainActor () -> UIViewController in
+            ItemListViewController(count: 25)
+        }
+        .inNavigationController()
+        .inTabBarController()
+        .diffUIKit(sizing: .dynamicHeight)
         .match()
     }
 }
@@ -82,6 +76,12 @@ private class ItemListViewController: UIViewController {
     init(count: Int) {
         self.count = count
         super.init(nibName: nil, bundle: nil)
+        title = "List of items"
+        tabBarItem = UITabBarItem(
+            title: "Items",
+            image: UIImage(systemName: "list.number"),
+            selectedImage: nil
+        )
     }
 
     required init?(coder: NSCoder) {
