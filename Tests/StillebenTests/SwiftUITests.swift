@@ -59,6 +59,23 @@ final class SwiftUITests: XCTestCase {
         .match()
     }
 
+    func testLongScrollviewInTabView() async {
+        await Snapshot {
+            TabView {
+                NavigationView {
+                    ScrollView {
+                        ItemList(count: 25)
+                    }
+                    .navigationTitle("List of items")
+                }
+                .tabItem {
+                    Label("List", systemImage: "list.number")
+                }
+            }
+        }
+        .diffSwiftUI(sizing: .dynamicHeight)
+        .match()
+    }
 }
 
 private struct ItemList: View {
