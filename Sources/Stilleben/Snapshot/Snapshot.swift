@@ -9,9 +9,8 @@ public struct Snapshot<Value> {
 
     public init(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Produce) {
         self.produce = produce
-        context = SnapshotContext(
-            callsite: Callsite(file: file, function: function, line: line)
-        )
+        context = SnapshotContext()
+        context.set(value: Callsite(file: file, function: function, line: line), for: .callsite)
     }
 
     internal init(context: SnapshotContext, produce: @escaping Produce) {

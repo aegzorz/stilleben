@@ -9,7 +9,9 @@ extension Snapshot where Value == Diff {
                 case .same:
                     return
                 case .different(let description, let attachments):
-                    XCTContext.runActivity(named: context.callsite.functionName) { activity in
+                    let callsite = try context.value(for: .callsite).unwrap()
+
+                    XCTContext.runActivity(named: callsite.functionName) { activity in
                         attachments.forEach(activity.add)
                     }
 
