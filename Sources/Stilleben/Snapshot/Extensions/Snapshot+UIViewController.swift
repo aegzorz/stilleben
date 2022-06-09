@@ -25,4 +25,12 @@ public extension Snapshot where Value: UIViewController {
             UINavigationController(rootViewController: viewController)
         }
     }
+
+    func inTabBarController() -> Snapshot<UITabBarController> {
+        map { viewController in
+            let controller = UITabBarController()
+            controller.viewControllers = [viewController]
+            return controller
+        }
+    }
 }
