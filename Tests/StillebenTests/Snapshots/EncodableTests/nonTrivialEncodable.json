@@ -1,0 +1,8 @@
+{
+  "birthdate" : "1976-04-01T12:00:00Z",
+  "first_name" : "John",
+  "info" : {
+    "Hobbies" : "iOS Development"
+  },
+  "last_name" : "Appleseed"
+}
