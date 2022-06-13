@@ -6,18 +6,6 @@ extension RecordingStrategy where Self == LocalFileRecordingStrategy {
     }
 }
 
-extension SnapshotContext.Key where Value == String {
-    public static var fileExtension: Self {
-        SnapshotContext.Key(name: "fileExtension")
-    }
-}
-
-extension SnapshotContext.Key where Value == [String] {
-    public static var recordingNameComponents: Self {
-        SnapshotContext.Key(name: "recordingNameComponents")
-    }
-}
-
 public struct LocalFileRecordingStrategy: RecordingStrategy {
     public struct MissingFileExtensionError: LocalizedError {
         public var errorDescription: String? = "Unable to record snapshot, file extension was not set"
