@@ -1,12 +1,6 @@
 import Foundation
 import XCTest
 
-public extension SnapshotContext.Key where Value == Bool {
-    static var isRecording: Self {
-        SnapshotContext.Key(name: "isRecording")
-    }
-}
-
 public extension Snapshot where Value == Data {
     struct MissingReferenceError: LocalizedError {
         public var errorDescription: String? = "No recording for snapshot was found. Re-run to compare against recorded snapshot."
