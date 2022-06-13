@@ -12,7 +12,7 @@ final class UIKitTests: XCTestCase {
         }
         .asViewController()
         .size(using: .intrinsic)
-        .render()
+        .render(hosted: false)
         .record(using: .localFile)
         .diff(using: .labDelta)
         .match()
