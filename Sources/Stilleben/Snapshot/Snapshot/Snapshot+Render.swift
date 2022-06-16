@@ -3,41 +3,22 @@ import UIKit
 import SwiftUI
 
 extension Snapshot where Value: View {
-    public func renderInHostApp() -> Snapshot<UIImage> {
+    public func render(hosted: Bool) -> Snapshot<UIImage> {
         inHostingController()
-            .renderInHostApp()
-    }
-
-    public func render() -> Snapshot<UIImage> {
-        inHostingController()
-            .render()
+            .render(hosted: hosted)
     }
 }
 
 extension Snapshot where Value: UIViewController {
-    public func renderInHostApp() -> Snapshot<UIImage> {
+    public func render(hosted: Bool) -> Snapshot<UIImage> {
         inKeyWindow()
             .map(\.view)
-            .renderInHostApp()
-    }
-
-    public func render() -> Snapshot<UIImage> {
-        inKeyWindow()
-            .map(\.view)
-            .render()
+            .render(hosted: hosted)
     }
 }
 
 extension Snapshot where Value: UIView {
-    public func renderInHostApp() -> Snapshot<UIImage> {
-        render(hosted: true)
-    }
-
-    public func render() -> Snapshot<UIImage> {
-        render(hosted: false)
-    }
-
-    func render(hosted: Bool) -> Snapshot<UIImage> {
+    public func render(hosted: Bool) -> Snapshot<UIImage> {
         map { view in
             let renderer = UIGraphicsImageRenderer(size: view.frame.size)
             let image = renderer.image { context in
