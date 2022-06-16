@@ -10,7 +10,16 @@ public struct Snapshot<Value> {
     public init(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Produce) {
         self.produce = produce
         context = SnapshotContext()
-        context.set(value: Callsite(file: file, function: function, line: line), for: .callsite)
+
+        let callsite = Callsite(file: file, function: function, line: line)
+        context.set(value: callsite, for: .callsite)
+
+        let testName = callsite.functionName
+            .removingPrefix("test")
+            .removingSuffix("()")
+            .lowercaseFirstLetter()
+        
+        context.set(value: [testName], for: .recordingNameComponents)
     }
 
     internal init(context: SnapshotContext, produce: @escaping Produce) {
