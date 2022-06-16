@@ -23,9 +23,16 @@ public extension Snapshot where Value == Data {
 }
 
 public extension Snapshot {
-    func forceRecording(file: StaticString = #file, line: UInt = #line) -> Self {
+    func forceRecording(file: StaticString = #file, line: UInt = #line, force: Bool = true) -> Self {
         XCTFail("Forced recording enabled", file: file, line: line)
-        context.set(value: true, for: .isRecording)
+        context.set(value: force, for: .isRecording)
+        return self
+    }
+
+    func recordingNameComponent(add component: String) -> Self {
+        var components = context.value(for: .recordingNameComponents) ?? []
+        components.append(component)
+        context.set(value: components, for: .recordingNameComponents)
         return self
     }
 }
