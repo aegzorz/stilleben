@@ -4,77 +4,72 @@ import Stilleben
 
 final class SwiftUITests: XCTestCase {
     func testSimpleText() async throws {
-        await Snapshot {
-            Text("Hello World!")
-                .padding()
-                .background(Color(UIColor.systemBackground))
-        }
-        .assertSimulator(modelIdentifier: "iPhone10,4")
-        .assertDisplayScale(2)
-        .diffSwiftUI(sizing: .intrinsic)
-        .match()
+        await SwiftUIMatcher()
+            .sizing(.intrinsic)
+            .match {
+                Text("Hello World!")
+                    .padding()
+                    .background(Color(UIColor.systemBackground))
+            }
     }
 
     func testNavigation() async throws {
-        await Snapshot {
-            NavigationView {
-                Text("Content View")
-                    .navigationTitle("Title")
+        await SwiftUIMatcher()
+            .match {
+                NavigationView {
+                    Text("Content View")
+                        .navigationTitle("Title")
+                }
             }
-        }
-        .diffSwiftUI()
-        .match()
     }
 
     func testShortScrollview() async throws {
-        await Snapshot {
-            ScrollView {
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
                 ItemList(count: 3)
+                    .background(Color(UIColor.systemBackground))
             }
-            .background(Color(UIColor.systemBackground))
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
     }
 
     func testLongScrollview() async throws {
-        await Snapshot {
-            ItemList(count: 25)
-                .background(Color(UIColor.systemBackground))
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
+                ItemList(count: 25)
+                    .background(Color(UIColor.systemBackground))
+            }
     }
 
     func testLongScrollviewInNavigationView() async throws {
-        await Snapshot {
-            NavigationView {
-                ScrollView {
-                    ItemList(count: 25)
-                }
-                .navigationTitle("List of items")
-            }
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
-    }
-
-    func testLongScrollviewInTabView() async {
-        await Snapshot {
-            TabView {
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
                 NavigationView {
                     ScrollView {
                         ItemList(count: 25)
                     }
                     .navigationTitle("List of items")
                 }
-                .tabItem {
-                    Label("List", systemImage: "list.number")
+            }
+    }
+
+    func testLongScrollviewInTabView() async {
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
+                TabView {
+                    NavigationView {
+                        ScrollView {
+                            ItemList(count: 25)
+                        }
+                        .navigationTitle("List of items")
+                    }
+                    .tabItem {
+                        Label("List", systemImage: "list.number")
+                    }
                 }
             }
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
     }
 }
 
