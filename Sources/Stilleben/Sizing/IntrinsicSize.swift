@@ -8,6 +8,10 @@ public extension SizingStrategy where Self == IntrinsicSizeStrategy {
 
 public struct IntrinsicSizeStrategy: SizingStrategy {
     public func size(viewController: UIViewController) -> CGSize {
-        viewController.view.intrinsicContentSize
+        let size = viewController.view.intrinsicContentSize
+        if size.height <= 0 || size.width <= 0 {
+            return viewController.view.systemLayoutSizeFitting(.zero)
+        }
+        return size
     }
 }
