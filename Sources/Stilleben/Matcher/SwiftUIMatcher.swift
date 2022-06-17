@@ -42,7 +42,8 @@ public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
             .render(hosted: hosted)
             .record(using: recording)
             .diff(using: diffing)
-            .match()
+            .forceRecording(file: file, line: line, force: forceRecording)
+            .match(file: file, line: line)
         }
     }
 }
