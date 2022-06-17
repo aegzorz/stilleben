@@ -10,7 +10,7 @@ public struct UIKitMatcher: SnapshotMatcher {
     public var recording: RecordingStrategy = .localFile
     public var diffing: ImageDiffingStrategy = .labDelta
     public var forceRecording = false
-    public var colorSchemes: [ColorScheme] = [.light]
+    public var colorSchemes: [ColorScheme] = [.light, .dark]
     public var dynamicTypeSizes: [DynamicTypeSize] = [.large]
     public var locales: [Locale] = [Locale(identifier: "en-US")]
 
