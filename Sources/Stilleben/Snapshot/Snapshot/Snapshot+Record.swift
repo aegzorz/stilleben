@@ -24,7 +24,9 @@ public extension Snapshot where Value == Data {
 
 public extension Snapshot {
     func forceRecording(file: StaticString = #file, line: UInt = #line, force: Bool = true) -> Self {
-        XCTFail("Forced recording enabled", file: file, line: line)
+        if force {
+            XCTFail("Forced recording enabled", file: file, line: line)
+        }
         context.set(value: force, for: .isRecording)
         return self
     }
