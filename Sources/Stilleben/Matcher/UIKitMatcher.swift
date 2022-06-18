@@ -45,7 +45,7 @@ public struct UIKitMatcher: SnapshotMatcher {
             .record(using: recording)
             .diff(using: diffing)
             .forceRecording(file: file, line: line, force: forceRecording)
-            .match()
+            .match(file: file, line: line)
         }
     }
 
