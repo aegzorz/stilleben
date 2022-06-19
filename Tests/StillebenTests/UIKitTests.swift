@@ -15,17 +15,19 @@ final class UIKitTests: XCTestCase {
     }
 
     func testNavigation() async throws {
-        await Snapshot { @MainActor () -> UIView in
-            let label = UILabel()
-            label.text = "Content View"
-            label.textAlignment = .center
-            label.backgroundColor = .systemBackground
-            return label
-        }
-        .asViewController(title: "Title")
-        .inNavigationController()
-        .diffUIKit()
-        .match()
+        await UIKitMatcher()
+            .match { @MainActor () -> UIViewController in
+                let content = UILabel()
+                content.text = "Content View"
+                content.textAlignment = .center
+                content.backgroundColor = .systemBackground
+
+                let viewController = WrapperViewController(view: content)
+                viewController.title = "Title"
+
+                let navigationController = UINavigationController(rootViewController: viewController)
+                return navigationController
+            }
     }
 
     func testShortScrollview() async throws {
