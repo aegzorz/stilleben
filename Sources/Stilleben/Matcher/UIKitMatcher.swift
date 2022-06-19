@@ -42,6 +42,7 @@ public struct UIKitMatcher: SnapshotMatcher {
             .recordingNameComponent(add: String(describing: colorScheme))
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
+            .addDeviceName(add: includeDeviceName)
             .diffUIKit(
                 file: file,
                 line: line,
@@ -62,6 +63,9 @@ public struct UIKitMatcher: SnapshotMatcher {
             )
         }
     }
+
+    // MARK: Private
+    private var includeDeviceName = false
 }
 
 extension UIKitMatcher {
@@ -88,5 +92,8 @@ extension UIKitMatcher {
     }
     public func locales(_ value: Locale...) -> Self {
         Modifier(base: self).locales(value)
+    }
+    public func addDeviceName() -> Self {
+        Modifier(base: self).includeDeviceName(true)
     }
 }
