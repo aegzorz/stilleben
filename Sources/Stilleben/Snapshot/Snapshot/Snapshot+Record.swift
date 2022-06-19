@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import SwiftUI
 
 public extension Snapshot where Value == Data {
     struct MissingReferenceError: LocalizedError {
@@ -36,5 +37,13 @@ public extension Snapshot {
         components.append(component)
         context.set(value: components, for: .recordingNameComponents)
         return self
+    }
+
+    func recordingNameComponent(add colorScheme: ColorScheme) -> Self {
+        recordingNameComponent(add: String(describing: colorScheme))
+    }
+
+    func recordingNameComponent(add dynamicTypeSize: DynamicTypeSize) -> Self {
+        recordingNameComponent(add: String(describing: dynamicTypeSize))
     }
 }

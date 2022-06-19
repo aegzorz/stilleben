@@ -39,8 +39,8 @@ public struct UIKitMatcher: SnapshotMatcher {
 
                 return viewController
             }
-            .recordingNameComponent(add: String(describing: colorScheme))
-            .recordingNameComponent(add: String(describing: dynamicTypeSize))
+            .recordingNameComponent(add: colorScheme)
+            .recordingNameComponent(add: dynamicTypeSize)
             .recordingNameComponent(add: locale.identifier)
             .addDeviceName(add: includeDeviceName)
             .diffUIKit(
