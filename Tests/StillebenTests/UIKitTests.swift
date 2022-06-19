@@ -3,8 +3,12 @@ import SwiftUI
 @testable import Stilleben
 
 final class UIKitTests: XCTestCase {
+    private let matcher = UIKitMatcher()
+        .sizing(.dynamicHeight)
+        .forceRecording(false)
+
     func testSimpleLabel() async throws {
-        await UIKitMatcher()
+        await matcher
             .sizing(.intrinsic)
             .locales(.english, .swedish)
             .match { @MainActor () -> UIView in
@@ -16,7 +20,8 @@ final class UIKitTests: XCTestCase {
     }
 
     func testNavigation() async throws {
-        await UIKitMatcher()
+        await matcher
+            .sizing(.screen)
             .match { @MainActor () -> UIViewController in
                 let content = TestLabel()
                 content.text = "Content View"
@@ -30,42 +35,34 @@ final class UIKitTests: XCTestCase {
     }
 
     func testShortScrollview() async throws {
-        await UIKitMatcher()
-            .sizing(.dynamicHeight)
-            .match { @MainActor () -> UIViewController in
-                ItemListViewController(count: 3)
-            }
+        await matcher.match { @MainActor () -> UIViewController in
+            ItemListViewController(count: 3)
+        }
     }
 
     func testLongScrollview() async throws {
-        await UIKitMatcher()
-            .sizing(.dynamicHeight)
-            .match { @MainActor () -> UIViewController in
-                ItemListViewController(count: 25)
-            }
+        await matcher.match { @MainActor () -> UIViewController in
+            ItemListViewController(count: 25)
+        }
     }
 
     func testLongScrollviewInNavigationController() async throws {
-        await UIKitMatcher()
-            .sizing(.dynamicHeight)
-            .match { @MainActor () -> UIViewController in
-                UINavigationController(
-                    rootViewController: ItemListViewController(count: 25)
-                )
-            }
+        await matcher.match { @MainActor () -> UIViewController in
+            UINavigationController(
+                rootViewController: ItemListViewController(count: 25)
+            )
+        }
     }
 
     func testLongScrollviewInTabBarController() async {
-        await UIKitMatcher()
-            .sizing(.dynamicHeight)
-            .match { @MainActor () -> UIViewController in
-                let controller = UITabBarController()
-                controller.viewControllers = [
-                    UINavigationController(
-                        rootViewController: ItemListViewController(count: 25)
-                    )
-                ]
-                return controller
-            }
+        await matcher.match { @MainActor () -> UIViewController in
+            let controller = UITabBarController()
+            controller.viewControllers = [
+                UINavigationController(
+                    rootViewController: ItemListViewController(count: 25)
+                )
+            ]
+            return controller
+        }
     }
 }
