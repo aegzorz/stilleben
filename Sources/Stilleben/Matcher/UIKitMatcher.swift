@@ -42,12 +42,15 @@ public struct UIKitMatcher: SnapshotMatcher {
             .recordingNameComponent(add: String(describing: colorScheme))
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
-            .inKeyWindow()
-            .size(using: sizing)
-            .render(hosted: hosted)
-            .record(using: recording)
-            .diff(using: diffing)
-            .forceRecording(file: file, line: line, force: forceRecording)
+            .diffUIKit(
+                file: file,
+                line: line,
+                sizing: sizing,
+                diffing: diffing,
+                recording: recording,
+                hosted: hosted,
+                forceRecording: forceRecording
+            )
             .match(file: file, line: line)
         }
     }
