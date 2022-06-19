@@ -1,7 +1,10 @@
 import Foundation
 import SwiftUI
+import UIKit
 
-public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
+public struct UIKitMatcher: SnapshotMatcher {
+    public typealias Value = UIViewController
+
     public var hosted = false
     public var sizing: SizingStrategy = .screen
     public var recording: RecordingStrategy = .localFile
@@ -27,28 +30,35 @@ public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
             }
 
         for (colorScheme, locale, dynamicTypeSize) in permutations {
-            await Snapshot(file: file, function: function, line: line) {
-                try await produce()
-                    .deferredEnvironment(\.colorScheme, colorScheme)
-                    .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
-                    .deferredEnvironment(\.locale, locale)
+            await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
+                let viewController = TraitsViewController(content: try await produce())
+                viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
+                viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
+                return viewController
             }
             .recordingNameComponent(add: String(describing: colorScheme))
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
-            .inHostingController()
             .inKeyWindow()
             .size(using: sizing)
             .render(hosted: hosted)
             .record(using: recording)
             .diff(using: diffing)
             .forceRecording(file: file, line: line, force: forceRecording)
-            .match(file: file, line: line)
+            .match()
+        }
+    }
+
+    public func match(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<UIView>.Produce) async {
+        await match(file: file, function: function, line: line) { @MainActor () -> UIViewController in
+            WrapperViewController(
+                view: try await produce()
+            )
         }
     }
 }
 
-extension SwiftUIMatcher {
+extension UIKitMatcher {
     public func hosted(_ value: Bool) -> Self {
         Modifier(base: self).hosted(value)
     }
