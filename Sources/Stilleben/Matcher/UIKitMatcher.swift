@@ -31,9 +31,12 @@ public struct UIKitMatcher: SnapshotMatcher {
 
         for (colorScheme, locale, dynamicTypeSize) in permutations {
             await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
+                Bundle.overrideLocale = locale
+
                 let viewController = TraitsViewController(content: try await produce())
                 viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
                 viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
+
                 return viewController
             }
             .recordingNameComponent(add: String(describing: colorScheme))
