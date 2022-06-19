@@ -6,9 +6,10 @@ final class UIKitTests: XCTestCase {
     func testSimpleLabel() async throws {
         await UIKitMatcher()
             .sizing(.intrinsic)
+            .locales(.english, .swedish)
             .match { @MainActor () -> UIView in
                 let label = UILabel()
-                label.text = "Hello World!"
+                label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
                 label.backgroundColor = .systemBackground
                 return label
             }
