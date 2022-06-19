@@ -41,7 +41,7 @@ public struct UIKitMatcher: SnapshotMatcher {
             }
             .recordingNameComponent(add: colorScheme)
             .recordingNameComponent(add: dynamicTypeSize)
-            .recordingNameComponent(add: locale.identifier)
+            .recordingNameComponent(add: locale)
             .addDeviceName(add: includeDeviceName)
             .diffUIKit(
                 file: file,

@@ -46,4 +46,8 @@ public extension Snapshot {
     func recordingNameComponent(add dynamicTypeSize: DynamicTypeSize) -> Self {
         recordingNameComponent(add: String(describing: dynamicTypeSize))
     }
+
+    func recordingNameComponent(add locale: Locale) -> Self {
+        recordingNameComponent(add: locale.identifier)
+    }
 }
