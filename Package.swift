@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Stilleben",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
     ],
@@ -25,7 +26,6 @@ let package = Package(
             name: "Stilleben",
             dependencies: []
         ),
-        
         .testTarget(
             name: "StillebenTests",
             dependencies: [
@@ -33,6 +33,9 @@ let package = Package(
             ],
             exclude: [
                 "Snapshots"
+            ],
+            resources: [
+                .process("Resources")
             ]
         )
     ]
