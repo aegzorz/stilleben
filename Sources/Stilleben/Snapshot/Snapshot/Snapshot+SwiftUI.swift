@@ -10,12 +10,21 @@ public extension Snapshot where Value: View {
         }
     }
 
-    func diffSwiftUI(sizing: SizingStrategy = .screen, diffing: ImageDiffingStrategy = .labDelta, hosted: Bool = false) -> Snapshot<Diff> {
+    func diffSwiftUI(
+        file: StaticString = #file,
+        line: UInt = #line,
+        sizing: SizingStrategy = .screen,
+        diffing: ImageDiffingStrategy = .labDelta,
+        recording: RecordingStrategy = .localFile,
+        hosted: Bool = false,
+        forceRecording: Bool = false
+    ) -> Snapshot<Diff> {
         inHostingController()
             .inKeyWindow()
             .size(using: sizing)
             .render(hosted: hosted)
             .record(using: .localFile)
             .diff(using: diffing)
+            .forceRecording(file: file, line: line, force: forceRecording)
     }
 }
