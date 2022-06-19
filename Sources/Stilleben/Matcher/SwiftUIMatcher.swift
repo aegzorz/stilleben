@@ -36,6 +36,7 @@ public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
             .recordingNameComponent(add: String(describing: colorScheme))
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
+            .addDeviceName(add: includeDeviceName)
             .diffSwiftUI(
                 file: file,
                 line: line,
@@ -48,6 +49,9 @@ public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
             .match(file: file, line: line)
         }
     }
+
+    // MARK: Private
+    private var includeDeviceName = false
 }
 
 extension SwiftUIMatcher {
@@ -74,5 +78,8 @@ extension SwiftUIMatcher {
     }
     public func locales(_ value: Locale...) -> Self {
         Modifier(base: self).locales(value)
+    }
+    public func addDeviceName() -> Self {
+        Modifier(base: self).includeDeviceName(true)
     }
 }
