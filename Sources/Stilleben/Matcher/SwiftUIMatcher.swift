@@ -8,7 +8,7 @@ public struct SwiftUIMatcher<Value: View>: SnapshotMatcher {
     public var diffing: ImageDiffingStrategy = .labDelta
     public var forceRecording = false
     public var colorSchemes: [ColorScheme] = [.light, .dark]
-    public var dynamicTypeSizes: [DynamicTypeSize] = [.large]
+    public var dynamicTypeSizes: [DynamicTypeSize] = [.large, .accessibility5]
     public var locales: [Locale] = [Locale(identifier: "en-US")]
 
     public init() { }
