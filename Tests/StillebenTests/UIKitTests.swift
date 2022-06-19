@@ -7,8 +7,9 @@ final class UIKitTests: XCTestCase {
         await UIKitMatcher()
             .sizing(.intrinsic)
             .locales(.english, .swedish)
+            .dynamicTypeSizes(.large, .accessibility5)
             .match { @MainActor () -> UIView in
-                let label = UILabel()
+                let label = TestLabel()
                 label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
                 label.backgroundColor = .systemBackground
                 return label
@@ -18,10 +19,8 @@ final class UIKitTests: XCTestCase {
     func testNavigation() async throws {
         await UIKitMatcher()
             .match { @MainActor () -> UIViewController in
-                let content = UILabel()
+                let content = TestLabel()
                 content.text = "Content View"
-                content.textAlignment = .center
-                content.backgroundColor = .systemBackground
 
                 let viewController = WrapperViewController(view: content)
                 viewController.title = "Title"

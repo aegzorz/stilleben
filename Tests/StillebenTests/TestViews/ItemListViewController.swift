@@ -56,9 +56,8 @@ private class ItemView: UIView {
     init(index: Int) {
         super.init(frame: .zero)
 
-        let label = UILabel(frame: .zero)
+        let label = TestLabel()
         label.text = "Item #\(index + 1)"
-        label.textAlignment = .center
         label.backgroundColor = colors[index % colors.count].withAlphaComponent(0.6)
         addSubview(label)
 
