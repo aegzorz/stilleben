@@ -6,8 +6,9 @@ final class SwiftUITests: XCTestCase {
     func testSimpleText() async throws {
         await SwiftUIMatcher()
             .sizing(.intrinsic)
+            .locales(.english, .swedish)
             .match {
-                Text("Hello World!")
+                Text("Hello World!", bundle: .module)
                     .padding()
                     .background(Color(UIColor.systemBackground))
             }
