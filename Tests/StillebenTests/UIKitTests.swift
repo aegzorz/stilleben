@@ -11,6 +11,7 @@ final class UIKitTests: XCTestCase {
         await matcher
             .sizing(.intrinsic)
             .locales(.english, .swedish)
+            .addDeviceName()
             .match { @MainActor () -> UIView in
                 let label = TestLabel()
                 label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
