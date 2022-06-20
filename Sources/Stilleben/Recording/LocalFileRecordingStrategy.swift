@@ -2,19 +2,21 @@ import Foundation
 
 extension RecordingStrategy where Self == LocalFileRecordingStrategy {
     public static var localFile: Self {
-        LocalFileRecordingStrategy()
-    }
-}
-
-extension SnapshotContext.Key where Value == String {
-    public static var fileExtension: Self {
-        SnapshotContext.Key(name: "fileExtension")
+        LocalFileRecordingStrategy(folderName: "Snapshots")
     }
 }
 
 public struct LocalFileRecordingStrategy: RecordingStrategy {
     public struct MissingFileExtensionError: LocalizedError {
         public var errorDescription: String? = "Unable to record snapshot, file extension was not set"
+    }
+
+    public struct MissingRecordingNameComponents: LocalizedError {
+        public var errorDescription: String? = "Unable to name recording, missing name components"
+    }
+
+    public init(folderName: String) {
+        self.folderName = folderName
     }
 
     public func read(context: SnapshotContext) async throws -> Data? {
@@ -27,8 +29,10 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
     }
 
     public func write(data: Data, context: SnapshotContext) async throws {
-        if !fileManager.fileExists(atPath: context.recordingDirectory.path) {
-            try fileManager.createDirectory(at: context.recordingDirectory, withIntermediateDirectories: true)
+        let directory = try recordingDirectory(context: context)
+
+        if !fileManager.fileExists(atPath: directory.path) {
+            try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         }
 
         try data.write(to: artifactUrl(context: context))
@@ -36,30 +40,28 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
 
     // MARK: - Private
     private let fileManager = FileManager()
+    private let folderName: String
 
     private func artifactUrl(context: SnapshotContext) throws -> URL {
         let fileExtension = try context.value(for: .fileExtension).unwrap(error: MissingFileExtensionError())
 
-        return context.recordingDirectory.appendingPathComponent(
-            context.baseName
-        )
-        .appendingPathExtension(fileExtension)
-    }
-}
+        guard let nameComponents = context.value(for: .recordingNameComponents), !nameComponents.isEmpty else {
+            throw MissingRecordingNameComponents()
+        }
 
-private extension SnapshotContext {
-    var recordingDirectory: URL {
-        let folder = callsite.fileUrl.deletingPathExtension().lastPathComponent
+        let recordingName = nameComponents.joined(separator: "-")
+
+        return try recordingDirectory(context: context)
+            .appendingPathComponent(recordingName)
+            .appendingPathExtension(fileExtension)
+    }
+
+    private func recordingDirectory(context: SnapshotContext) throws -> URL {
+        let callsite = try context.value(for: .callsite).unwrap()
+        let name = callsite.fileUrl.deletingPathExtension().lastPathComponent
 
         return callsite.fileUrl.deletingLastPathComponent()
-            .appendingPathComponent("Snapshots")
-            .appendingPathComponent(folder)
-    }
-
-    var baseName: String {
-        callsite.functionName
-            .removingPrefix("test")
-            .removingSuffix("()")
-            .lowercaseFirstLetter()
+            .appendingPathComponent(folderName)
+            .appendingPathComponent(name)
     }
 }

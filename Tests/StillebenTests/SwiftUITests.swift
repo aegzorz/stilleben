@@ -2,77 +2,75 @@ import XCTest
 import SwiftUI
 import Stilleben
 
-
 final class SwiftUITests: XCTestCase {
     func testSimpleText() async throws {
-        await Snapshot {
-            Text("Hello World!")
-                .padding()
-                .background(Color(UIColor.systemBackground))
-        }
-        .diffSwiftUI(sizing: .intrinsic)
-        .match()
+        await SwiftUIMatcher()
+            .sizing(.intrinsic)
+            .locales(.english, .swedish)
+            .addDeviceName()
+            .match {
+                Text("Hello World!", bundle: .module)
+                    .padding()
+                    .background(Color(UIColor.systemBackground))
+            }
     }
 
     func testNavigation() async throws {
-        await Snapshot {
-            NavigationView {
-                Text("Content View")
-                    .navigationTitle("Title")
+        await SwiftUIMatcher()
+            .match {
+                NavigationView {
+                    Text("Content View")
+                        .navigationTitle("Title")
+                }
             }
-        }
-        .diffSwiftUI()
-        .match()
     }
 
     func testShortScrollview() async throws {
-        await Snapshot {
-            ScrollView {
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
                 ItemList(count: 3)
+                    .background(Color(UIColor.systemBackground))
             }
-            .background(Color(UIColor.systemBackground))
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
     }
 
     func testLongScrollview() async throws {
-        await Snapshot {
-            ItemList(count: 25)
-                .background(Color(UIColor.systemBackground))
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
+                ItemList(count: 25)
+                    .background(Color(UIColor.systemBackground))
+            }
     }
 
     func testLongScrollviewInNavigationView() async throws {
-        await Snapshot {
-            NavigationView {
-                ScrollView {
-                    ItemList(count: 25)
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
+                NavigationView {
+                    ScrollView {
+                        ItemList(count: 25)
+                    }
+                    .navigationTitle("List of items")
                 }
-                .navigationTitle("List of items")
             }
-        }
-        .diffSwiftUI(sizing: .dynamicHeight)
-        .match()
     }
 
-}
-
-private struct ItemList: View {
-    let count: Int
-
-    var body: some View {
-        ScrollView {
-            ForEach(0..<count, id: \.self) { index in
-                Text("Item #\(index + 1)")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(colors[index % colors.count].opacity(0.6))
+    func testLongScrollviewInTabView() async {
+        await SwiftUIMatcher()
+            .sizing(.dynamicHeight)
+            .match {
+                TabView {
+                    NavigationView {
+                        ScrollView {
+                            ItemList(count: 25)
+                        }
+                        .navigationTitle("List of items")
+                    }
+                    .tabItem {
+                        Label("List", systemImage: "list.number")
+                    }
+                }
             }
-        }
     }
-
-    private let colors: [Color] = [.red, .blue, .green, .yellow, .purple]
 }

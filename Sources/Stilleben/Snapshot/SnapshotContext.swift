@@ -1,12 +1,8 @@
 import Foundation
 
 public final class SnapshotContext {
-    public let callsite: Callsite
     internal var configuration: [String: Any] = [:]
-
-    public init(callsite: Callsite) {
-        self.callsite = callsite
-    }
+    public init() { }
 }
 
 extension SnapshotContext {

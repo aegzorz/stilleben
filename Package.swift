@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Stilleben",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
     ],
@@ -17,7 +18,6 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/SnapKit/SnapKit.git", .upToNextMajor(from: "5.6.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -26,15 +26,16 @@ let package = Package(
             name: "Stilleben",
             dependencies: []
         ),
-        
         .testTarget(
             name: "StillebenTests",
             dependencies: [
-                "Stilleben",
-                "SnapKit"
+                "Stilleben"
             ],
             exclude: [
                 "Snapshots"
+            ],
+            resources: [
+                .process("Resources")
             ]
         )
     ]
