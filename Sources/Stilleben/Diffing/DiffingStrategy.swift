@@ -10,7 +10,7 @@ public protocol DiffingStrategy {
     /// Calculates the difference `Diff` between the `actual` and `expected` values.
     /// - Parameter actual: Snapshot produced by running a test
     /// - Parameter expected: Reference snapshot, provided by `RecordingStrategy`
-    /// - Returns: diff between the passed in values
+    /// - Returns: Diff between the passed in values
     func diff(actual: Value, expected: Value) async throws -> Diff
 }
 
