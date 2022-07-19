@@ -1,5 +1,6 @@
 import Foundation
 
+/// Struct used to store the callsite of the snapshot from a test.
 public struct Callsite {
     public let fileUrl: URL
     public let functionName: String

@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// A SnapshotMatcher for UIViewController
 public struct UIKitMatcher: SnapshotMatcher {
     public typealias Value = UIViewController
 

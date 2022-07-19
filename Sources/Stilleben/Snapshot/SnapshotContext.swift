@@ -1,5 +1,7 @@
 import Foundation
 
+/// Context that is used to pass values outside of the mapping of snapshots between values.
+/// Useful when one of the strategies needs some context in order to function properly.
 public final class SnapshotContext {
     internal var configuration: [String: Any] = [:]
     public init() { }

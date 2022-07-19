@@ -2,6 +2,8 @@ import Foundation
 import UIKit
 
 public extension Snapshot where Value == UIImage {
+    /// Sets the file extension to `.png` in the `SnapshotContext` and records snapshots if needed.
+    /// - Parameter using: The recording strategy to use
     func record(using strategy: RecordingStrategy) -> Snapshot<(UIImage, UIImage)> {
         context.set(value: "png", for: .fileExtension)
 
