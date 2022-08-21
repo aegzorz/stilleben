@@ -1,6 +1,7 @@
 import UIKit
 
 public extension Snapshot where Value: UIViewController {
+    /// Wraps the `UIViewController` in a `UIWindow`
     func inKeyWindow() -> Self {
         map { viewController in
             var frame = UIScreen.main.bounds
@@ -20,12 +21,14 @@ public extension Snapshot where Value: UIViewController {
         }
     }
 
+    /// Wraps the `UIViewController` in a `UINavigationController`
     func inNavigationController() -> Snapshot<UINavigationController> {
         map { viewController in
             UINavigationController(rootViewController: viewController)
         }
     }
 
+    /// Wraps the `UIViewController` in a `UITabBarController`
     func inTabBarController() -> Snapshot<UITabBarController> {
         map { viewController in
             let controller = UITabBarController()

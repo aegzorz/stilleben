@@ -6,15 +6,20 @@ extension RecordingStrategy where Self == LocalFileRecordingStrategy {
     }
 }
 
+/// Recording strategy that stores recorded snapshots locally on disk
 public struct LocalFileRecordingStrategy: RecordingStrategy {
+    /// Error thrown when no file extension has been set in the `SnapshotContext`
     public struct MissingFileExtensionError: LocalizedError {
         public var errorDescription: String? = "Unable to record snapshot, file extension was not set"
     }
 
+    /// Error thrown when no name components have been set in the `SnapshotContext`
     public struct MissingRecordingNameComponents: LocalizedError {
         public var errorDescription: String? = "Unable to name recording, missing name components"
     }
 
+    /// Initializer for `LocalFileRecordingStrategy`
+    /// - Parameter folderName: The name of the folder to store recorded snapshots
     public init(folderName: String) {
         self.folderName = folderName
     }

@@ -2,20 +2,31 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// A SnapshotMatcher for UIViewController
 public struct UIKitMatcher: SnapshotMatcher {
     public typealias Value = UIViewController
 
+    /// Indicates whether the tests are running in an app (hosted) or is simply a unit test (not hosted)
     public var hosted = false
+    /// The strategy to use when determining the size of the resulting snapshot
     public var sizing: SizingStrategy = .screen
+    /// The strategy to use when recording and reading reference snapshots
     public var recording: RecordingStrategy = .localFile
+    /// The strategy to use when performing image diffs for the snapshots
     public var diffing: ImageDiffingStrategy = .labDelta
+    /// When `true` forces the `RecordingStrategy` to record a new snapshot reference.
     public var forceRecording = false
+    /// Color schemes to permute when taking snapshots
     public var colorSchemes: [ColorScheme] = [.light, .dark]
+    /// Dynamic type sizes to permute when taking snapshots
     public var dynamicTypeSizes: [DynamicTypeSize] = [.large, .accessibility5]
+    /// Locales to permute when taking snapshots
     public var locales: [Locale] = [Locale(identifier: "en-US")]
 
     public init() { }
 
+    /// Matches a UIViewController to the reference image stored by the `RecordingStrategy`
+    /// - Parameter produce: Closure used to produce a UIViewController
     public func match(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
         let permutations = colorSchemes
             .flatMap { colorScheme in
@@ -56,6 +67,8 @@ public struct UIKitMatcher: SnapshotMatcher {
         }
     }
 
+    /// Matches a UIView to the reference image stored by the `RecordingStrategy`
+    /// - Parameter produce: Closure used to produce a UIView
     public func match(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<UIView>.Produce) async {
         await match(file: file, function: function, line: line) { @MainActor () -> UIViewController in
             WrapperViewController(
