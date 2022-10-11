@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 
 public extension Snapshot where Value: UIViewController {
+    /// Convenience function for diffing `UIViewController`
     func diffUIKit(
         file: StaticString = #file,
         line: UInt = #line,

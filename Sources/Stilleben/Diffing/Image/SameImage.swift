@@ -2,6 +2,7 @@ import UIKit
 import XCTest
 
 extension DiffingStrategy where Self == ImageDiffingStrategy {
+    /// Diffing strategy for comparing that the two images have the same PNG representation, i.e. are exactly the same.
     public static var sameImage: ImageDiffingStrategy {
         ImageDiffingStrategy { actual, expected in
             if actual.pngData() == expected.pngData() {

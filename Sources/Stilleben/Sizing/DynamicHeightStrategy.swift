@@ -6,6 +6,8 @@ public extension SizingStrategy where Self == DynamicHeightStrategy {
     }
 }
 
+/// Sizing strategy that dynamically calculates the required size to fit vertically scrolling content
+/// in the snapshot.
 public struct DynamicHeightStrategy: SizingStrategy {
     public func size(viewController: UIViewController) throws -> CGSize {
         let view = try viewController.view.unwrap()

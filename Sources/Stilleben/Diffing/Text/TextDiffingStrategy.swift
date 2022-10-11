@@ -8,6 +8,7 @@ extension DiffingStrategy where Self == TextDiffingStrategy {
     }
 }
 
+/// Diffing strategy used for diffing strings.
 public struct TextDiffingStrategy: DiffingStrategy {
     public func diff(actual: String, expected: String) async throws -> Diff {
         if actual == expected {

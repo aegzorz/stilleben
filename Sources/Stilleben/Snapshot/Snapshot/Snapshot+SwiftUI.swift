@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 public extension Snapshot where Value: View {
+    /// Wraps the SwiftUI view in a `UIHostingController`
     func inHostingController() -> Snapshot<UIHostingController<Value>> {
         map { @MainActor view in
             let viewController = UIHostingController(rootView: view)
@@ -10,6 +11,7 @@ public extension Snapshot where Value: View {
         }
     }
 
+    /// Convenience function for diffing `SwiftUI` views.
     func diffSwiftUI(
         file: StaticString = #file,
         line: UInt = #line,

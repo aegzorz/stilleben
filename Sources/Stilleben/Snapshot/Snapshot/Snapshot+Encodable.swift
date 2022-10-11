@@ -1,6 +1,7 @@
 import Foundation
 
 extension Snapshot where Value: Encodable {
+    /// Allows diffing any `Encodable` as JSON, recording using `localFile` recording strategy
     func diffJson() -> Snapshot<Diff> {
         encodeJson().record(using: .localFile).diff(using: .text)
     }
