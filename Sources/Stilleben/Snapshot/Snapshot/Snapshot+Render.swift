@@ -16,8 +16,17 @@ extension Snapshot where Value: UIViewController {
     /// - Parameter hosted: Determines if the test is running in an app
     public func render(hosted: Bool) -> Snapshot<UIImage> {
         inKeyWindow()
-            .map(\.view)
-            .render(hosted: hosted)
+           .map { viewController in
+               let renderer = UIGraphicsImageRenderer(size: viewController.view.frame.size)
+               let image = renderer.image { context in
+                   if hosted {
+                       viewController.view.drawHierarchy(in: viewController.view.bounds, afterScreenUpdates: true)
+                   } else {
+                       viewController.view.layer.render(in: context.cgContext)
+                   }
+               }
+               return image
+           }
     }
 }
 
