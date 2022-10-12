@@ -25,7 +25,7 @@ public extension Snapshot where Value: View {
             .inKeyWindow()
             .size(using: sizing)
             .render(hosted: hosted)
-            .record(using: .localFile)
+            .record(using: recording)
             .diff(using: diffing)
             .forceRecording(file: file, line: line, force: forceRecording)
     }
