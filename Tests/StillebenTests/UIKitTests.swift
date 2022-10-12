@@ -4,7 +4,7 @@ import SwiftUI
 
 final class UIKitTests: XCTestCase {
     private let matcher = UIMatcher()
-        .assertSimulator(modelIdentifier: "iPhone10,4")
+        .assertSimulator(modelIdentifier: "iPhone14,7")
         .sizing(.dynamicHeight)
         .forceRecording(false)
 

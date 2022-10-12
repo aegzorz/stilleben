@@ -4,7 +4,7 @@ import Stilleben
 
 final class SwiftUITests: XCTestCase {
     private let matcher = UIMatcher()
-        .assertSimulator(modelIdentifier: "iPhone10,4")
+        .assertSimulator(modelIdentifier: "iPhone14,7")
         .sizing(.dynamicHeight)
 
     func testSimpleText() async throws {
