@@ -3,7 +3,8 @@ import SwiftUI
 @testable import Stilleben
 
 final class UIKitTests: XCTestCase {
-    private let matcher = UIKitMatcher()
+    private let matcher = UIMatcher()
+        .assertSimulator(modelIdentifier: "iPhone10,4")
         .sizing(.dynamicHeight)
         .forceRecording(false)
 
@@ -11,7 +12,7 @@ final class UIKitTests: XCTestCase {
         await matcher
             .sizing(.intrinsic)
             .locales(.english, .swedish)
-            .addDeviceName()
+            .includeDeviceName()
             .match { @MainActor () -> UIView in
                 let label = TestLabel()
                 label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
