@@ -12,7 +12,7 @@ env:
   
 jobs:
   Tests:
-    runs-on: macos-12
+    runs-on: self-hosted
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v2
