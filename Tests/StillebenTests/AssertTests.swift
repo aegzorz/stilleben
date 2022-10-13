@@ -25,7 +25,7 @@ final class AssertTests: XCTestCase {
         await Snapshot {
             Data()
         }
-        .assertDisplayScale(3)
+        .assertDisplayScale(1)
         .record(using: MockRecordingStrategy())
         .diff(using: MockDiffingStrategy())
         .match()
