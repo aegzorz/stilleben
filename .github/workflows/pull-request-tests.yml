@@ -7,22 +7,22 @@ on:
     branches: ["**"]
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode_13.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode-14.0.1.app/Contents/Developer
   NSUnbufferedIO: YES
   
 jobs:
-  UnitTests:
-    runs-on: macos-12
+  Tests:
+    runs-on: self-hosted
     steps:
-      - name: Checkout
+      - name: Checkout 👀
         uses: actions/checkout@v2
-      - name: Brew
+      - name: Homebrew 🍺
         run: |
           brew bundle
-      - name: Test
+      - name: Test ✅
         run: |
-          xcodebuild -scheme Stilleben -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 8"  -resultBundlePath TestResults.xcresult -enableCodeCoverage YES test | xcbeautify
-      - name: Report
+          make test
+      - name: Report 📝
         uses: kishikawakatsumi/xcresulttool@v1
         with:
           path: TestResults.xcresult
