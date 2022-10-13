@@ -21,7 +21,7 @@ jobs:
           brew bundle
       - name: Test ✅
         run: |
-          xcodebuild -scheme Stilleben -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14"  -resultBundlePath TestResults.xcresult -enableCodeCoverage YES test | xcbeautify
+          make test
       - name: Report 📝
         uses: kishikawakatsumi/xcresulttool@v1
         with:
