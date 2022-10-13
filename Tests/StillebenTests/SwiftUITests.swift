@@ -15,7 +15,7 @@ final class SwiftUITests: XCTestCase {
             .match {
                 Text("Hello World!", bundle: .module)
                     .padding()
-                    .background(Color(UIColor.systemBackground))
+                    .background(.background)
             }
     }
 
@@ -33,14 +33,14 @@ final class SwiftUITests: XCTestCase {
     func testShortScrollview() async throws {
         await matcher.match {
             ItemList(count: 3)
-                .background(Color(UIColor.systemBackground))
+                .background(.background)
         }
     }
 
     func testLongScrollview() async throws {
         await matcher.match {
             ItemList(count: 25)
-                .background(Color(UIColor.systemBackground))
+                .background(.background)
         }
     }
 
