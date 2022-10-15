@@ -1,4 +1,4 @@
-name: Pull Request Tests
+name: Tests
 
 on:
   push:
@@ -15,7 +15,13 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout 👀
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+          ssh-key: ''
+      - name: Fix PATH 🗺
+        run: | 
+            echo "/opt/homebrew/bin" >> $GITHUB_PATH
       - name: Homebrew 🍺
         run: |
           brew bundle
