@@ -19,6 +19,7 @@ extension UIMatcher {
         for (colorScheme, locale, dynamicTypeSize) in permutations {
             await Snapshot(file: file, function: function, line: line) {
                 try await produce()
+                    .ignoresSafeArea(ignoresSafeArea ? .all : [], edges: ignoresSafeArea ? .all : [])
                     .deferredEnvironment(\.colorScheme, colorScheme)
                     .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
                     .deferredEnvironment(\.locale, locale)
