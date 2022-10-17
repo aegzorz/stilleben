@@ -30,6 +30,7 @@ extension UIMatcher {
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
             .addDeviceName(add: includeDeviceName)
+            .ignoresSafeArea(ignore: ignoresSafeArea)
             .diffSwiftUI(
                 file: file,
                 line: line,

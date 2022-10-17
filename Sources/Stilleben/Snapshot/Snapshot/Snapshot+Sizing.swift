@@ -15,3 +15,12 @@ extension Snapshot where Value: UIViewController {
         }
     }
 }
+
+extension Snapshot {
+    public func ignoresSafeArea(ignore: Bool) -> Self {
+        map { value in
+            context.set(value: ignore, for: .ignoresSafeArea)
+            return value
+        }
+    }
+}

@@ -32,6 +32,7 @@ extension UIMatcher {
             .recordingNameComponent(add: dynamicTypeSize)
             .recordingNameComponent(add: locale)
             .addDeviceName(add: includeDeviceName)
+            .ignoresSafeArea(ignore: ignoresSafeArea)
             .diffUIKit(
                 file: file,
                 line: line,
