@@ -6,7 +6,6 @@ final class UIKitTests: XCTestCase {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone14,7")
         .sizing(.dynamicHeight)
-        .forceRecording(false)
 
     func testSimpleLabel() async throws {
         await matcher
@@ -37,15 +36,19 @@ final class UIKitTests: XCTestCase {
     }
 
     func testShortScrollview() async throws {
-        await matcher.match { @MainActor () -> UIViewController in
-            ItemListViewController(count: 3)
-        }
+        await matcher
+            .ignoresSafeArea()
+            .match { @MainActor () -> UIViewController in
+                ItemListViewController(count: 3)
+            }
     }
 
     func testLongScrollview() async throws {
-        await matcher.match { @MainActor () -> UIViewController in
-            ItemListViewController(count: 25)
-        }
+        await matcher
+            .ignoresSafeArea()
+            .match { @MainActor () -> UIViewController in
+                ItemListViewController(count: 25)
+            }
     }
 
     func testLongScrollviewInNavigationController() async throws {
