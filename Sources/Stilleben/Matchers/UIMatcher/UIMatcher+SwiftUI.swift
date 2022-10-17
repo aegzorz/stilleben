@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension UIMatcher {
-    /// Matches a SwiftUI view to the reference image stored by the `RecordingStrategy`
+    /// Matches a SwiftUI view to the reference image stored by the ``RecordingStrategy``
     /// - Parameter produce: Closure used to produce a SwiftUI view
     public func match<Value: View>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
         let permutations = colorSchemes
@@ -35,9 +35,9 @@ extension UIMatcher {
                 file: file,
                 line: line,
                 sizing: sizing,
+                rendering: rendering,
                 diffing: diffing,
                 recording: recording,
-                hosted: hosted,
                 forceRecording: forceRecording
             )
             .match(file: file, line: line)

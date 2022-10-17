@@ -16,15 +16,15 @@ public extension Snapshot where Value: View {
         file: StaticString = #file,
         line: UInt = #line,
         sizing: SizingStrategy = .screen,
+        rendering: RenderingStrategy = .default(hosted: false),
         diffing: ImageDiffingStrategy = .labDelta,
         recording: RecordingStrategy = .localFile,
-        hosted: Bool = false,
         forceRecording: Bool = false
     ) -> Snapshot<Diff> {
         inHostingController()
             .inKeyWindow()
             .size(using: sizing)
-            .render(hosted: hosted)
+            .render(using: rendering)
             .record(using: recording)
             .diff(using: diffing)
             .forceRecording(file: file, line: line, force: forceRecording)

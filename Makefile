@@ -1,6 +1,7 @@
 .PHONY: docs clean resolve test
 
 clean:
+	swift package dump-pif > /dev/null
 	@xcodebuild clean -scheme Stilleben \
 	-destination "platform=iOS Simulator,name=iPhone 14" \
 	-sdk iphonesimulator
