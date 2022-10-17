@@ -1,7 +1,9 @@
 .PHONY: docs clean resolve test
 
 clean:
-	@xcodebuild clean -scheme Stilleben -destination generic/platform=iOS
+	@xcodebuild clean -scheme Stilleben \
+	-destination "platform=iOS Simulator,name=iPhone 14" \
+	-sdk iphonesimulator
 resolve:
 	@xcodebuild -resolvePackageDependencies
 docs: 

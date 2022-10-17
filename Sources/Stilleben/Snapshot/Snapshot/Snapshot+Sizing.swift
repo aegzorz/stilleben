@@ -8,10 +8,19 @@ extension Snapshot where Value: UIViewController {
     public func size(using strategy: SizingStrategy) -> Snapshot<UIViewController> {
         map { viewController in
             context.set(
-                value: try await strategy.size(viewController: viewController),
+                value: try await strategy.size(viewController: viewController, context: context),
                 for: .targetSize
             )
             return viewController
+        }
+    }
+}
+
+extension Snapshot {
+    public func ignoresSafeArea(ignore: Bool) -> Self {
+        map { value in
+            context.set(value: ignore, for: .ignoresSafeArea)
+            return value
         }
     }
 }

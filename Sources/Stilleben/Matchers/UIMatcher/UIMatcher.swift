@@ -24,6 +24,8 @@ public struct UIMatcher {
     public var assertDisplayScale: CGFloat?
     /// Include the device name when naming the snapshot
     public var includeDeviceName = false
+    /// Ignores safe area while sizing if set to `true`
+    public var ignoresSafeArea = false
 
     public init() { }
 }
@@ -61,5 +63,8 @@ extension UIMatcher {
     }
     public func assertDisplayScale(_ expected: CGFloat) -> Self {
         Modifier(base: self).assertDisplayScale(expected)
+    }
+    public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
+        Modifier(base: self).ignoresSafeArea(ignore)
     }
 }

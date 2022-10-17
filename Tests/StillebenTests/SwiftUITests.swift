@@ -31,17 +31,21 @@ final class SwiftUITests: XCTestCase {
     }
 
     func testShortScrollview() async throws {
-        await matcher.match {
-            ItemList(count: 3)
-                .background(.background)
-        }
+        await matcher
+            .ignoresSafeArea()
+            .match {
+                ItemList(count: 3)
+                    .background(.background)
+            }
     }
 
     func testLongScrollview() async throws {
-        await matcher.match {
-            ItemList(count: 25)
-                .background(.background)
-        }
+        await matcher
+            .ignoresSafeArea()
+            .match {
+                ItemList(count: 25)
+                    .background(.background)
+            }
     }
 
     func testLongScrollviewInNavigationView() async throws {
