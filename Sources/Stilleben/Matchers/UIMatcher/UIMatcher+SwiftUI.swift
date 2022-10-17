@@ -35,9 +35,9 @@ extension UIMatcher {
                 file: file,
                 line: line,
                 sizing: sizing,
+                rendering: rendering,
                 diffing: diffing,
                 recording: recording,
-                hosted: hosted,
                 forceRecording: forceRecording
             )
             .match(file: file, line: line)
