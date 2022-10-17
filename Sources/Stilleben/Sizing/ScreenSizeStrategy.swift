@@ -8,7 +8,7 @@ public extension SizingStrategy where Self == ScreenSizeStrategy {
 
 /// Sizing strategy that sizes the snapshots according to the screen size of the current device.
 public struct ScreenSizeStrategy: SizingStrategy {
-    public func size(viewController: UIViewController) -> CGSize {
+    public func size(viewController: UIViewController, context: SnapshotContext) -> CGSize {
         UIScreen.main.bounds.size
     }
 }

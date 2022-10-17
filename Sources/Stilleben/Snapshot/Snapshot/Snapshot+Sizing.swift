@@ -8,7 +8,7 @@ extension Snapshot where Value: UIViewController {
     public func size(using strategy: SizingStrategy) -> Snapshot<UIViewController> {
         map { viewController in
             context.set(
-                value: try await strategy.size(viewController: viewController),
+                value: try await strategy.size(viewController: viewController, context: context),
                 for: .targetSize
             )
             return viewController

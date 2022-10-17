@@ -1,7 +1,7 @@
 import UIKit
 
 public extension SizingStrategy where Self == DynamicHeightStrategy {
-    static var dynamicHeight: DynamicHeightStrategy {
+    static var dynamicHeight: Self {
         DynamicHeightStrategy()
     }
 }
@@ -9,7 +9,7 @@ public extension SizingStrategy where Self == DynamicHeightStrategy {
 /// Sizing strategy that dynamically calculates the required size to fit vertically scrolling content
 /// in the snapshot.
 public struct DynamicHeightStrategy: SizingStrategy {
-    public func size(viewController: UIViewController) throws -> CGSize {
+    public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
         let view = try viewController.view.unwrap()
 
         if let scrollView = view.findScrollView() {
