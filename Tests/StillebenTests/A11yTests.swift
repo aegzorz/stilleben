@@ -10,40 +10,73 @@ final class A11yTests: XCTestCase {
         .dynamicTypeSizes(.large)
         .colorSchemes(.light)
 
+    @MainActor
     func testButtonsAndLinks() async throws {
         await matcher.match {
-            NavigationView {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        Button(action: {}) {
-                            Text("Button 1 Title")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                        }
+            TabView {
+                NavigationView {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 20) {
+                            Image(systemName: "camera.macro.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .accessibilityLabel("Photo")
 
-                        Button(action: {}) {
-                            Text("Button 2 Title")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                        }
-                        .accessibilityLabel("Custom a11y")
+                            Button(action: {}) {
+                                Text("Save")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
 
-                        Button(action: {}) {
-                            Text("Button Link Title")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                        }
-                        .accessibilityAddTraits(.isLink)
+                            Button(action: {}) {
+                                Image(systemName: "camera")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .accessibilityLabel("Camera")
 
-                        NavigationLink {
-                            EmptyView()
-                        } label: {
-                            Text("Navigation Link")
-                                .padding()
-                                .frame(maxWidth: .infinity)
+                            Button(action: {}) {
+                                Text("Button Link Title")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .accessibilityAddTraits(.isLink)
+
+                            NavigationLink {
+                                Text("Destination")
+                            } label: {
+                                Text("Navigation Link")
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                        }
+                        .padding()
+                    }
+                    .background(Color.yellow.opacity(0.1))
+                    .toolbar {
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            Button(action: { }) {
+                                Image(systemName: "square.and.pencil")
+                            }
+                            .accessibilityLabel("Edit")
+
+                            Button(action: { }) {
+                                Image(systemName: "square.and.arrow.up")
+                            }
+                            .accessibilityLabel("Share")
                         }
                     }
                 }
+                .tabItem {
+                    Image(systemName: "star")
+                    Text("Favorites")
+                }
+
+                Text("Dummy Tab Content")
+                    .tabItem {
+                        Image(systemName: "person.circle")
+                        Text("Profile")
+                    }
             }
         }
     }
