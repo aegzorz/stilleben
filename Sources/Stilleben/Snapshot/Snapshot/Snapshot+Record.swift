@@ -40,9 +40,7 @@ public extension Snapshot {
     /// Adds an arbitrary recording name component
     /// - Parameter add: The name component to add
     func recordingNameComponent(add component: String) -> Self {
-        var components = context.value(for: .recordingNameComponents) ?? []
-        components.append(component)
-        context.set(value: components, for: .recordingNameComponents)
+        context.append(value: component, for: .recordingNameComponents)
         return self
     }
 

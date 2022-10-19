@@ -11,9 +11,7 @@ public struct A11yRenderingStrategy: RenderingStrategy {
     let hosted: Bool
 
     public func render(viewController: UIViewController, context: SnapshotContext) -> UIImage {
-        var nameComponents = context.value(for: .recordingNameComponents) ?? []
-        nameComponents.append("a11y")
-        context.set(value: nameComponents, for: .recordingNameComponents)
+        context.append(value: "a11y", for: .recordingNameComponents)
 
         let renderer = UIGraphicsImageRenderer(size: viewController.view.frame.size)
         let image = renderer.image { context in
