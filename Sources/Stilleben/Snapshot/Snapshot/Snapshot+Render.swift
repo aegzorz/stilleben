@@ -6,10 +6,9 @@ extension Snapshot where Value: UIViewController {
     /// Renders the snapshots `UIViewController` into an `UIImage`
     /// - Parameter strategy: Render using specific ``RenderingStrategy``
     public func render(using strategy: RenderingStrategy) -> Snapshot<UIImage> {
-        inKeyWindow()
-            .map { viewController in
-                try await strategy.render(viewController: viewController, context: context)
-            }
+        map { viewController in
+            try await strategy.render(viewController: viewController, context: context)
+        }
     }
 }
 
