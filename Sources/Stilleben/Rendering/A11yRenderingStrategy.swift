@@ -27,19 +27,14 @@ public struct A11yRenderingStrategy: RenderingStrategy {
 
             recursiveAccessibility(view: viewController.view).forEach { node in
                 context.cgContext.setStrokeColor(node.color)
-                context.cgContext.setFillColor(UIColor.lightGray.cgColor)
+                context.cgContext.setFillColor(UIColor.lightGray.withAlphaComponent(0.6).cgColor)
 
                 let path = UIBezierPath(rect: node.frame)
                 path.fill()
                 path.stroke()
 
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.alignment = .center
-
                 NSString(string: node.label)
-                    .draw(in: node.frame, withAttributes: [
-                        .paragraphStyle: paragraphStyle
-                    ])
+                    .draw(in: node.frame)
             }
 
             UIGraphicsPopContext()
@@ -62,31 +57,43 @@ private struct AccessibilityNode {
             return UIColor.red.cgColor
         }
     }
+
+    init?(with object: NSObject) {
+        guard let label = object.accessibilityLabel else { return nil }
+
+        var frame = object.accessibilityFrame
+        if let view = object as? UIView {
+            frame = view.convert(view.bounds, to: view.rootView())
+        }
+        self.frame = frame
+        self.label = label
+        traits = object.accessibilityTraits
+    }
 }
 
 private func recursiveAccessibility(view: UIView) -> [AccessibilityNode] {
     var nodes: [AccessibilityNode] = []
 
+    if let node = AccessibilityNode(with: view) {
+        nodes.append(node)
+    }
+
     let elements = view.accessibilityElements?
         .compactMap { $0 as? NSObject }
-        .filter(\.isAccessibilityElement) ?? []
+        .filter { $0.accessibilityLabel != nil } ?? []
 
-    nodes.append(
-        contentsOf: elements.map { element in
-            AccessibilityNode(
-                frame: element.accessibilityFrame,
-                label: element.accessibilityLabel ?? "",
-                traits: element.accessibilityTraits
-            )
-        }
-    )
-
-    for subview in view.subviews {
-        nodes.append(
-            contentsOf: recursiveAccessibility(view: subview)
-        )
-    }
+    nodes.append(contentsOf: elements.compactMap(AccessibilityNode.init))
+    nodes.append(contentsOf: view.subviews.flatMap(recursiveAccessibility))
 
     return nodes
 }
 
+private extension UIView {
+    func rootView() -> UIView? {
+        if let superview {
+            return superview.rootView()
+        } else {
+            return self
+        }
+    }
+}
