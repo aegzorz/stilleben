@@ -1,8 +1,8 @@
 import UIKit
 
 extension UIMatcher {
-    /// Matches a UIViewController to the reference image stored by the `RecordingStrategy`
-    /// - Parameter produce: Closure used to produce a UIViewController
+    /// Matches a UIViewController to the reference image stored by the ``RecordingStrategy``
+    /// - Parameter produce: Closure used to produce a `UIViewController`
     public func match<Value: UIViewController>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
         let permutations = colorSchemes
             .flatMap { colorScheme in
@@ -32,21 +32,22 @@ extension UIMatcher {
             .recordingNameComponent(add: dynamicTypeSize)
             .recordingNameComponent(add: locale)
             .addDeviceName(add: includeDeviceName)
+            .ignoresSafeArea(ignore: ignoresSafeArea)
             .diffUIKit(
                 file: file,
                 line: line,
                 sizing: sizing,
+                rendering: rendering,
                 diffing: diffing,
                 recording: recording,
-                hosted: hosted,
                 forceRecording: forceRecording
             )
             .match(file: file, line: line)
         }
     }
 
-    /// Matches a UIView to the reference image stored by the `RecordingStrategy`
-    /// - Parameter produce: Closure used to produce a UIView
+    /// Matches a UIView to the reference image stored by the ``RecordingStrategy``
+    /// - Parameter produce: Closure used to produce a `UIView`
     public func match(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<UIView>.Produce) async {
         await match(file: file, function: function, line: line) { @MainActor () -> UIViewController in
             WrapperViewController(

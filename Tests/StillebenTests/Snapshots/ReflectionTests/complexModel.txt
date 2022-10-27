@@ -1,0 +1,15 @@
+  ▿ StillebenTests.ReflectionTests.?.?.Car<Swift.Double>
+    ▿ manufacturer: StillebenTests.ReflectionTests.?.?.Car<Swift.Double>.Manufacturer
+      - name: "Volvo"
+      - country: "Sweden"
+      - foundedYear: 1927
+    - model: "C40"
+    - modelYear: 2022
+    - horsePower: 408
+    - type: StillebenTests.ReflectionTests.?.?.Car<Swift.Double>.CarType.electric
+    ▿ features: 2 elements
+      - StillebenTests.ReflectionTests.?.?.Car<Swift.Double>.Feature.carplay
+      - StillebenTests.ReflectionTests.?.?.Car<Swift.Double>.Feature.airbag
+    - extra: 1234.5678
+    ▿ referenceDate: 2001-01-01 00:00:00 +0000
+      - timeIntervalSinceReferenceDate: 0.0

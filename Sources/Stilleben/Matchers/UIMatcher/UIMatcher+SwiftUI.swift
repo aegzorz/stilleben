@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension UIMatcher {
-    /// Matches a SwiftUI view to the reference image stored by the `RecordingStrategy`
+    /// Matches a SwiftUI view to the reference image stored by the ``RecordingStrategy``
     /// - Parameter produce: Closure used to produce a SwiftUI view
     public func match<Value: View>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
         let permutations = colorSchemes
@@ -17,8 +17,11 @@ extension UIMatcher {
             }
 
         for (colorScheme, locale, dynamicTypeSize) in permutations {
+            Bundle.overrideLocale = locale
+
             await Snapshot(file: file, function: function, line: line) {
                 try await produce()
+                    .ignoresSafeArea(ignoresSafeArea ? .all : [], edges: ignoresSafeArea ? .all : [])
                     .deferredEnvironment(\.colorScheme, colorScheme)
                     .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
                     .deferredEnvironment(\.locale, locale)
@@ -29,13 +32,14 @@ extension UIMatcher {
             .recordingNameComponent(add: String(describing: dynamicTypeSize))
             .recordingNameComponent(add: locale.identifier)
             .addDeviceName(add: includeDeviceName)
+            .ignoresSafeArea(ignore: ignoresSafeArea)
             .diffSwiftUI(
                 file: file,
                 line: line,
                 sizing: sizing,
+                rendering: rendering,
                 diffing: diffing,
                 recording: recording,
-                hosted: hosted,
                 forceRecording: forceRecording
             )
             .match(file: file, line: line)

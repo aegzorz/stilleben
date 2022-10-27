@@ -6,3 +6,10 @@ public extension SnapshotContext.Key where Value == CGSize {
         SnapshotContext.Key(name: "targetSize")
     }
 }
+
+public extension SnapshotContext.Key where Value == Bool {
+    static var ignoresSafeArea: Self {
+        SnapshotContext.Key(name: "ignoresSafeArea")
+    }
+}
+
