@@ -17,6 +17,8 @@ extension UIMatcher {
             }
 
         for (colorScheme, locale, dynamicTypeSize) in permutations {
+            Bundle.overrideLocale = locale
+
             await Snapshot(file: file, function: function, line: line) {
                 try await produce()
                     .ignoresSafeArea(ignoresSafeArea ? .all : [], edges: ignoresSafeArea ? .all : [])
