@@ -6,6 +6,9 @@ Used to for testing snapshots of mostly UI components but also models and other 
 
 Example of snapshot testing a SwiftUI view:
 ```swift
+import XCTest
+import Stilleben
+
 final class SomeViewTests: XCTestCase {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone14,7")
@@ -26,6 +29,9 @@ final class SomeViewTests: XCTestCase {
 It also supports snapshot testing UIKit view controllers or views:
 
 ```swift
+import XCTest
+import Stilleben
+
 final class SomeViewControllerTests: XCTestCase {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone14,7")
