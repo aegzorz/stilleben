@@ -1,3 +1,7 @@
+![Build](https://img.shields.io/appveyor/build/aegzorz/stilleben)
+![License](https://img.shields.io/github/license/aegzorz/stilleben)
+![Version](https://img.shields.io/github/v/release/aegzorz/stilleben)
+
 # Stilleben
 
 Modern snapshot testing written in Swift.
