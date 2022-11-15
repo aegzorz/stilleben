@@ -57,7 +57,7 @@ final class SomeViewControllerTests: XCTestCase {
             }
     }
     
-    func testSimpleLabel() async throws {
+    func testSomeView() async throws {
         await matcher
             .sizing(.intrinsic)
             .match { @MainActor () -> UIView in
