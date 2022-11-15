@@ -7,21 +7,15 @@ on:
     branches: ["**"]
 
 env:
-  DEVELOPER_DIR: /Applications/Xcode-14.0.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
   NSUnbufferedIO: YES
   
 jobs:
   Tests:
-    runs-on: self-hosted
+    runs-on: macos-12
     steps:
       - name: Checkout 👀
         uses: actions/checkout@v3
-        with:
-          token: ${{ github.token }}
-          ssh-key: ''
-      - name: Fix PATH 🗺
-        run: | 
-            echo "/opt/homebrew/bin" >> $GITHUB_PATH
       - name: Homebrew 🍺
         run: |
           brew bundle
