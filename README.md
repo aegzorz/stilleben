@@ -43,6 +43,8 @@ final class SomeViewTests: XCTestCase {
 }
 ```
 
+![Snapshot](/Tests/StillebenTests/Snapshots/SwiftUITests/longScrollviewInNavigationView-light-large-en-US.png?height=400)
+
 It also supports snapshot testing UIKit view controllers or views:
 
 ```swift
