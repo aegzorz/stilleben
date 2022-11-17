@@ -76,3 +76,32 @@ final class SomeViewControllerTests: XCTestCase {
     }
 }
 ```
+
+Support for snapshotting reflections of your models:
+
+```swift
+import XCTest
+import Stilleben
+
+final class ReflectionTests: XCTestCase {
+    let matcher = ReflectionMatcher()
+
+    func testSimpleModel() async {
+        struct Model {
+            let text = "Hello World!"
+        }
+
+        await matcher.match {
+            Model()
+        }
+    }
+}
+```
+
+Which yields a text file snapshot:
+
+```
+  ▿ StillebenTests.ReflectionTests.?.?.Model
+    - text: "Hello World!"
+```
+
