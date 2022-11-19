@@ -25,7 +25,7 @@ public struct Snapshot<Value> {
             .lowercaseFirstLetter()
 
         // Add the current test name as the first recording name component
-        context.set(value: [testName], for: .recordingNameComponents)
+        context.append(value: testName, for: .recordingNameComponents)
     }
 
     internal init(context: SnapshotContext, produce: @escaping Produce) {

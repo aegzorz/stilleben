@@ -13,6 +13,7 @@ extension Snapshot where Value: UIViewController {
             )
             return viewController
         }
+        .inKeyWindow() // Re-windowing seems to help with final sizing
     }
 }
 

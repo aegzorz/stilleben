@@ -41,6 +41,15 @@ extension SnapshotContext {
         configuration[key.name] = value
     }
 
+    /// Appends a value for a specific `Key` where `Value` is an array.
+    /// - Parameter value: Value to store
+    /// - Parameter key: Unique key for array to append
+    public func append<T>(value: T, for key: Key<[T]>) {
+        var values: [T] = self.value(for: key) ?? []
+        values.append(value)
+        set(value: values, for: key)
+    }
+
     /// Reads a value from context
     /// - Parameter key: Unique key for reading the value
     /// - Returns Value  or `nil`  if no value exists for `key`
