@@ -40,7 +40,8 @@ extension UIMatcher {
                 rendering: rendering,
                 diffing: diffing,
                 recording: recording,
-                forceRecording: forceRecording
+                forceRecording: forceRecording,
+                delay: delay
             )
             .match(file: file, line: line)
         }

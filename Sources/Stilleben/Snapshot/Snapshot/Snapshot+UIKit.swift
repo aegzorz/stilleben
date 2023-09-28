@@ -10,10 +10,12 @@ public extension Snapshot where Value: UIViewController {
         rendering: RenderingStrategy = .default(hosted: false),
         diffing: ImageDiffingStrategy = .labDelta,
         recording: RecordingStrategy = .localFile,
-        forceRecording: Bool = false
+        forceRecording: Bool = false,
+        delay: SnapshotDelay = .none
     ) -> Snapshot<Diff> {
         inKeyWindow()
             .size(using: sizing)
+            .delay(delay)
             .render(using: rendering)
             .record(using: recording)
             .diff(using: diffing)

@@ -74,4 +74,31 @@ final class SwiftUITests: XCTestCase {
             }
         }
     }
+    
+    func testDelayedSnapshot() async {
+        let matcher = self.matcher
+            .dynamicTypeSizes(.large)
+            .colorSchemes(.light)
+            .sizing(.intrinsic)
+            .delay(.milliseconds(200))
+        
+        await matcher.match {
+            LightBulb()
+        }
+    }
+    
+    private struct LightBulb: View {
+        @State var isOn = false
+        
+        var body: some View {
+            HStack {
+                Image(systemName: "lightbulb")
+                Image(systemName: isOn ? "lightbulb.fill" : "lightbulb")
+                    .task {
+                        try? await Task.sleep(nanoseconds: 100_000_000)
+                        isOn = true
+                    }
+            }
+        }
+    }
 }
