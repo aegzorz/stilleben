@@ -26,7 +26,9 @@ public struct UIMatcher {
     public var includeDeviceName = false
     /// Ignores safe area while sizing if set to `true`
     public var ignoresSafeArea = false
-
+    /// Delays the snapshotting
+    public var delay = SnapshotDelay.none
+    
     public init() { }
 }
 
@@ -66,5 +68,8 @@ extension UIMatcher {
     }
     public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
         Modifier(base: self).ignoresSafeArea(ignore)
+    }
+    public func delay(_ delay: SnapshotDelay) -> Self {
+        Modifier(base: self).delay(delay)
     }
 }
