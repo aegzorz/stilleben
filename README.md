@@ -20,7 +20,7 @@ Snapshots can be configured to use the following:
 - `SizingStrategy` strategy used for sizing views before snapshotting: `.device`, `.dynamicHeight`, `.fullWidth`, `.fixedHeight(_:)` or `.intrinsic`.
 
 UI snapshots are laid out and rendered for a configured `Device` (size, display scale, safe area and traits),
-so they look the same on any simulator. Presets include `.iPhone18Pro` (default), `.iPhone18ProMax`, `.iPhone17e` and `.iPadPro13`.
+so they look the same on any simulator. Presets include `.iPhone18Pro` (default), `.iPhone18ProMax`, `.iPhone17e`, `.iPhoneDuo` and `.iPhoneDuoFolded` (unfolded and folded) and `.iPadPro13`.
 Snapshots are permuted over `devices(...)`, and each snapshot name includes the device class (`phone`, `pad`, ...),
 which stays the same when a preset moves to a newer model.
 

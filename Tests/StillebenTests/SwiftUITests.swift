@@ -34,6 +34,22 @@ final class SwiftUITests: XCTestCase {
       }
   }
 
+  func testListOnFoldable() async throws {
+    await matcher
+      .devices(.iPhoneDuo, .iPhoneDuoFolded)
+      .sizing(.device)
+      .colorSchemes(.light)
+      .dynamicTypeSizes(.large)
+      .match {
+        NavigationStack {
+          List(1...20, id: \.self) { index in
+            Text("Row \(index)")
+          }
+          .navigationTitle("Foldable")
+        }
+      }
+  }
+
   func testShortScrollview() async throws {
     await matcher
       .ignoresSafeArea()
