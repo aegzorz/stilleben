@@ -2,41 +2,41 @@ import Foundation
 import UIKit
 
 class TraitsViewController: UIViewController {
-    let content: UIViewController
+  let content: UIViewController
 
-    var interfaceStyle: UIUserInterfaceStyle = .light
-    var contentSizeCategory: UIContentSizeCategory = .large
+  var interfaceStyle: UIUserInterfaceStyle = .light
+  var contentSizeCategory: UIContentSizeCategory = .large
 
-    init(content: UIViewController) {
-        self.content = content
-        super.init(nibName: nil, bundle: nil)
-    }
+  init(content: UIViewController) {
+    self.content = content
+    super.init(nibName: nil, bundle: nil)
+  }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
-        addChild(content)
-        view.addSubview(content.view)
+  override func viewDidLoad() {
+    super.viewDidLoad()
 
-        content.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            content.view.topAnchor.constraint(equalTo: view.topAnchor),
-            content.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            content.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            content.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+    addChild(content)
+    view.addSubview(content.view)
 
-        content.didMove(toParent: self)
+    content.view.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      content.view.topAnchor.constraint(equalTo: view.topAnchor),
+      content.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      content.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      content.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    ])
 
-        let traits = UITraitCollection(traitsFrom: [
-            UITraitCollection(userInterfaceStyle: interfaceStyle),
-            UITraitCollection(preferredContentSizeCategory: contentSizeCategory)
-        ])
+    content.didMove(toParent: self)
 
-        setOverrideTraitCollection(traits, forChild: content)
-    }
+    let traits = UITraitCollection(traitsFrom: [
+      UITraitCollection(userInterfaceStyle: interfaceStyle),
+      UITraitCollection(preferredContentSizeCategory: contentSizeCategory),
+    ])
+
+    setOverrideTraitCollection(traits, forChild: content)
+  }
 }
