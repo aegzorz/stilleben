@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 /// Protocol describing how recorded snapshots are read and written
-public protocol RecordingStrategy {
+public protocol RecordingStrategy: Sendable {
   /// Reads a previously recorded snapshot
   /// - Parameter context: The context of the current snapshot
   /// - Returns: The recorded `Data` or `nil` if no recording was found

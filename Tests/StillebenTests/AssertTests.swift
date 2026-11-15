@@ -2,6 +2,7 @@ import Stilleben
 import SwiftUI
 import XCTest
 
+@MainActor
 final class AssertTests: XCTestCase {
   func testWrongSimulator() async throws {
     XCTExpectFailure { issue in

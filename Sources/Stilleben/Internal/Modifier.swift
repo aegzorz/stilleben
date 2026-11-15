@@ -1,7 +1,7 @@
 import Foundation
 
 @dynamicMemberLookup
-struct Modifier<Base> {
+struct Modifier<Base: Sendable>: Sendable {
   let base: Base
 
   subscript<T>(dynamicMember keyPath: WritableKeyPath<Base, T>) -> (T) -> Base {

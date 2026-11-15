@@ -26,7 +26,7 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
 
   public func read(context: SnapshotContext) async throws -> Data? {
     let artifact = try artifactUrl(context: context)
-    guard fileManager.fileExists(atPath: artifact.path) else {
+    guard FileManager.default.fileExists(atPath: artifact.path) else {
       return nil
     }
     let data = try Data(contentsOf: artifact)
@@ -36,8 +36,8 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
   public func write(data: Data, context: SnapshotContext) async throws {
     let directory = try recordingDirectory(context: context)
 
-    if !fileManager.fileExists(atPath: directory.path) {
-      try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+    if !FileManager.default.fileExists(atPath: directory.path) {
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
     try data.write(to: artifactUrl(context: context))
@@ -45,7 +45,6 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
 
   // MARK: - Private
 
-  private let fileManager = FileManager()
   private let folderName: String
 
   private func artifactUrl(context: SnapshotContext) throws -> URL {

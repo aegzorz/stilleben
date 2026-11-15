@@ -32,11 +32,7 @@ class TraitsViewController: UIViewController {
 
     content.didMove(toParent: self)
 
-    let traits = UITraitCollection(traitsFrom: [
-      UITraitCollection(userInterfaceStyle: interfaceStyle),
-      UITraitCollection(preferredContentSizeCategory: contentSizeCategory),
-    ])
-
-    setOverrideTraitCollection(traits, forChild: content)
+    content.traitOverrides.userInterfaceStyle = interfaceStyle
+    content.traitOverrides.preferredContentSizeCategory = contentSizeCategory
   }
 }

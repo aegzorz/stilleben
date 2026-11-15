@@ -3,7 +3,7 @@ import XCTest
 
 extension Snapshot where Value == Diff {
   /// Compares the `Diff` of the `Snapshot` and adds attachements if there's a diff.
-  public func match(file: StaticString = #file, line: UInt = #line) async {
+  public func match(file: StaticString = #filePath, line: UInt = #line) async {
     do {
       try await map { diff in
         switch diff {

@@ -2,6 +2,7 @@ import Foundation
 import Stilleben
 import XCTest
 
+@MainActor
 final class EncodableTests: XCTestCase {
   let matcher = EncodableMatcher()
 

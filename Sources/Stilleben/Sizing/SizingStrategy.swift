@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 /// Protocol describing how to size `UIViewController` before taking the snapshot
-public protocol SizingStrategy {
+public protocol SizingStrategy: Sendable {
   /// Sizing function for the view controller being snapshotted
   /// - Parameter viewController: The `UIViewController` being sized.
   /// - Parameter context: The context of the current snapshot.

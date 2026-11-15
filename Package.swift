@@ -1,5 +1,4 @@
-// swift-tools-version: 5.6
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.4
 
 import PackageDescription
 
@@ -7,7 +6,7 @@ let package = Package(
   name: "Stilleben",
   defaultLocalization: "en",
   platforms: [
-    .iOS(.v15),
+    .iOS(.v26),
   ],
   products: [
     .library(
@@ -16,12 +15,22 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0"),
   ],
   targets: [
     .target(
       name: "Stilleben",
-      dependencies: [],
+      swiftSettings: [
+        // Snapshots render UIKit views and windows, so the whole library runs on the main actor
+        .defaultIsolation(MainActor.self),
+        .treatAllWarnings(as: .error),
+        // Temporary: `UIScreen.main` and `UIWindow(frame:)` are replaced by device configuration in the next change
+        .treatWarning("DeprecatedDeclaration", as: .warning),
+      ],
+      linkerSettings: [
+        // Stilleben reports failures through XCTest, so it must be linked with the test frameworks
+        .linkedFramework("XCTest"),
+      ],
     ),
     .testTarget(
       name: "StillebenTests",
@@ -34,6 +43,10 @@ let package = Package(
       resources: [
         .process("Resources"),
       ],
+      swiftSettings: [
+        .treatAllWarnings(as: .error),
+      ],
     ),
   ],
+  swiftLanguageModes: [.v6],
 )
