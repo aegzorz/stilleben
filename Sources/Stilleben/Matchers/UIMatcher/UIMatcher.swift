@@ -20,8 +20,9 @@ public struct UIMatcher: Sendable {
   public var locales: [Locale] = [Locale(identifier: "en-US")]
   /// Devices to permute when taking snapshots. The device's ``Device/name`` is part of each snapshot's name.
   public var devices: [Device] = [.iPhone18Pro]
-  /// Ignores safe area while sizing if set to `true`
-  public var ignoresSafeArea = false
+  /// Whether snapshots ignore the device's safe area. When `nil`, only ``DeviceSizeStrategy`` (full screen) snapshots
+  /// get the safe area; content sized snapshots like `.dynamicHeight` or `.intrinsic` don't.
+  public var ignoresSafeArea: Bool?
   /// The simulator snapshots have to be taken on. On any other simulator the test fails without comparing or
   /// recording anything, so references aren't overwritten with a different rendering.
   public var simulator: SimulatorRequirement?

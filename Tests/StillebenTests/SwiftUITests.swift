@@ -10,8 +10,7 @@ final class SwiftUITests: XCTestCase {
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  // Disabled: applying the device safe area to intrinsic sizing renders the snapshot blank
-  func disabled_testSimpleText() async throws {
+  func testSimpleText() async throws {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)

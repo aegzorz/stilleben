@@ -11,8 +11,7 @@ final class HostedSwiftUITests: XCTestCase {
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  // Disabled: applying the device safe area to dynamic height sizing renders accessibility sizes blank
-  func disabled_testLongScrollviewInNavigationView() async throws {
+  func testLongScrollviewInNavigationView() async throws {
     await matcher.match {
       NavigationView {
         ScrollView {
