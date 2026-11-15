@@ -46,7 +46,7 @@ extension EncodableMatcher {
   }
 }
 
-private nonisolated extension JSONEncoder {
+private extension JSONEncoder {
   static var matcherDefault: JSONEncoder {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

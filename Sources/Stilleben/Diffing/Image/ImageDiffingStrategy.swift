@@ -7,7 +7,7 @@ public struct ImageDiffingStrategy: DiffingStrategy {
 
   let diffing: Diffing
 
-  public nonisolated init(diffing: @escaping ImageDiffingStrategy.Diffing) {
+  public init(diffing: @escaping ImageDiffingStrategy.Diffing) {
     self.diffing = diffing
   }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-nonisolated extension RecordingStrategy where Self == LocalFileRecordingStrategy {
+extension RecordingStrategy where Self == LocalFileRecordingStrategy {
   public static var localFile: Self {
     LocalFileRecordingStrategy(folderName: "Snapshots")
   }
@@ -20,7 +20,7 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
 
   /// Initializer for ``LocalFileRecordingStrategy``
   /// - Parameter folderName: The name of the folder to store recorded snapshots
-  public nonisolated init(folderName: String) {
+  public init(folderName: String) {
     self.folderName = folderName
   }
 
