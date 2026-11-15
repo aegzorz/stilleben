@@ -8,16 +8,15 @@ public extension SizingStrategy where Self == IntrinsicSizeStrategy {
 
 /// Sizing strategy that sizes the snapshots according to the intrinsic size of the supplied view controller
 public struct IntrinsicSizeStrategy: SizingStrategy {
-  public func size(viewController: UIViewController, context: SnapshotContext) -> CGSize {
-    let insets = viewController.view.safeAreaInsets
-    viewController.additionalSafeAreaInsets = UIEdgeInsets(top: -insets.top, left: 0, bottom: -insets.bottom, right: 0)
+  public nonisolated init() {}
 
-    var size = viewController.view.intrinsicContentSize
-    size.height -= insets.top + insets.bottom
+  public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
+    let view = try viewController.view.unwrap()
+    let size = view.intrinsicContentSize
 
-    // If size is not useful, try system sizing
-    if size.height <= 0 || size.width <= 0 {
-      return viewController.view.systemLayoutSizeFitting(.zero)
+    // Views without an intrinsic size are measured by their constraints
+    if size.width <= 0 || size.height <= 0 || size.width == UIView.noIntrinsicMetric || size.height == UIView.noIntrinsicMetric {
+      return view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
     return size
   }
