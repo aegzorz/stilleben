@@ -10,8 +10,8 @@ public struct UIMatcher: Sendable {
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing image diffs for the snapshots
   public var diffing: ImageDiffingStrategy = .labDelta
-  /// When `true` forces the ``RecordingStrategy`` to record a new snapshot reference.
-  public var forceRecording = false
+  /// When reference recordings are written, ``RecordMode/default`` (`.failed`) unless set
+  public var record: RecordMode = .default
   /// Color schemes to permute when taking snapshots
   public var colorSchemes: [ColorScheme] = [.light, .dark]
   /// Dynamic type sizes to permute when taking snapshots
@@ -47,8 +47,8 @@ extension UIMatcher {
     Modifier(base: self).diffing(value)
   }
 
-  public func forceRecording(_ value: Bool) -> Self {
-    Modifier(base: self).forceRecording(value)
+  public func record(_ value: RecordMode) -> Self {
+    Modifier(base: self).record(value)
   }
 
   public func colorSchemes(_ value: ColorScheme...) -> Self {

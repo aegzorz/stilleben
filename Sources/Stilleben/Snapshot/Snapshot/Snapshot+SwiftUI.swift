@@ -19,7 +19,7 @@ public extension Snapshot where Value: View {
     rendering: RenderingStrategy = .default(hosted: false),
     diffing: ImageDiffingStrategy = .labDelta,
     recording: RecordingStrategy = .localFile,
-    forceRecording: Bool = false,
+    record: RecordMode = .default,
   ) -> Snapshot<Diff> {
     inHostingController()
       .inKeyWindow()
@@ -27,6 +27,6 @@ public extension Snapshot where Value: View {
       .render(using: rendering)
       .record(using: recording)
       .diff(using: diffing)
-      .forceRecording(file: file, line: line, force: forceRecording)
+      .recordMode(record)
   }
 }
