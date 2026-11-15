@@ -1,49 +1,47 @@
-import XCTest
 import Stilleben
 import SwiftUI
+import XCTest
 
 final class AssertTests: XCTestCase {
-    func testWrongSimulator() async throws {
-        XCTExpectFailure { issue in
-            issue.compactDescription.contains("Wrong simulator used")
-        }
-
-        await Snapshot {
-            Data()
-        }
-        .assertSimulator(modelIdentifier: "Dummy")
-        .record(using: MockRecordingStrategy())
-        .diff(using: MockDiffingStrategy())
-        .match()
+  func testWrongSimulator() async throws {
+    XCTExpectFailure { issue in
+      issue.compactDescription.contains("Wrong simulator used")
     }
 
-    func testWrongDisplayScale() async throws {
-        XCTExpectFailure { issue in
-            issue.compactDescription.contains("Wrong display scale detected")
-        }
-
-        await Snapshot {
-            Data()
-        }
-        .assertDisplayScale(1)
-        .record(using: MockRecordingStrategy())
-        .diff(using: MockDiffingStrategy())
-        .match()
+    await Snapshot {
+      Data()
     }
+    .assertSimulator(modelIdentifier: "Dummy")
+    .record(using: MockRecordingStrategy())
+    .diff(using: MockDiffingStrategy())
+    .match()
+  }
+
+  func testWrongDisplayScale() async throws {
+    XCTExpectFailure { issue in
+      issue.compactDescription.contains("Wrong display scale detected")
+    }
+
+    await Snapshot {
+      Data()
+    }
+    .assertDisplayScale(1)
+    .record(using: MockRecordingStrategy())
+    .diff(using: MockDiffingStrategy())
+    .match()
+  }
 }
 
 private struct MockRecordingStrategy: RecordingStrategy {
-    func read(context: SnapshotContext) async throws -> Data? {
-        Data()
-    }
+  func read(context: SnapshotContext) async throws -> Data? {
+    Data()
+  }
 
-    func write(data: Data, context: SnapshotContext) async throws {
-
-    }
+  func write(data: Data, context: SnapshotContext) async throws {}
 }
 
 private struct MockDiffingStrategy: DiffingStrategy {
-    func diff(actual: Data, expected: Data) async throws -> Diff {
-        .same
-    }
+  func diff(actual: Data, expected: Data) async throws -> Diff {
+    .same
+  }
 }

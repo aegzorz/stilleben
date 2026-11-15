@@ -2,21 +2,21 @@ import Foundation
 import UIKit
 
 class WrapperViewController: UIViewController {
-    private let content: UIView
+  private let content: UIView
 
-    init(view: UIView) {
-        self.content = view
-        super.init(nibName: nil, bundle: nil)
-    }
+  init(view: UIView) {
+    content = view
+    super.init(nibName: nil, bundle: nil)
+  }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+  override func viewDidLoad() {
+    super.viewDidLoad()
 
-        view.addSubview(content)
-        content.constrainToEdges(of: view)
-    }
+    view.addSubview(content)
+    content.constrainToEdges(of: view)
+  }
 }

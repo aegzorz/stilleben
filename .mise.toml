@@ -1,0 +1,7 @@
+[settings]
+experimental = true
+lockfile = true
+
+[tools]
+"github:nicklockwood/SwiftFormat" = "0.64.7"
+"aqua:cpisciotta/xcbeautify" = "3.2.1"

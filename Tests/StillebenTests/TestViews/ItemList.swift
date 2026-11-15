@@ -2,27 +2,26 @@ import Foundation
 import SwiftUI
 
 struct ItemList: View {
-    let count: Int
+  let count: Int
 
-    var body: some View {
-        ScrollView {
-            ForEach(0..<count, id: \.self) { index in
-                Item(index: index)
-            }
-        }
+  var body: some View {
+    ScrollView {
+      ForEach(0..<count, id: \.self) { index in
+        Item(index: index)
+      }
     }
-
+  }
 }
 
 struct Item: View {
-    let index: Int
+  let index: Int
 
-    var body: some View {
-        Text("Item #\(index + 1)")
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(colors[index % colors.count].opacity(0.6))
-    }
+  var body: some View {
+    Text("Item #\(index + 1)")
+      .frame(maxWidth: .infinity)
+      .padding()
+      .background(colors[index % colors.count].opacity(0.6))
+  }
 
-    private let colors: [Color] = [.red, .blue, .green, .yellow, .purple]
+  private let colors: [Color] = [.red, .blue, .green, .yellow, .purple]
 }

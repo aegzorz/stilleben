@@ -1,73 +1,73 @@
-import XCTest
 import SwiftUI
+import XCTest
 @testable import Stilleben
 
 final class UIKitTests: XCTestCase {
-    private let matcher = UIMatcher()
-        .assertSimulator(modelIdentifier: "iPhone14,7")
-        .sizing(.dynamicHeight)
+  private let matcher = UIMatcher()
+    .assertSimulator(modelIdentifier: "iPhone14,7")
+    .sizing(.dynamicHeight)
 
-    func testSimpleLabel() async throws {
-        await matcher
-            .sizing(.intrinsic)
-            .locales(.english, .swedish)
-            .includeDeviceName()
-            .match { @MainActor () -> UIView in
-                let label = TestLabel()
-                label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
-                label.backgroundColor = .systemBackground
-                return label
-            }
+  func testSimpleLabel() async throws {
+    await matcher
+      .sizing(.intrinsic)
+      .locales(.english, .swedish)
+      .includeDeviceName()
+      .match { @MainActor () -> UIView in
+        let label = TestLabel()
+        label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
+        label.backgroundColor = .systemBackground
+        return label
+      }
+  }
+
+  func testNavigation() async throws {
+    await matcher
+      .sizing(.screen)
+      .match { @MainActor () -> UIViewController in
+        let content = TestLabel()
+        content.text = "Content View"
+
+        let viewController = WrapperViewController(view: content)
+        viewController.title = "Title"
+
+        let navigationController = UINavigationController(rootViewController: viewController)
+        return navigationController
+      }
+  }
+
+  func testShortScrollview() async throws {
+    await matcher
+      .ignoresSafeArea()
+      .match { @MainActor () -> UIViewController in
+        ItemListViewController(count: 3)
+      }
+  }
+
+  func testLongScrollview() async throws {
+    await matcher
+      .ignoresSafeArea()
+      .match { @MainActor () -> UIViewController in
+        ItemListViewController(count: 25)
+      }
+  }
+
+  func testLongScrollviewInNavigationController() async throws {
+    await matcher.match { @MainActor () -> UIViewController in
+      UINavigationController(
+        rootViewController: ItemListViewController(count: 25),
+      )
     }
+  }
 
-    func testNavigation() async throws {
-        await matcher
-            .sizing(.screen)
-            .match { @MainActor () -> UIViewController in
-                let content = TestLabel()
-                content.text = "Content View"
-
-                let viewController = WrapperViewController(view: content)
-                viewController.title = "Title"
-
-                let navigationController = UINavigationController(rootViewController: viewController)
-                return navigationController
-            }
+  func testLongScrollviewInTabBarController() async {
+    await matcher.match { @MainActor () -> UIViewController in
+      let controller = UITabBarController()
+      controller.viewControllers = [
+        UINavigationController(
+          rootViewController: ItemListViewController(count: 25),
+        ),
+      ]
+      return controller
     }
-
-    func testShortScrollview() async throws {
-        await matcher
-            .ignoresSafeArea()
-            .match { @MainActor () -> UIViewController in
-                ItemListViewController(count: 3)
-            }
-    }
-
-    func testLongScrollview() async throws {
-        await matcher
-            .ignoresSafeArea()
-            .match { @MainActor () -> UIViewController in
-                ItemListViewController(count: 25)
-            }
-    }
-
-    func testLongScrollviewInNavigationController() async throws {
-        await matcher.match { @MainActor () -> UIViewController in
-            UINavigationController(
-                rootViewController: ItemListViewController(count: 25)
-            )
-        }
-    }
-
-    func testLongScrollviewInTabBarController() async {
-        await matcher.match { @MainActor () -> UIViewController in
-            let controller = UITabBarController()
-            controller.viewControllers = [
-                UINavigationController(
-                    rootViewController: ItemListViewController(count: 25)
-                )
-            ]
-            return controller
-        }
-    }
+  }
 }
