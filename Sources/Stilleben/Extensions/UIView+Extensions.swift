@@ -22,4 +22,15 @@ extension UIView {
 
     return nil
   }
+
+  /// Hides the scroll edge effects of every scroll view in the hierarchy, so content near the edges is rendered as is
+  func hideScrollEdgeEffects() {
+    if let scrollView = self as? UIScrollView {
+      scrollView.topEdgeEffect.isHidden = true
+      scrollView.bottomEdgeEffect.isHidden = true
+      scrollView.leftEdgeEffect.isHidden = true
+      scrollView.rightEdgeEffect.isHidden = true
+    }
+    subviews.forEach { $0.hideScrollEdgeEffects() }
+  }
 }

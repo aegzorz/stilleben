@@ -9,6 +9,8 @@ extension Snapshot where Value: UIViewController {
     map { viewController in
       try attachToWindow(viewController)
       defer { viewController.detachFromWindow() }
+      viewController.view.hideScrollEdgeEffects()
+      viewController.view.layoutIfNeeded()
       return try await strategy.render(viewController: viewController, context: context)
     }
   }
