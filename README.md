@@ -105,3 +105,16 @@ Which yields a text file snapshot:
     - text: "Hello World!"
 ```
 
+## Recording
+
+`RecordMode` decides when reference snapshots are written:
+
+| Mode | Missing reference | Different snapshot |
+|---|---|---|
+| `.failed` (default) | Recorded, test fails | Reference overwritten, test fails |
+| `.missing` | Recorded, test fails | Test fails |
+| `.never` | Test fails | Test fails |
+| `.all` | Always recorded, test fails | Always recorded, test fails |
+
+With `.failed`, a changed snapshot shows up as a diff in git, ready to review and commit or discard. Set it per matcher with
+`UIMatcher().record(.never)`, or for a whole run with the `STILLEBEN_RECORD` environment variable (CI uses `never`).
