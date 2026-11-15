@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Snapshot matcher for UI snapshots
-public struct UIMatcher {
+public struct UIMatcher: Sendable {
   /// The strategy to use when determining the size of the resulting snapshot
   public var sizing: SizingStrategy = .screen
   /// The strategy to use when rendering the view

@@ -3,7 +3,7 @@ import UIKit
 extension UIMatcher {
   /// Matches a UIViewController to the reference image stored by the ``RecordingStrategy``
   /// - Parameter produce: Closure used to produce a `UIViewController`
-  public func match<Value: UIViewController>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
+  public func match<Value: UIViewController>(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
     let permutations = colorSchemes
       .flatMap { colorScheme in
         locales.map { locale in
@@ -48,7 +48,7 @@ extension UIMatcher {
 
   /// Matches a UIView to the reference image stored by the ``RecordingStrategy``
   /// - Parameter produce: Closure used to produce a `UIView`
-  public func match(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<UIView>.Produce) async {
+  public func match(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<UIView>.Produce) async {
     await match(file: file, function: function, line: line) { @MainActor () -> UIViewController in
       try await WrapperViewController(
         view: produce(),

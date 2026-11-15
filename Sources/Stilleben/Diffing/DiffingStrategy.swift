@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 
 /// Defines how values of the associated type `Value` should be diffed.
-public protocol DiffingStrategy {
+public protocol DiffingStrategy: Sendable {
   associatedtype Value
 
   /// Calculates the difference `Diff` between the `actual` and `expected` values.

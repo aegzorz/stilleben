@@ -3,14 +3,14 @@ import XCTest
 
 /// Generic type that describes a `Snapshot` of a `Value`
 public struct Snapshot<Value> {
-  public typealias Produce = () async throws -> Value
+  public typealias Produce = @MainActor () async throws -> Value
 
   /// Closure to produce `Value` which will be used for snapshotting
   public let produce: Produce
   /// Context of the current snapshot
   public let context: SnapshotContext
 
-  public init(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Produce) {
+  public init(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Produce) {
     self.produce = produce
     // Create a context that can be used to pass values when mapping into other snapshots
     context = SnapshotContext()

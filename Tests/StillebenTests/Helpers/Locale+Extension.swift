@@ -1,6 +1,6 @@
 import Foundation
 
-extension Locale: ExpressibleByStringLiteral {
+extension Locale: @retroactive ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self.init(identifier: value)
   }

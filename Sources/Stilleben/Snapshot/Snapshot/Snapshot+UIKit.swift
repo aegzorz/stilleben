@@ -4,7 +4,7 @@ import UIKit
 public extension Snapshot where Value: UIViewController {
   /// Convenience function for diffing `UIViewController`
   func diffUIKit(
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line,
     sizing: SizingStrategy = .screen,
     rendering: RenderingStrategy = .default(hosted: false),

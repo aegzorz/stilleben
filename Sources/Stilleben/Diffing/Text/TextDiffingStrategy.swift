@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 import XCTest
 
-extension DiffingStrategy where Self == TextDiffingStrategy {
+nonisolated extension DiffingStrategy where Self == TextDiffingStrategy {
   public static var text: TextDiffingStrategy {
     TextDiffingStrategy()
   }

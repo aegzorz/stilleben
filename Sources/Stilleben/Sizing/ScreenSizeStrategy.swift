@@ -1,6 +1,6 @@
 import UIKit
 
-public extension SizingStrategy where Self == ScreenSizeStrategy {
+public nonisolated extension SizingStrategy where Self == ScreenSizeStrategy {
   static var screen: ScreenSizeStrategy {
     ScreenSizeStrategy()
   }

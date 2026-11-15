@@ -1,19 +1,24 @@
 import Foundation
 
-extension Bundle {
+/// Overrides the locale used for localized strings by swizzling `Bundle.localizedString(forKey:value:table:)`.
+/// The swizzled method runs on whatever thread asks for a string, so its state is guarded by a lock.
+nonisolated extension Bundle {
+  private static let localeOverride = LockedValue<(locale: Locale?, swizzled: Bool)>((nil, false))
+
   static var overrideLocale: Locale? {
-    didSet {
-      swizzleLocalizationIfNeeded()
+    get {
+      localeOverride.value.locale
     }
-  }
-
-  private static var swizzled = false
-
-  private static func swizzleLocalizationIfNeeded() {
-    guard !swizzled else { return }
-    swizzled = true
-
-    swizzleLocalization()
+    set {
+      let needsSwizzling = localeOverride.withValue { state in
+        state.locale = newValue
+        defer { state.swizzled = true }
+        return !state.swizzled
+      }
+      if needsSwizzling {
+        swizzleLocalization()
+      }
+    }
   }
 
   private static func swizzleLocalization() {
@@ -31,7 +36,7 @@ extension Bundle {
   }
 
   @objc private func customLocalizedString(forKey key: String, value: String?, table: String?) -> String {
-    let bundle = Bundle.overrideLocale.flatMap(\.languageCode)
+    let bundle = Bundle.overrideLocale.flatMap(\.language.languageCode?.identifier)
       .flatMap { languageCode in
         path(forResource: languageCode, ofType: "lproj")
       }

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-public extension RenderingStrategy where Self == DefaultRenderingStrategy {
+public nonisolated extension RenderingStrategy where Self == DefaultRenderingStrategy {
   /// Default rendering strategy, renders the view controller to a `UIImage`
   /// - Parameter hosted: Indicates whether the tests are running in an app (hosted) or is simply a unit test (not hosted)
   static func `default`(hosted: Bool) -> Self {

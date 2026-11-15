@@ -1,6 +1,6 @@
 import UIKit
 
-public extension SizingStrategy where Self == DynamicHeightStrategy {
+public nonisolated extension SizingStrategy where Self == DynamicHeightStrategy {
   static var dynamicHeight: Self {
     DynamicHeightStrategy()
   }

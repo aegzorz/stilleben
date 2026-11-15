@@ -2,7 +2,7 @@ import CoreImage.CIFilterBuiltins
 import UIKit
 import XCTest
 
-extension DiffingStrategy where Self == ImageDiffingStrategy {
+nonisolated extension DiffingStrategy where Self == ImageDiffingStrategy {
   /// Image diffiing strategy that creates a delta image using `CILabDeltaE` filter from `CoreImage`.
   /// The delta image will contain ∆E 1994 values between 0.0 and 100.0 where 2.0 is considered a just noticeable difference.
   /// Delta image is then passed through `CIAreaMaximum` to determine the maximum pixel difference in a single pixel.

@@ -2,7 +2,7 @@ import Combine
 import Foundation
 
 /// Snapshot matcher for Encodable snapshots
-public struct EncodableMatcher {
+public struct EncodableMatcher: Sendable {
   /// The strategy to use when recording and reading reference snapshots
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing text diffs for the snapshots
@@ -16,7 +16,7 @@ public struct EncodableMatcher {
 }
 
 extension EncodableMatcher {
-  public func match<Value: Encodable>(file: StaticString = #file, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
+  public func match<Value: Encodable>(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
     await Snapshot(file: file, function: function, line: line) {
       try await produce()
     }
@@ -46,7 +46,7 @@ extension EncodableMatcher {
   }
 }
 
-private extension JSONEncoder {
+private nonisolated extension JSONEncoder {
   static var matcherDefault: JSONEncoder {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

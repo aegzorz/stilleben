@@ -3,11 +3,11 @@ import UIKit
 /// Virtual diffing strategy for comparing `UIImage` values.
 /// Must be initialized with a closure that actually performs the diffing.
 public struct ImageDiffingStrategy: DiffingStrategy {
-  public typealias Diffing = (UIImage, UIImage) async throws -> Diff
+  public typealias Diffing = @MainActor @Sendable (UIImage, UIImage) async throws -> Diff
 
   let diffing: Diffing
 
-  public init(diffing: @escaping ImageDiffingStrategy.Diffing) {
+  public nonisolated init(diffing: @escaping ImageDiffingStrategy.Diffing) {
     self.diffing = diffing
   }
 

@@ -29,7 +29,7 @@ public extension Snapshot where Value == Data {
 public extension Snapshot {
   /// Forces recording of a new snapshot
   /// - Parameter force: Whether or not to force a new recording
-  func forceRecording(file: StaticString = #file, line: UInt = #line, force: Bool = true) -> Self {
+  func forceRecording(file: StaticString = #filePath, line: UInt = #line, force: Bool = true) -> Self {
     if force {
       XCTFail("Forced recording enabled", file: file, line: line)
     }

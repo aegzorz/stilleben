@@ -2,6 +2,7 @@ import Stilleben
 import SwiftUI
 import XCTest
 
+@MainActor
 final class SwiftUITests: XCTestCase {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone14,7")

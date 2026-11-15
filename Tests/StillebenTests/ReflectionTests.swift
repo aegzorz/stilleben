@@ -2,6 +2,7 @@ import Foundation
 import Stilleben
 import XCTest
 
+@MainActor
 final class ReflectionTests: XCTestCase {
   let matcher = ReflectionMatcher()
 

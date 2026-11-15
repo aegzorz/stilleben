@@ -1,7 +1,7 @@
 import Foundation
 
 /// Snapshot matcher for reflected values
-public struct ReflectionMatcher {
+public struct ReflectionMatcher: Sendable {
   /// The strategy to use when recording and reading reference snapshots
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing text diffs for the snapshots
@@ -14,7 +14,7 @@ public struct ReflectionMatcher {
 
 extension ReflectionMatcher {
   public func match<Value>(
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     function: StaticString = #function,
     line: UInt = #line,
     produce: @escaping Snapshot<Value>.Produce,
