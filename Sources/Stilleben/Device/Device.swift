@@ -61,6 +61,26 @@ public extension Device {
     verticalSizeClass: .regular,
   )
 
+  /// iPhone Duo unfolded: a large phone with regular size classes in both directions
+  static let iPhoneDuo = Device(
+    name: "foldable",
+    size: CGSize(width: 669, height: 951),
+    scale: 3,
+    idiom: .phone,
+    horizontalSizeClass: .regular,
+    verticalSizeClass: .regular,
+  )
+
+  /// iPhone Duo folded
+  static let iPhoneDuoFolded = Device(
+    name: "foldable-folded",
+    size: CGSize(width: 466, height: 678),
+    scale: 3,
+    idiom: .phone,
+    horizontalSizeClass: .compact,
+    verticalSizeClass: .regular,
+  )
+
   static let iPadPro13 = Device(
     name: "pad",
     size: CGSize(width: 1032, height: 1376),
