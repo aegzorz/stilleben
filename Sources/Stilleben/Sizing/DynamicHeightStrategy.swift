@@ -9,16 +9,13 @@ public extension SizingStrategy where Self == DynamicHeightStrategy {
 /// Sizing strategy that keeps the width of the snapshot's ``Device`` and fits the height to the content,
 /// including the full content of vertically scrolling views.
 public struct DynamicHeightStrategy: SizingStrategy {
-  public nonisolated init() {}
+  public init() {}
 
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
     let width = context.device.size.width
 
     if let scrollView = view.findScrollView() {
-      // The snapshot shows all content without scrolling, so nothing scrolls under the edges
-      scrollView.topEdgeEffect.isHidden = true
-      scrollView.bottomEdgeEffect.isHidden = true
       view.layoutIfNeeded()
       let insets = scrollView.adjustedContentInset
       let hiddenContent = scrollView.contentSize.height + insets.top + insets.bottom - scrollView.frame.height

@@ -1,6 +1,6 @@
 import UIKit
 
-public nonisolated extension SizingStrategy where Self == FixedHeightStrategy {
+public extension SizingStrategy where Self == FixedHeightStrategy {
   /// Keeps the width of the snapshot's ``Device`` with a fixed height
   static func fixedHeight(_ height: CGFloat) -> FixedHeightStrategy {
     FixedHeightStrategy(height: height)
@@ -11,7 +11,7 @@ public nonisolated extension SizingStrategy where Self == FixedHeightStrategy {
 public struct FixedHeightStrategy: SizingStrategy {
   let height: CGFloat
 
-  public nonisolated init(height: CGFloat) {
+  public init(height: CGFloat) {
     self.height = height
   }
 
