@@ -1,8 +1,21 @@
 import Foundation
 
-extension SnapshotContext.Key where Value == Bool {
-  public static var isRecording: Self {
-    SnapshotContext.Key(name: "isRecording")
+extension SnapshotContext.Key where Value == RecordMode {
+  public static var recordMode: Self {
+    SnapshotContext.Key(name: "recordMode")
+  }
+}
+
+extension SnapshotContext.Key where Value == Data {
+  /// The recording produced by the test, kept so a failed match can re-record it
+  static var actualRecording: Self {
+    SnapshotContext.Key(name: "actualRecording")
+  }
+}
+
+extension SnapshotContext.Key where Value == RecordingStrategy {
+  static var recordingStrategy: Self {
+    SnapshotContext.Key(name: "recordingStrategy")
   }
 }
 

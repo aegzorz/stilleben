@@ -3,37 +3,53 @@ import SwiftUI
 import XCTest
 
 public extension Snapshot where Value == Data {
-  /// Error used when the recording strategy can't find a reference to compare to
+  /// Error used when there is no reference to compare to
   struct MissingReferenceError: LocalizedError {
-    public var errorDescription: String? = "No recording for snapshot was found. Re-run to compare against recorded snapshot."
+    let recorded: Bool
+
+    public var errorDescription: String? {
+      recorded
+        ? "No reference snapshot was found, so it was recorded. Review it and run the test again."
+        : "No reference snapshot was found, and the record mode doesn't allow recording it."
+    }
   }
 
-  /// Records a snapshot if no reference could be found
-  /// - Parameter using: Recoding strategy
+  /// Error used when record mode ``RecordMode/all`` recorded a snapshot
+  struct RecordedError: LocalizedError {
+    public var errorDescription: String? {
+      "Recorded the snapshot because the record mode is .all. Review it and switch back to another mode."
+    }
+  }
+
+  /// Reads the reference recording to compare against, recording it according to the ``RecordMode``
+  /// - Parameter using: Recording strategy
   func record(using strategy: RecordingStrategy) -> Snapshot<(Data, Data)> {
     map { actual in
-      if context.value(for: .isRecording) {
+      let mode = context.value(for: .recordMode) ?? .default
+      context.set(value: actual, for: .actualRecording)
+      context.set(value: strategy, for: .recordingStrategy)
+
+      if mode == .all {
         try await strategy.write(data: actual, context: context)
+        throw RecordedError()
       }
 
-      if let expected = try await strategy.read(context: context) {
-        return (actual, expected)
-      } else {
-        try await strategy.write(data: actual, context: context)
-        throw MissingReferenceError()
+      guard let expected = try await strategy.read(context: context) else {
+        let recorded = mode != .never
+        if recorded {
+          try await strategy.write(data: actual, context: context)
+        }
+        throw MissingReferenceError(recorded: recorded)
       }
+      return (actual, expected)
     }
   }
 }
 
 public extension Snapshot {
-  /// Forces recording of a new snapshot
-  /// - Parameter force: Whether or not to force a new recording
-  func forceRecording(file: StaticString = #filePath, line: UInt = #line, force: Bool = true) -> Self {
-    if force {
-      XCTFail("Forced recording enabled", file: file, line: line)
-    }
-    context.set(value: force, for: .isRecording)
+  /// Sets the ``RecordMode`` for the snapshot, ``RecordMode/default`` unless set
+  func recordMode(_ mode: RecordMode) -> Self {
+    context.set(value: mode, for: .recordMode)
     return self
   }
 

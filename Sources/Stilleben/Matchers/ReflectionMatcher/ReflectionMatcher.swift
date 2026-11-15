@@ -6,8 +6,8 @@ public struct ReflectionMatcher: Sendable {
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing text diffs for the snapshots
   public var diffing: TextDiffingStrategy = .text
-  /// When `true` forces the ``RecordingStrategy`` to record a new snapshot reference.
-  public var forceRecording = false
+  /// When reference recordings are written, ``RecordMode/default`` (`.failed`) unless set
+  public var record: RecordMode = .default
 
   public init() {}
 }
@@ -26,7 +26,7 @@ extension ReflectionMatcher {
     .reflect()
     .record(using: recording)
     .diff(using: diffing)
-    .forceRecording(force: forceRecording)
+    .recordMode(record)
     .match(file: file, line: line)
   }
 }
@@ -40,7 +40,7 @@ extension ReflectionMatcher {
     Modifier(base: self).diffing(value)
   }
 
-  public func forceRecording(_ value: Bool) -> Self {
-    Modifier(base: self).forceRecording(value)
+  public func record(_ value: RecordMode) -> Self {
+    Modifier(base: self).record(value)
   }
 }

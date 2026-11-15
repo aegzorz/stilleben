@@ -16,6 +16,11 @@ extension Snapshot where Value == Diff {
             attachments.forEach(activity.add)
           }
 
+          let mode = context.value(for: .recordMode) ?? .default
+          if mode == .failed, let actual = context.value(for: .actualRecording), let strategy = context.value(for: .recordingStrategy) {
+            try await strategy.write(data: actual, context: context)
+            return XCTFail("\(description). The reference was re-recorded (record mode .failed): review the change and commit it.", file: file, line: line)
+          }
           return XCTFail(description, file: file, line: line)
         }
       }
