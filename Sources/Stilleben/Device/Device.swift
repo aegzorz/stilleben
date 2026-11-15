@@ -5,7 +5,8 @@ import UIKit
 /// Snapshots are laid out and rendered with the device's size, display scale and traits,
 /// so they look the same no matter which simulator runs the tests.
 public struct Device: Sendable, Hashable {
-  /// Name used in recording names when ``UIMatcher/includeDeviceName(_:)`` is enabled
+  /// Short, stable name of the device class used in snapshot names, like `phone` or `pad`.
+  /// It stays the same when a preset moves to a newer model, so snapshots keep their names.
   public var name: String
   /// Screen size in points
   public var size: CGSize
@@ -15,7 +16,7 @@ public struct Device: Sendable, Hashable {
   public var horizontalSizeClass: UIUserInterfaceSizeClass
   public var verticalSizeClass: UIUserInterfaceSizeClass
 
-  public nonisolated init(
+  public init(
     name: String,
     size: CGSize,
     scale: CGFloat,
@@ -32,9 +33,9 @@ public struct Device: Sendable, Hashable {
   }
 }
 
-public nonisolated extension Device {
-  static let iPhone17 = Device(
-    name: "iPhone 17",
+public extension Device {
+  static let iPhone18Pro = Device(
+    name: "phone",
     size: CGSize(width: 402, height: 874),
     scale: 3,
     idiom: .phone,
@@ -42,8 +43,8 @@ public nonisolated extension Device {
     verticalSizeClass: .regular,
   )
 
-  static let iPhone17ProMax = Device(
-    name: "iPhone 17 Pro Max",
+  static let iPhone18ProMax = Device(
+    name: "phone-max",
     size: CGSize(width: 440, height: 956),
     scale: 3,
     idiom: .phone,
@@ -52,7 +53,7 @@ public nonisolated extension Device {
   )
 
   static let iPhone17e = Device(
-    name: "iPhone 17e",
+    name: "phone-compact",
     size: CGSize(width: 390, height: 844),
     scale: 3,
     idiom: .phone,
@@ -61,16 +62,11 @@ public nonisolated extension Device {
   )
 
   static let iPadPro13 = Device(
-    name: "iPad Pro 13-inch",
+    name: "pad",
     size: CGSize(width: 1032, height: 1376),
     scale: 2,
     idiom: .pad,
     horizontalSizeClass: .regular,
     verticalSizeClass: .regular,
   )
-
-  /// Name usable in file names
-  var fileName: String {
-    name.replacingOccurrences(of: " ", with: "_")
-  }
 }

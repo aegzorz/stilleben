@@ -16,32 +16,34 @@ extension UIMatcher {
         }
       }
 
-    for (colorScheme, locale, dynamicTypeSize) in permutations {
-      await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
-        Bundle.overrideLocale = locale
+    for device in devices {
+      for (colorScheme, locale, dynamicTypeSize) in permutations {
+        await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
+          Bundle.overrideLocale = locale
 
-        let viewController = try await TraitsViewController(content: produce())
-        viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
-        viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
+          let viewController = try await TraitsViewController(content: produce())
+          viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
+          viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
 
-        return viewController
+          return viewController
+        }
+        .device(device)
+        .recordingNameComponent(add: device.name)
+        .recordingNameComponent(add: colorScheme)
+        .recordingNameComponent(add: dynamicTypeSize)
+        .recordingNameComponent(add: locale)
+        .ignoresSafeArea(ignore: ignoresSafeArea)
+        .diffUIKit(
+          file: file,
+          line: line,
+          sizing: sizing,
+          rendering: rendering,
+          diffing: diffing,
+          recording: recording,
+          record: record,
+        )
+        .match(file: file, line: line)
       }
-      .device(device)
-      .recordingNameComponent(add: colorScheme)
-      .recordingNameComponent(add: dynamicTypeSize)
-      .recordingNameComponent(add: locale)
-      .addDeviceName(add: includeDeviceName)
-      .ignoresSafeArea(ignore: ignoresSafeArea)
-      .diffUIKit(
-        file: file,
-        line: line,
-        sizing: sizing,
-        rendering: rendering,
-        diffing: diffing,
-        recording: recording,
-        record: record,
-      )
-      .match(file: file, line: line)
     }
   }
 

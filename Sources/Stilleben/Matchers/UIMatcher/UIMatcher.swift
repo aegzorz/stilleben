@@ -18,10 +18,8 @@ public struct UIMatcher: Sendable {
   public var dynamicTypeSizes: [DynamicTypeSize] = [.large, .accessibility5]
   /// Locales to permute when taking snapshots
   public var locales: [Locale] = [Locale(identifier: "en-US")]
-  /// The device that snapshots are laid out and rendered for
-  public var device: Device = .iPhone17
-  /// Include the device name when naming the snapshot
-  public var includeDeviceName = false
+  /// Devices to permute when taking snapshots. The device's ``Device/name`` is part of each snapshot's name.
+  public var devices: [Device] = [.iPhone18Pro]
   /// Ignores safe area while sizing if set to `true`
   public var ignoresSafeArea = false
 
@@ -61,12 +59,8 @@ extension UIMatcher {
     Modifier(base: self).locales(value)
   }
 
-  public func includeDeviceName(_ include: Bool = true) -> Self {
-    Modifier(base: self).includeDeviceName(include)
-  }
-
-  public func device(_ value: Device) -> Self {
-    Modifier(base: self).device(value)
+  public func devices(_ value: Device...) -> Self {
+    Modifier(base: self).devices(value)
   }
 
   public func ignoresSafeArea(_ ignore: Bool = true) -> Self {

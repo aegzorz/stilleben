@@ -11,7 +11,6 @@ final class SwiftUITests: XCTestCase {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)
-      .includeDeviceName()
       .match {
         Text("Hello World!", bundle: .module)
           .padding()

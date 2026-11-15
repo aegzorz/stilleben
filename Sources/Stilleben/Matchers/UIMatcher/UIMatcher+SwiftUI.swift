@@ -16,32 +16,34 @@ extension UIMatcher {
         }
       }
 
-    for (colorScheme, locale, dynamicTypeSize) in permutations {
-      Bundle.overrideLocale = locale
+    for device in devices {
+      for (colorScheme, locale, dynamicTypeSize) in permutations {
+        Bundle.overrideLocale = locale
 
-      await Snapshot(file: file, function: function, line: line) {
-        try await produce()
-          .ignoresSafeArea(ignoresSafeArea ? .all : [], edges: ignoresSafeArea ? .all : [])
-          .deferredEnvironment(\.colorScheme, colorScheme)
-          .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
-          .deferredEnvironment(\.locale, locale)
+        await Snapshot(file: file, function: function, line: line) {
+          try await produce()
+            .ignoresSafeArea(ignoresSafeArea ? .all : [], edges: ignoresSafeArea ? .all : [])
+            .deferredEnvironment(\.colorScheme, colorScheme)
+            .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
+            .deferredEnvironment(\.locale, locale)
+        }
+        .device(device)
+        .recordingNameComponent(add: device.name)
+        .recordingNameComponent(add: String(describing: colorScheme))
+        .recordingNameComponent(add: String(describing: dynamicTypeSize))
+        .recordingNameComponent(add: locale.identifier)
+        .ignoresSafeArea(ignore: ignoresSafeArea)
+        .diffSwiftUI(
+          file: file,
+          line: line,
+          sizing: sizing,
+          rendering: rendering,
+          diffing: diffing,
+          recording: recording,
+          record: record,
+        )
+        .match(file: file, line: line)
       }
-      .device(device)
-      .recordingNameComponent(add: String(describing: colorScheme))
-      .recordingNameComponent(add: String(describing: dynamicTypeSize))
-      .recordingNameComponent(add: locale.identifier)
-      .addDeviceName(add: includeDeviceName)
-      .ignoresSafeArea(ignore: ignoresSafeArea)
-      .diffSwiftUI(
-        file: file,
-        line: line,
-        sizing: sizing,
-        rendering: rendering,
-        diffing: diffing,
-        recording: recording,
-        record: record,
-      )
-      .match(file: file, line: line)
     }
   }
 }

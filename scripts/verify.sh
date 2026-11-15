@@ -18,7 +18,7 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=27.2}"
+DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2}"
 
 # Snapshots render in a window scene, so the tests run hosted in the TestHost app
 echo "🏗️ Generating test host"
