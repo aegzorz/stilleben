@@ -7,3 +7,8 @@ DerivedData/
 .swiftpm/config/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .netrc
+
+# Generated test host project
+/TestHost/*.xcodeproj
+/TestHost/*.xcworkspace
+/TestHost/Derived
