@@ -20,7 +20,9 @@ Snapshots can be configured to use the following:
 - `SizingStrategy` strategy used for sizing views before snapshotting: `.device`, `.dynamicHeight`, `.fullWidth`, `.fixedHeight(_:)` or `.intrinsic`.
 
 UI snapshots are laid out and rendered for a configured `Device` (size, display scale, safe area and traits),
-so they look the same on any simulator. Presets include `.iPhone17`, `.iPhone17ProMax`, `.iPhone17e` and `.iPadPro13`.
+so they look the same on any simulator. Presets include `.iPhone18Pro` (default), `.iPhone18ProMax`, `.iPhone17e` and `.iPadPro13`.
+Snapshots are permuted over `devices(...)`, and each snapshot name includes the device class (`phone`, `pad`, ...),
+which stays the same when a preset moves to a newer model.
 
 ## Requirements
 
@@ -63,7 +65,7 @@ import Stilleben
 final class SomeViewTests: XCTestCase {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
-        .device(.iPhone17)
+        .devices(.iPhone18Pro)
         .sizing(.dynamicHeight)
         .dynamicTypeSizes(.large)
 
@@ -94,7 +96,7 @@ import Stilleben
 final class SomeViewControllerTests: XCTestCase {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
-        .device(.iPadPro13)
+        .devices(.iPhone18Pro, .iPadPro13)
         .sizing(.device)
 
     func testSomeViewController() async throws {

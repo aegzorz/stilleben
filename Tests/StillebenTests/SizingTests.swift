@@ -33,7 +33,7 @@ final class SizingTests: XCTestCase {
     try await Snapshot {
       Color.red.frame(height: 50)
     }
-    .device(.iPhone17)
+    .device(.iPhone18Pro)
     .ignoresSafeArea(ignore: ignoresSafeArea)
     .inHostingController()
     .inWindow()
