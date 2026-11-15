@@ -47,6 +47,15 @@ Which one to use is up to you:
 References are recorded in the mode the tests run in, so keep each test target in one mode. Snapshot views that use
 Liquid Glass in hosted tests if the glass itself matters.
 
+## Localization
+
+`UIMatcher().locales(...)` takes a snapshot per locale. SwiftUI views get it through the `\.locale` environment,
+so `Text` is localized automatically. UIKit code can read `SnapshotEnvironment.locale` while the snapshot is produced:
+
+```swift
+label.text = String(localized: LocalizedStringResource("Hello", locale: SnapshotEnvironment.locale, bundle: .main))
+```
+
 ## Simulator
 
 The device configuration sets the size, scale and traits of a snapshot, but rendering still differs between iOS versions
