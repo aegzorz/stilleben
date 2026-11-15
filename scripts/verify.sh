@@ -18,12 +18,17 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=latest}"
+DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=27.2}"
+
+# Snapshots render in a window scene, so the tests run hosted in the TestHost app
+echo "🏗️ Generating test host"
+(cd TestHost && mise exec -- tuist generate --no-open)
+
 echo "✅ Testing on ${DESTINATION}"
 rm -rf .build/TestResults.xcresult
-set -o pipefail
 xcodebuild test \
-  -scheme Stilleben \
+  -workspace TestHost/StillebenTestHost.xcworkspace \
+  -scheme StillebenTests \
   -destination "$DESTINATION" \
   -resultBundlePath .build/TestResults.xcresult \
   | mise exec -- xcbeautify

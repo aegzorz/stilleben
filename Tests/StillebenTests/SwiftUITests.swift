@@ -5,7 +5,6 @@ import XCTest
 @MainActor
 final class SwiftUITests: XCTestCase {
   private let matcher = UIMatcher()
-    .assertSimulator(modelIdentifier: "iPhone14,7")
     .sizing(.dynamicHeight)
 
   func testSimpleText() async throws {
@@ -22,7 +21,7 @@ final class SwiftUITests: XCTestCase {
 
   func testNavigation() async throws {
     await matcher
-      .sizing(.screen)
+      .sizing(.device)
       .match {
         NavigationView {
           Text("Content View")

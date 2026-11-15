@@ -26,8 +26,7 @@ extension UIMatcher {
           .deferredEnvironment(\.dynamicTypeSize, dynamicTypeSize)
           .deferredEnvironment(\.locale, locale)
       }
-      .assertSimulator(modelIdentifier: assertSimulatorModelIdentifier, file: file, line: line)
-      .assertDisplayScale(assertDisplayScale, file: file, line: line)
+      .device(device)
       .recordingNameComponent(add: String(describing: colorScheme))
       .recordingNameComponent(add: String(describing: dynamicTypeSize))
       .recordingNameComponent(add: locale.identifier)

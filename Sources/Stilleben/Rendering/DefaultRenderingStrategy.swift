@@ -2,25 +2,22 @@ import Foundation
 import UIKit
 
 public extension RenderingStrategy where Self == DefaultRenderingStrategy {
-  /// Default rendering strategy, renders the view controller to a `UIImage`
-  /// - Parameter hosted: Indicates whether the tests are running in an app (hosted) or is simply a unit test (not hosted)
-  static func `default`(hosted: Bool) -> Self {
-    DefaultRenderingStrategy(hosted: hosted)
+  /// Default rendering strategy, draws the view hierarchy at the display scale of the snapshot's ``Device``
+  static var `default`: Self {
+    DefaultRenderingStrategy()
   }
 }
 
 public struct DefaultRenderingStrategy: RenderingStrategy {
-  let hosted: Bool
+  public init() {}
 
   public func render(viewController: UIViewController, context: SnapshotContext) -> UIImage {
-    let renderer = UIGraphicsImageRenderer(size: viewController.view.frame.size)
-    let image = renderer.image { context in
-      if hosted {
-        viewController.view.drawHierarchy(in: viewController.view.bounds, afterScreenUpdates: true)
-      } else {
-        viewController.view.layer.render(in: context.cgContext)
-      }
+    let format = UIGraphicsImageRendererFormat(for: viewController.traitCollection)
+    format.scale = context.device.scale
+
+    let view = viewController.view!
+    return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { _ in
+      view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
     }
-    return image
   }
 }

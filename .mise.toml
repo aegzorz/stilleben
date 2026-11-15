@@ -3,5 +3,6 @@ experimental = true
 lockfile = true
 
 [tools]
+"aqua:tuist/tuist" = "4.216.7"
 "github:nicklockwood/SwiftFormat" = "0.64.7"
 "aqua:cpisciotta/xcbeautify" = "3.2.1"

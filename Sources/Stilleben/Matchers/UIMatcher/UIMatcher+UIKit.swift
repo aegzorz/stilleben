@@ -26,8 +26,7 @@ extension UIMatcher {
 
         return viewController
       }
-      .assertSimulator(modelIdentifier: assertSimulatorModelIdentifier, file: file, line: line)
-      .assertDisplayScale(assertDisplayScale, file: file, line: line)
+      .device(device)
       .recordingNameComponent(add: colorScheme)
       .recordingNameComponent(add: dynamicTypeSize)
       .recordingNameComponent(add: locale)

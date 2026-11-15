@@ -3,13 +3,14 @@ import SwiftUI
 import UIKit
 
 extension Snapshot where Value: UIViewController {
-  /// Renders the snapshots `UIViewController` into an `UIImage`
+  /// Renders the snapshots `UIViewController` into an `UIImage`, then releases its window
   /// - Parameter strategy: Render using specific ``RenderingStrategy``
   public func render(using strategy: RenderingStrategy) -> Snapshot<UIImage> {
-    inKeyWindow()
-      .map { viewController in
-        try await strategy.render(viewController: viewController, context: context)
-      }
+    map { viewController in
+      try attachToWindow(viewController)
+      defer { viewController.detachFromWindow() }
+      return try await strategy.render(viewController: viewController, context: context)
+    }
   }
 }
 

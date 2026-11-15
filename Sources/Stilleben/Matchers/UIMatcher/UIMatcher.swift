@@ -3,9 +3,9 @@ import SwiftUI
 /// Snapshot matcher for UI snapshots
 public struct UIMatcher: Sendable {
   /// The strategy to use when determining the size of the resulting snapshot
-  public var sizing: SizingStrategy = .screen
+  public var sizing: SizingStrategy = .device
   /// The strategy to use when rendering the view
-  public var rendering: RenderingStrategy = .default(hosted: false)
+  public var rendering: RenderingStrategy = .default
   /// The strategy to use when recording and reading reference snapshots
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing image diffs for the snapshots
@@ -18,10 +18,8 @@ public struct UIMatcher: Sendable {
   public var dynamicTypeSizes: [DynamicTypeSize] = [.large, .accessibility5]
   /// Locales to permute when taking snapshots
   public var locales: [Locale] = [Locale(identifier: "en-US")]
-  /// Model identifier for the simulator that the snapshots should be taken on
-  public var assertSimulatorModelIdentifier: String?
-  /// Display scale for the simulator that the snapshots should be taken on
-  public var assertDisplayScale: CGFloat?
+  /// The device that snapshots are laid out and rendered for
+  public var device: Device = .iPhone17
   /// Include the device name when naming the snapshot
   public var includeDeviceName = false
   /// Ignores safe area while sizing if set to `true`
@@ -67,12 +65,8 @@ extension UIMatcher {
     Modifier(base: self).includeDeviceName(include)
   }
 
-  public func assertSimulator(modelIdentifier expected: String) -> Self {
-    Modifier(base: self).assertSimulatorModelIdentifier(expected)
-  }
-
-  public func assertDisplayScale(_ expected: CGFloat) -> Self {
-    Modifier(base: self).assertDisplayScale(expected)
+  public func device(_ value: Device) -> Self {
+    Modifier(base: self).device(value)
   }
 
   public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
