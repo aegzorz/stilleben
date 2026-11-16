@@ -8,6 +8,8 @@ final class HostedSwiftUITests: XCTestCase {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
+    .colorSchemes(.light)
+    .dynamicTypeSizes(.large)
 
   // Disabled: applying the device safe area to dynamic height sizing renders accessibility sizes blank
   func disabled_testLongScrollviewInNavigationView() async throws {

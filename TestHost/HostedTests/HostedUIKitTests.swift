@@ -8,6 +8,8 @@ final class HostedUIKitTests: XCTestCase {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
+    .colorSchemes(.light)
+    .dynamicTypeSizes(.large)
 
   func testLongScrollviewInTabBarController() async throws {
     await matcher.match { @MainActor () -> UIViewController in

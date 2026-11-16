@@ -7,11 +7,15 @@ final class UIKitTests: XCTestCase {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
+    .colorSchemes(.light)
+    .dynamicTypeSizes(.large)
 
   func testSimpleLabel() async throws {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)
+      .colorSchemes(.light, .dark)
+      .dynamicTypeSizes(.large, .accessibility5)
       .match { @MainActor () -> UIView in
         let label = TestLabel()
         label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
