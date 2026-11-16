@@ -1,0 +1,53 @@
+# Test host for the snapshot tests that need a window scene (Liquid Glass and other hosted-only rendering).
+# Generate the project with `mise exec -- xcodegen` in this folder; the .xcodeproj isn't checked in.
+name: TestHost
+
+options:
+  bundleIdPrefix: dev.aegzorz
+  deploymentTarget:
+    iOS: "26.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    GENERATE_INFOPLIST_FILE: YES
+
+packages:
+  Stilleben:
+    path: ..
+
+targets:
+  TestHost:
+    type: application
+    platform: iOS
+    sources:
+      - App
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.aegzorz.StillebenTestHost
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+
+  HostedTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: HostedTests
+        excludes:
+          - Snapshots
+      - path: ../Tests/StillebenTests/TestViews
+    dependencies:
+      - target: TestHost
+      - package: Stilleben
+
+schemes:
+  TestHost:
+    build:
+      targets:
+        TestHost: all
+        HostedTests: [test]
+    test:
+      targets:
+        - HostedTests

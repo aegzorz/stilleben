@@ -8,16 +8,6 @@ extension RecordingStrategy where Self == LocalFileRecordingStrategy {
 
 /// Recording strategy that stores recorded snapshots locally on disk
 public struct LocalFileRecordingStrategy: RecordingStrategy {
-  /// Error thrown when no file extension has been set in the ``SnapshotContext``
-  public struct MissingFileExtensionError: LocalizedError {
-    public var errorDescription: String? = "Unable to record snapshot, file extension was not set"
-  }
-
-  /// Error thrown when no name components have been set in the ``SnapshotContext``
-  public struct MissingRecordingNameComponents: LocalizedError {
-    public var errorDescription: String? = "Unable to name recording, missing name components"
-  }
-
   /// Initializer for ``LocalFileRecordingStrategy``
   /// - Parameter folderName: The name of the folder to store recorded snapshots
   public init(folderName: String) {
@@ -48,10 +38,10 @@ public struct LocalFileRecordingStrategy: RecordingStrategy {
   private let folderName: String
 
   private func artifactUrl(context: SnapshotContext) throws -> URL {
-    let fileExtension = try context.value(for: .fileExtension).unwrap(error: MissingFileExtensionError())
+    let fileExtension = try context.value(for: .fileExtension).unwrap(error: ConfigurationError.missingFileExtension)
 
     guard let nameComponents = context.value(for: .recordingNameComponents), !nameComponents.isEmpty else {
-      throw MissingRecordingNameComponents()
+      throw ConfigurationError.missingRecordingName
     }
 
     let recordingName = nameComponents.joined(separator: "-")

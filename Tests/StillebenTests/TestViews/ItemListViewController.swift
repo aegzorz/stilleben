@@ -5,9 +5,11 @@ import UIKit
 
 class ItemListViewController: UIViewController {
   private let count: Int
+  private let bottomSpacing: Bool
 
-  init(count: Int) {
+  init(count: Int, bottomSpacing: Bool = false) {
     self.count = count
+    self.bottomSpacing = bottomSpacing
     super.init(nibName: nil, bundle: nil)
     title = "List of items"
     tabBarItem = UITabBarItem(
@@ -37,6 +39,12 @@ class ItemListViewController: UIViewController {
 
     for index in 0..<count {
       stackView.addArrangedSubview(ItemView(index: index))
+    }
+
+    if bottomSpacing {
+      let spacing = ItemView(index: count)
+      spacing.alpha = 0
+      stackView.addArrangedSubview(spacing)
     }
 
     view.addSubview(scrollView)

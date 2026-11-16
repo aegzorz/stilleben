@@ -24,8 +24,6 @@ let package = Package(
         // Snapshots render UIKit views and windows, so the whole library runs on the main actor
         .defaultIsolation(MainActor.self),
         .treatAllWarnings(as: .error),
-        // Temporary: `UIScreen.main` and `UIWindow(frame:)` are replaced by device configuration in the next change
-        .treatWarning("DeprecatedDeclaration", as: .warning),
       ],
       linkerSettings: [
         // Stilleben reports failures through XCTest, so it must be linked with the test frameworks

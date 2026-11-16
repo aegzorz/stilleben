@@ -2,25 +2,27 @@ import Foundation
 import UIKit
 
 public extension RenderingStrategy where Self == DefaultRenderingStrategy {
-  /// Default rendering strategy, renders the view controller to a `UIImage`
-  /// - Parameter hosted: Indicates whether the tests are running in an app (hosted) or is simply a unit test (not hosted)
-  static func `default`(hosted: Bool) -> Self {
-    DefaultRenderingStrategy(hosted: hosted)
+  /// Default rendering strategy, renders the view at the display scale of the snapshot's ``Device``
+  static var `default`: Self {
+    DefaultRenderingStrategy()
   }
 }
 
 public struct DefaultRenderingStrategy: RenderingStrategy {
-  let hosted: Bool
+  public func render(viewController: UIViewController, context: SnapshotContext) throws -> UIImage {
+    let format = UIGraphicsImageRendererFormat(for: viewController.traitCollection)
+    format.scale = try context.device.scale
 
-  public func render(viewController: UIViewController, context: SnapshotContext) -> UIImage {
-    let renderer = UIGraphicsImageRenderer(size: viewController.view.frame.size)
-    let image = renderer.image { context in
-      if hosted {
-        viewController.view.drawHierarchy(in: viewController.view.bounds, afterScreenUpdates: true)
+    let view = try viewController.view.unwrap()
+    return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { rendererContext in
+      // Hosted tests (an app with a window scene) use drawHierarchy, which captures everything, Liquid Glass included.
+      // Unhosted tests (like Swift package tests) have no app scene, and drawHierarchy would give them an empty image,
+      // so render the layer tree instead: same output, except Liquid Glass is missing.
+      if let scene = view.window?.windowScene, UIApplication.shared.connectedScenes.contains(scene) {
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
       } else {
-        viewController.view.layer.render(in: context.cgContext)
+        view.layer.render(in: rendererContext.cgContext)
       }
     }
-    return image
   }
 }

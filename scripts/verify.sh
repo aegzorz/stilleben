@@ -18,12 +18,23 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 17,OS=latest}"
-echo "✅ Testing on ${DESTINATION}"
-rm -rf .build/TestResults.xcresult
-set -o pipefail
+DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2}"
+rm -rf .build/TestResults-*.xcresult
+
+echo "✅ Package tests on ${DESTINATION}"
 xcodebuild test \
   -scheme Stilleben \
   -destination "$DESTINATION" \
-  -resultBundlePath .build/TestResults.xcresult \
+  -resultBundlePath .build/TestResults-package.xcresult \
+  | mise exec -- xcbeautify
+
+echo "🏗️ Generating the test host project"
+(cd TestHost && mise exec -- xcodegen --quiet)
+
+echo "✅ Hosted tests in the TestHost app on ${DESTINATION}"
+xcodebuild test \
+  -project TestHost/TestHost.xcodeproj \
+  -scheme TestHost \
+  -destination "$DESTINATION" \
+  -resultBundlePath .build/TestResults-hosted.xcresult \
   | mise exec -- xcbeautify

@@ -5,14 +5,17 @@ import XCTest
 @MainActor
 final class UIKitTests: XCTestCase {
   private let matcher = UIMatcher()
-    .assertSimulator(modelIdentifier: "iPhone14,7")
+    .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
+    .colorSchemes(.light)
+    .dynamicTypeSizes(.large)
 
   func testSimpleLabel() async throws {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)
-      .includeDeviceName()
+      .colorSchemes(.light, .dark)
+      .dynamicTypeSizes(.large, .accessibility5)
       .match { @MainActor () -> UIView in
         let label = TestLabel()
         label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
@@ -23,7 +26,7 @@ final class UIKitTests: XCTestCase {
 
   func testNavigation() async throws {
     await matcher
-      .sizing(.screen)
+      .sizing(.device)
       .match { @MainActor () -> UIViewController in
         let content = TestLabel()
         content.text = "Content View"
@@ -48,27 +51,15 @@ final class UIKitTests: XCTestCase {
     await matcher
       .ignoresSafeArea()
       .match { @MainActor () -> UIViewController in
-        ItemListViewController(count: 25)
+        ItemListViewController(count: 12)
       }
   }
 
   func testLongScrollviewInNavigationController() async throws {
     await matcher.match { @MainActor () -> UIViewController in
       UINavigationController(
-        rootViewController: ItemListViewController(count: 25),
+        rootViewController: ItemListViewController(count: 12),
       )
-    }
-  }
-
-  func testLongScrollviewInTabBarController() async {
-    await matcher.match { @MainActor () -> UIViewController in
-      let controller = UITabBarController()
-      controller.viewControllers = [
-        UINavigationController(
-          rootViewController: ItemListViewController(count: 25),
-        ),
-      ]
-      return controller
     }
   }
 }

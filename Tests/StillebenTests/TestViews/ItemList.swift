@@ -3,11 +3,15 @@ import SwiftUI
 
 struct ItemList: View {
   let count: Int
+  var bottomSpacing = false
 
   var body: some View {
     ScrollView {
       ForEach(0..<count, id: \.self) { index in
         Item(index: index)
+      }
+      if bottomSpacing {
+        Item(index: count).hidden()
       }
     }
   }

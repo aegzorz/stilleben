@@ -6,13 +6,13 @@ public extension Snapshot where Value: UIViewController {
   func diffUIKit(
     file: StaticString = #filePath,
     line: UInt = #line,
-    sizing: SizingStrategy = .screen,
-    rendering: RenderingStrategy = .default(hosted: false),
+    sizing: SizingStrategy = .device,
+    rendering: RenderingStrategy = .default,
     diffing: ImageDiffingStrategy = .labDelta,
     recording: RecordingStrategy = .localFile,
     record: RecordMode = .default,
   ) -> Snapshot<Diff> {
-    inKeyWindow()
+    inWindow()
       .size(using: sizing)
       .render(using: rendering)
       .record(using: recording)

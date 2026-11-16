@@ -3,9 +3,9 @@ import SwiftUI
 /// Snapshot matcher for UI snapshots
 public struct UIMatcher: Sendable {
   /// The strategy to use when determining the size of the resulting snapshot
-  public var sizing: SizingStrategy = .screen
+  public var sizing: SizingStrategy = .device
   /// The strategy to use when rendering the view
-  public var rendering: RenderingStrategy = .default(hosted: false)
+  public var rendering: RenderingStrategy = .default
   /// The strategy to use when recording and reading reference snapshots
   public var recording: RecordingStrategy = .localFile
   /// The strategy to use when performing image diffs for the snapshots
@@ -18,14 +18,13 @@ public struct UIMatcher: Sendable {
   public var dynamicTypeSizes: [DynamicTypeSize] = [.large, .accessibility5]
   /// Locales to permute when taking snapshots
   public var locales: [Locale] = [Locale(identifier: "en-US")]
-  /// Model identifier for the simulator that the snapshots should be taken on
-  public var assertSimulatorModelIdentifier: String?
-  /// Display scale for the simulator that the snapshots should be taken on
-  public var assertDisplayScale: CGFloat?
-  /// Include the device name when naming the snapshot
-  public var includeDeviceName = false
+  /// Devices to permute when taking snapshots. The device's ``Device/name`` is part of each snapshot's name.
+  public var devices: [Device] = [.iPhone18Pro]
   /// Ignores safe area while sizing if set to `true`
   public var ignoresSafeArea = false
+  /// The simulator snapshots have to be taken on. On any other simulator the test fails without comparing or
+  /// recording anything, so references aren't overwritten with a different rendering.
+  public var simulator: SimulatorRequirement?
 
   public init() {}
 }
@@ -63,19 +62,27 @@ extension UIMatcher {
     Modifier(base: self).locales(value)
   }
 
-  public func includeDeviceName(_ include: Bool = true) -> Self {
-    Modifier(base: self).includeDeviceName(include)
-  }
-
-  public func assertSimulator(modelIdentifier expected: String) -> Self {
-    Modifier(base: self).assertSimulatorModelIdentifier(expected)
-  }
-
-  public func assertDisplayScale(_ expected: CGFloat) -> Self {
-    Modifier(base: self).assertDisplayScale(expected)
+  public func devices(_ value: Device...) -> Self {
+    Modifier(base: self).devices(value)
   }
 
   public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
     Modifier(base: self).ignoresSafeArea(ignore)
+  }
+
+  /// Requires snapshots to be taken on a simulator with this model identifier (like `iPhone19,2`) and iOS version
+  /// (matched as a prefix, like `27.2`)
+  public func assertSimulator(modelIdentifier: String? = nil, osVersion: String? = nil) -> Self {
+    Modifier(base: self).simulator(SimulatorRequirement(modelIdentifier: modelIdentifier, osVersion: osVersion))
+  }
+
+  /// Throws a ``ConfigurationError`` when the matcher can't take meaningful snapshots: when a permutation is empty,
+  /// or the tests run on another simulator than ``simulator``
+  func validate() throws {
+    if devices.isEmpty { throw ConfigurationError.emptyPermutation("devices") }
+    if colorSchemes.isEmpty { throw ConfigurationError.emptyPermutation("colorSchemes") }
+    if dynamicTypeSizes.isEmpty { throw ConfigurationError.emptyPermutation("dynamicTypeSizes") }
+    if locales.isEmpty { throw ConfigurationError.emptyPermutation("locales") }
+    try simulator?.validate()
   }
 }
