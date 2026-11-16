@@ -10,21 +10,23 @@ final class SimulatorRequirementTests: XCTestCase {
   func testMatchingSimulator() {
     let requirement = SimulatorRequirement(modelIdentifier: "iPhone19,2", osVersion: "27.2")
 
-    XCTAssertNil(requirement.mismatch(environment: iPhone18Pro, operatingSystemVersion: iOS27_2))
+    XCTAssertNoThrow(try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2))
   }
 
   func testVersionIsMatchedAsPrefix() {
     let patched = OperatingSystemVersion(majorVersion: 27, minorVersion: 2, patchVersion: 1)
     let later = OperatingSystemVersion(majorVersion: 27, minorVersion: 20, patchVersion: 0)
 
-    XCTAssertNil(SimulatorRequirement(osVersion: "27.2").mismatch(environment: iPhone18Pro, operatingSystemVersion: patched))
-    XCTAssertNotNil(SimulatorRequirement(osVersion: "27.2").mismatch(environment: iPhone18Pro, operatingSystemVersion: later))
+    XCTAssertNoThrow(try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: patched))
+    XCTAssertThrowsError(try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: later))
   }
 
   func testWrongModel() {
-    let mismatch = SimulatorRequirement(modelIdentifier: "iPhone19,4").mismatch(environment: iPhone18Pro, operatingSystemVersion: iOS27_2)
+    let requirement = SimulatorRequirement(modelIdentifier: "iPhone19,4")
 
-    XCTAssertEqual(mismatch, "Snapshots need iPhone19,4, but the tests run on iPhone19,2 on iOS 27.2.0")
+    XCTAssertThrowsError(try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2)) { error in
+      XCTAssertEqual(error as? ConfigurationError, .wrongSimulator(expected: "iPhone19,4", actual: "iPhone19,2 on iOS 27.2.0"))
+    }
   }
 
   func testWrongSimulatorDoesNotRecord() async {

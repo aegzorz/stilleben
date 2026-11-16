@@ -1,10 +1,15 @@
 import SwiftUI
+import XCTest
 
 extension UIMatcher {
   /// Matches a SwiftUI view to the reference image stored by the ``RecordingStrategy``
   /// - Parameter produce: Closure used to produce a SwiftUI view
   public func match<Value: View>(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
-    guard verifySimulator(file: file, line: line) else { return }
+    do {
+      try validate()
+    } catch {
+      return XCTFail("\(error.localizedDescription). Nothing was compared or recorded.", file: file, line: line)
+    }
 
     let permutations = colorSchemes
       .flatMap { colorScheme in

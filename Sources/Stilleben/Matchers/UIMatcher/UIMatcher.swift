@@ -1,5 +1,4 @@
 import SwiftUI
-import XCTest
 
 /// Snapshot matcher for UI snapshots
 public struct UIMatcher: Sendable {
@@ -77,11 +76,18 @@ extension UIMatcher {
     Modifier(base: self).simulator(SimulatorRequirement(modelIdentifier: modelIdentifier, osVersion: osVersion))
   }
 
-  /// Fails the test when the running simulator doesn't meet ``simulator``
-  /// - Returns: `true` when snapshots can be taken
-  func verifySimulator(file: StaticString, line: UInt) -> Bool {
-    guard let mismatch = simulator?.mismatch() else { return true }
-    XCTFail("\(mismatch). Nothing was compared or recorded.", file: file, line: line)
-    return false
+  /// Throws a ``ConfigurationError`` when the matcher can't take meaningful snapshots: when a permutation is empty,
+  /// or the tests run on another simulator than ``simulator``
+  func validate() throws {
+    let permutations = [
+      ("devices", devices.isEmpty),
+      ("colorSchemes", colorSchemes.isEmpty),
+      ("dynamicTypeSizes", dynamicTypeSizes.isEmpty),
+      ("locales", locales.isEmpty),
+    ]
+    for (name, isEmpty) in permutations where isEmpty {
+      throw ConfigurationError.emptyPermutation(name)
+    }
+    try simulator?.validate()
   }
 }

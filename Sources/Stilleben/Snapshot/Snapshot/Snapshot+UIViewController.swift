@@ -32,7 +32,7 @@ extension Snapshot {
   func attachToWindow(_ viewController: UIViewController) throws {
     guard viewController.view.window == nil else { return }
 
-    let device = context.device
+    let device = try context.device
     let scene = UIApplication.shared.connectedScenes.lazy.compactMap { $0 as? UIWindowScene }.first
 
     let window = scene.map(UIWindow.init(windowScene:)) ?? makeWindowWithoutScene()

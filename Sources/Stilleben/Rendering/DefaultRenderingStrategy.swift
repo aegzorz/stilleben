@@ -9,11 +9,11 @@ public extension RenderingStrategy where Self == DefaultRenderingStrategy {
 }
 
 public struct DefaultRenderingStrategy: RenderingStrategy {
-  public func render(viewController: UIViewController, context: SnapshotContext) -> UIImage {
+  public func render(viewController: UIViewController, context: SnapshotContext) throws -> UIImage {
     let format = UIGraphicsImageRendererFormat(for: viewController.traitCollection)
-    format.scale = context.device.scale
+    format.scale = try context.device.scale
 
-    let view = viewController.view!
+    let view = try viewController.view.unwrap()
     return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { rendererContext in
       // Hosted tests (an app with a window scene) use drawHierarchy, which captures everything, Liquid Glass included.
       // Unhosted tests (like Swift package tests) have no app scene, and drawHierarchy would give them an empty image,

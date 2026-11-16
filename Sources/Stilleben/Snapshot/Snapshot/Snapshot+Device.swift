@@ -7,9 +7,12 @@ public extension SnapshotContext.Key where Value == Device {
 }
 
 extension SnapshotContext {
-  /// The device the snapshot is rendered for, ``Device/iPhone18Pro`` unless configured
+  /// The device the snapshot is rendered for
+  /// - Throws: ``ConfigurationError/missingDevice`` when no device was set with ``Snapshot/device(_:)``
   var device: Device {
-    value(for: .device) ?? .iPhone18Pro
+    get throws {
+      try value(for: .device).unwrap(error: ConfigurationError.missingDevice)
+    }
   }
 }
 
