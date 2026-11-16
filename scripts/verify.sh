@@ -21,20 +21,20 @@ fi
 DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2}"
 rm -rf .build/TestResults-*.xcresult
 
-echo "✅ Testing unhosted, as a Swift package, on ${DESTINATION}"
+echo "✅ Package tests on ${DESTINATION}"
 xcodebuild test \
   -scheme Stilleben \
   -destination "$DESTINATION" \
-  -resultBundlePath .build/TestResults-unhosted.xcresult \
+  -resultBundlePath .build/TestResults-package.xcresult \
   | mise exec -- xcbeautify
 
-echo "🏗️ Generating test host"
-(cd TestHost && mise exec -- tuist generate --no-open)
+echo "🏗️ Generating the test host project"
+(cd TestHost && mise exec -- xcodegen --quiet)
 
-echo "✅ Testing hosted, in the TestHost app, on ${DESTINATION}"
+echo "✅ Hosted tests in the TestHost app on ${DESTINATION}"
 xcodebuild test \
-  -workspace TestHost/StillebenTestHost.xcworkspace \
-  -scheme StillebenTests \
+  -project TestHost/TestHost.xcodeproj \
+  -scheme TestHost \
   -destination "$DESTINATION" \
   -resultBundlePath .build/TestResults-hosted.xcresult \
   | mise exec -- xcbeautify

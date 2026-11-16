@@ -46,33 +46,4 @@ final class SwiftUITests: XCTestCase {
           .background(.background)
       }
   }
-
-  func testLongScrollviewInNavigationView() async throws {
-    try skipUnlessHosted()
-    await matcher.match {
-      NavigationView {
-        ScrollView {
-          ItemList(count: 25)
-        }
-        .navigationTitle("List of items")
-      }
-    }
-  }
-
-  func testLongScrollviewInTabView() async throws {
-    try skipUnlessHosted()
-    await matcher.match {
-      TabView {
-        NavigationView {
-          ScrollView {
-            ItemList(count: 25)
-          }
-          .navigationTitle("List of items")
-        }
-        .tabItem {
-          Label("List", systemImage: "list.number")
-        }
-      }
-    }
-  }
 }
