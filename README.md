@@ -30,6 +30,7 @@ Which one to use is up to you:
 | Window | In the app's window scene | Standalone window without a scene |
 | Rendering | Draws the view hierarchy, like the screen | Renders the layer tree |
 | Liquid Glass (tab bars, glass buttons and bars) | Rendered | Glass content is missing, only its outline is drawn |
+| Rounded corners (e.g. grouped lists) | Rendered | Anti-aliased slightly differently, so references differ from hosted ones |
 | Everything else | Rendered | Identical to hosted |
 
 References are recorded in the mode the tests run in, so keep each test target in one mode. Snapshot views that use
