@@ -15,7 +15,9 @@ public struct DefaultRenderingStrategy: RenderingStrategy {
 
     let view = viewController.view!
     return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { rendererContext in
-      // Windows without an app scene (tests of Swift packages) get a fallback scene that drawHierarchy renders blank
+      // Hosted tests (an app with a window scene) use drawHierarchy, which captures everything, Liquid Glass included.
+      // Unhosted tests (like Swift package tests) have no app scene, and drawHierarchy would give them an empty image,
+      // so render the layer tree instead: same output, except Liquid Glass is missing.
       if let scene = view.window?.windowScene, UIApplication.shared.connectedScenes.contains(scene) {
         view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
       } else {
