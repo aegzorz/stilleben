@@ -14,7 +14,8 @@ final class HostedUIKitTests: XCTestCase {
       let controller = UITabBarController()
       controller.viewControllers = [
         UINavigationController(
-          rootViewController: ItemListViewController(count: 12),
+          // Leaves an item's height of empty space at the end, so the tab bar's glass doesn't render on top of the last item
+          rootViewController: ItemListViewController(count: 12, bottomSpacing: true),
         ),
       ]
       return controller

@@ -3,14 +3,16 @@ import SwiftUI
 
 struct ItemList: View {
   let count: Int
+  var bottomSpacing = false
 
   var body: some View {
     ScrollView {
       ForEach(0..<count, id: \.self) { index in
         Item(index: index)
       }
-      // Empty space below the last item, so the tab bar's glass doesn't render on top of it
-      Item(index: count).hidden()
+      if bottomSpacing {
+        Item(index: count).hidden()
+      }
     }
   }
 }

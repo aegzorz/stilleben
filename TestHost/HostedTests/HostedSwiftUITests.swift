@@ -26,7 +26,8 @@ final class HostedSwiftUITests: XCTestCase {
       TabView {
         NavigationView {
           ScrollView {
-            ItemList(count: 12)
+            // Leaves an item's height of empty space at the end, so the tab bar's glass doesn't render on top of the last item
+            ItemList(count: 12, bottomSpacing: true)
           }
           .navigationTitle("List of items")
         }

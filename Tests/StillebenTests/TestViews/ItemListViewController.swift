@@ -5,9 +5,11 @@ import UIKit
 
 class ItemListViewController: UIViewController {
   private let count: Int
+  private let bottomSpacing: Bool
 
-  init(count: Int) {
+  init(count: Int, bottomSpacing: Bool = false) {
     self.count = count
+    self.bottomSpacing = bottomSpacing
     super.init(nibName: nil, bundle: nil)
     title = "List of items"
     tabBarItem = UITabBarItem(
@@ -39,10 +41,11 @@ class ItemListViewController: UIViewController {
       stackView.addArrangedSubview(ItemView(index: index))
     }
 
-    // Empty space below the last item, so the tab bar's glass doesn't render on top of it
-    let spacing = ItemView(index: count)
-    spacing.alpha = 0
-    stackView.addArrangedSubview(spacing)
+    if bottomSpacing {
+      let spacing = ItemView(index: count)
+      spacing.alpha = 0
+      stackView.addArrangedSubview(spacing)
+    }
 
     view.addSubview(scrollView)
     scrollView.constrainToEdges(of: view)
