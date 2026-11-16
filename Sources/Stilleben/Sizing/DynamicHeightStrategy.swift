@@ -25,6 +25,7 @@ public struct DynamicHeightStrategy: SizingStrategy {
     if let scrollView = view.findScrollView() {
       view.layoutIfNeeded()
       let insets = scrollView.adjustedContentInset
+      context.updateSizingMetrics { $0.measuredContentInset = insets }
       let hiddenContent = scrollView.contentSize.height + insets.top + insets.bottom - scrollView.frame.height
       return CGSize(width: width, height: view.bounds.height + hiddenContent)
     }

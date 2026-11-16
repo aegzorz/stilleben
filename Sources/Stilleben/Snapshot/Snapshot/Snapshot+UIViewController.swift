@@ -60,7 +60,19 @@ extension Snapshot {
       bottom: expected.bottom - actual.bottom,
       right: expected.right - actual.right,
     )
+    // Containers like navigation and tab bar controllers only update the insets of their scroll views when their
+    // own views lay out, which a changed safe area of a parent view controller doesn't trigger
+    viewController.setNeedsLayoutOfDescendants()
     window.layoutIfNeeded()
+  }
+}
+
+private extension UIViewController {
+  func setNeedsLayoutOfDescendants() {
+    for child in children {
+      child.viewIfLoaded?.setNeedsLayout()
+      child.setNeedsLayoutOfDescendants()
+    }
   }
 }
 
