@@ -3,9 +3,9 @@ import UIKit
 
 /// Protocol describing how to size `UIViewController` before taking the snapshot
 public protocol SizingStrategy: Sendable {
-  /// Whether snapshots sized by this strategy get the device's safe area, like a full screen app.
-  /// `false` unless the strategy says otherwise.
-  var includesSafeArea: Bool { get }
+  /// Whether snapshots sized by this strategy ignore the device's safe area. `true` unless the strategy says
+  /// otherwise; full screen snapshots keep the safe area, like an app does.
+  var ignoresSafeArea: Bool { get }
 
   /// Sizing function for the view controller being snapshotted
   /// - Parameter viewController: The `UIViewController` being sized.
@@ -15,5 +15,5 @@ public protocol SizingStrategy: Sendable {
 }
 
 public extension SizingStrategy {
-  var includesSafeArea: Bool { false }
+  var ignoresSafeArea: Bool { true }
 }

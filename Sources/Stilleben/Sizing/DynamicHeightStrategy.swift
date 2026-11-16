@@ -3,20 +3,20 @@ import UIKit
 public extension SizingStrategy where Self == DynamicHeightStrategy {
   /// Keeps the width of the snapshot's ``Device`` and fits the height to the content, without the safe area
   static var dynamicHeight: Self {
-    DynamicHeightStrategy(includesSafeArea: false)
+    DynamicHeightStrategy(ignoresSafeArea: true)
   }
 
   /// Keeps the width of the snapshot's ``Device`` and fits the height to the content
-  /// - Parameter includesSafeArea: Whether the snapshot gets the device's safe area
-  static func dynamicHeight(includesSafeArea: Bool) -> Self {
-    DynamicHeightStrategy(includesSafeArea: includesSafeArea)
+  /// - Parameter ignoresSafeArea: Whether the snapshot ignores the device's safe area
+  static func dynamicHeight(ignoresSafeArea: Bool) -> Self {
+    DynamicHeightStrategy(ignoresSafeArea: ignoresSafeArea)
   }
 }
 
 /// Sizing strategy that keeps the width of the snapshot's ``Device`` and fits the height to the content,
 /// including the full content of vertically scrolling views.
 public struct DynamicHeightStrategy: SizingStrategy {
-  public let includesSafeArea: Bool
+  public let ignoresSafeArea: Bool
 
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
