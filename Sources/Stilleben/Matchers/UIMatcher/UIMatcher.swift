@@ -79,15 +79,10 @@ extension UIMatcher {
   /// Throws a ``ConfigurationError`` when the matcher can't take meaningful snapshots: when a permutation is empty,
   /// or the tests run on another simulator than ``simulator``
   func validate() throws {
-    let permutations = [
-      ("devices", devices.isEmpty),
-      ("colorSchemes", colorSchemes.isEmpty),
-      ("dynamicTypeSizes", dynamicTypeSizes.isEmpty),
-      ("locales", locales.isEmpty),
-    ]
-    for (name, isEmpty) in permutations where isEmpty {
-      throw ConfigurationError.emptyPermutation(name)
-    }
+    if devices.isEmpty { throw ConfigurationError.emptyPermutation("devices") }
+    if colorSchemes.isEmpty { throw ConfigurationError.emptyPermutation("colorSchemes") }
+    if dynamicTypeSizes.isEmpty { throw ConfigurationError.emptyPermutation("dynamicTypeSizes") }
+    if locales.isEmpty { throw ConfigurationError.emptyPermutation("locales") }
     try simulator?.validate()
   }
 }
