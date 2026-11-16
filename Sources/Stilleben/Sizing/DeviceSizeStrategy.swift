@@ -9,6 +9,8 @@ public extension SizingStrategy where Self == DeviceSizeStrategy {
 
 /// Sizing strategy that sizes the snapshots according to the screen size of the snapshot's ``Device``
 public struct DeviceSizeStrategy: SizingStrategy {
+  public var includesDeviceSafeArea: Bool { true }
+
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     try context.device.size
   }

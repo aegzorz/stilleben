@@ -38,7 +38,7 @@ extension UIMatcher {
         .recordingNameComponent(add: String(describing: colorScheme))
         .recordingNameComponent(add: String(describing: dynamicTypeSize))
         .recordingNameComponent(add: locale.identifier)
-        .ignoresSafeArea(ignore: ignoresSafeArea ?? !(sizing is DeviceSizeStrategy))
+        .ignoresSafeArea(ignore: resolvedIgnoresSafeArea)
         .diffSwiftUI(
           file: file,
           line: line,
