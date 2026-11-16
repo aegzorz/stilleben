@@ -9,8 +9,6 @@ public extension RenderingStrategy where Self == DefaultRenderingStrategy {
 }
 
 public struct DefaultRenderingStrategy: RenderingStrategy {
-  public init() {}
-
   public func render(viewController: UIViewController, context: SnapshotContext) -> UIImage {
     let format = UIGraphicsImageRendererFormat(for: viewController.traitCollection)
     format.scale = context.device.scale
