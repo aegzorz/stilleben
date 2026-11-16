@@ -19,22 +19,17 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2}"
-rm -rf .build/TestResults-*.xcresult
-
-echo "✅ Package tests on ${DESTINATION}"
-xcodebuild test \
-  -scheme Stilleben \
-  -destination "$DESTINATION" \
-  -resultBundlePath .build/TestResults-package.xcresult \
-  | mise exec -- xcbeautify
+rm -rf .build/TestResults.xcresult
 
 echo "🏗️ Generating the test host project"
 (cd TestHost && mise exec -- xcodegen --quiet)
 
-echo "✅ Hosted tests in the TestHost app on ${DESTINATION}"
+# The Stilleben test plan runs the package tests (unhosted) and the hosted tests in the TestHost app
+echo "✅ Tests on ${DESTINATION}"
 xcodebuild test \
   -project TestHost/TestHost.xcodeproj \
   -scheme TestHost \
+  -testPlan Stilleben \
   -destination "$DESTINATION" \
-  -resultBundlePath .build/TestResults-hosted.xcresult \
+  -resultBundlePath .build/TestResults.xcresult \
   | mise exec -- xcbeautify

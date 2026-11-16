@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "6F0D3C2A-8E1B-4C5D-9A7F-2B3E4D5C6A71",
+      "name" : "Snapshots",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en",
+    "region" : "US",
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TestHost.xcodeproj",
+      "identifier" : "FFC8DF346F2497CC18BD252C",
+      "name" : "TestHost"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "StillebenTests",
+        "name" : "StillebenTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:TestHost.xcodeproj",
+        "identifier" : "94A3E08F623AD39ED74429E7",
+        "name" : "HostedTests"
+      }
+    }
+  ],
+  "version" : 1
+}

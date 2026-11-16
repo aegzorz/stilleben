@@ -162,5 +162,6 @@ With `.failed`, a changed snapshot shows up as a diff in git, ready to review an
 ## Development
 
 Tools are pinned with [mise](https://mise.jdx.dev). `scripts/verify.sh` formats the code, fails if that leaves changes,
-and runs the tests. Open `Package.swift` for the package tests. The few snapshots that need a window scene live in
-`TestHost/`: generate its project with `mise exec -- xcodegen` in that folder. CI runs the same script.
+and runs the tests. CI runs the same script. Generate the test host project with `mise exec -- xcodegen` in `TestHost/`
+and open it: its `Stilleben` test plan runs the package tests (unhosted) and the few snapshots that need a window scene
+(hosted in the TestHost app) together. Opening `Package.swift` runs only the package tests.

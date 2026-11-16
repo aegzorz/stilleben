@@ -50,4 +50,8 @@ schemes:
         HostedTests: [test]
     test:
       targets:
+        - package: Stilleben/StillebenTests
         - HostedTests
+      testPlans:
+        - path: Stilleben.xctestplan
+          defaultPlan: true
