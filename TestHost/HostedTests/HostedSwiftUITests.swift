@@ -6,6 +6,7 @@ import XCTest
 @MainActor
 final class HostedSwiftUITests: XCTestCase {
   private let matcher = UIMatcher()
+    .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
 
   func testLongScrollviewInNavigationView() async throws {

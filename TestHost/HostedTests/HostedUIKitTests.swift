@@ -6,6 +6,7 @@ import XCTest
 @MainActor
 final class HostedUIKitTests: XCTestCase {
   private let matcher = UIMatcher()
+    .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
 
   func testLongScrollviewInTabBarController() async throws {

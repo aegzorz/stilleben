@@ -1,4 +1,5 @@
 import SwiftUI
+import XCTest
 
 /// Snapshot matcher for UI snapshots
 public struct UIMatcher: Sendable {
@@ -22,6 +23,9 @@ public struct UIMatcher: Sendable {
   public var devices: [Device] = [.iPhone18Pro]
   /// Ignores safe area while sizing if set to `true`
   public var ignoresSafeArea = false
+  /// The simulator snapshots have to be taken on. On any other simulator the test fails without comparing or
+  /// recording anything, so references aren't overwritten with a different rendering.
+  public var simulator: SimulatorRequirement?
 
   public init() {}
 }
@@ -65,5 +69,19 @@ extension UIMatcher {
 
   public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
     Modifier(base: self).ignoresSafeArea(ignore)
+  }
+
+  /// Requires snapshots to be taken on a simulator with this model identifier (like `iPhone19,2`) and iOS version
+  /// (matched as a prefix, like `27.2`)
+  public func assertSimulator(modelIdentifier: String? = nil, osVersion: String? = nil) -> Self {
+    Modifier(base: self).simulator(SimulatorRequirement(modelIdentifier: modelIdentifier, osVersion: osVersion))
+  }
+
+  /// Fails the test when the running simulator doesn't meet ``simulator``
+  /// - Returns: `true` when snapshots can be taken
+  func verifySimulator(file: StaticString, line: UInt) -> Bool {
+    guard let mismatch = simulator?.mismatch() else { return true }
+    XCTFail("\(mismatch). Nothing was compared or recorded.", file: file, line: line)
+    return false
   }
 }

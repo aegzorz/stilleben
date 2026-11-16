@@ -36,6 +36,13 @@ Which one to use is up to you:
 References are recorded in the mode the tests run in, so keep each test target in one mode. Snapshot views that use
 Liquid Glass in hosted tests if the glass itself matters.
 
+## Simulator
+
+The device configuration sets the size, scale and traits of a snapshot, but rendering still differs between iOS versions
+and simulators (fonts, anti-aliasing, system components). Pin the simulator with
+`assertSimulator(modelIdentifier:osVersion:)`: on any other simulator the test fails before anything is compared or
+recorded, so references are never overwritten with a different rendering.
+
 ## Examples
 
 Example of snapshot testing a SwiftUI view:
@@ -45,7 +52,7 @@ import Stilleben
 
 final class SomeViewTests: XCTestCase {
     private let matcher = UIMatcher()
-        .assertSimulator(modelIdentifier: "iPhone14,7")
+        .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
         .sizing(.dynamicHeight)
         .dynamicTypeSizes(.large)
 
@@ -74,8 +81,8 @@ import Stilleben
 
 final class SomeViewControllerTests: XCTestCase {
     private let matcher = UIMatcher()
-        .assertSimulator(modelIdentifier: "iPhone14,7")
-        .sizing(.screen)
+        .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
+        .sizing(.device)
     
     func testSomeViewController() async throws {
         await matcher

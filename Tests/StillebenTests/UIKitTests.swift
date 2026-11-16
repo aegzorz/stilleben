@@ -5,6 +5,7 @@ import XCTest
 @MainActor
 final class UIKitTests: XCTestCase {
   private let matcher = UIMatcher()
+    .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
 
   func testSimpleLabel() async throws {

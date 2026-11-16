@@ -4,6 +4,8 @@ extension UIMatcher {
   /// Matches a UIViewController to the reference image stored by the ``RecordingStrategy``
   /// - Parameter produce: Closure used to produce a `UIViewController`
   public func match<Value: UIViewController>(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
+    guard verifySimulator(file: file, line: line) else { return }
+
     let permutations = colorSchemes
       .flatMap { colorScheme in
         locales.map { locale in
