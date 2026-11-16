@@ -8,8 +8,6 @@ public extension SizingStrategy where Self == IntrinsicSizeStrategy {
 
 /// Sizing strategy that sizes the snapshots according to the intrinsic size of the supplied view controller
 public struct IntrinsicSizeStrategy: SizingStrategy {
-  public init() {}
-
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
     let size = view.intrinsicContentSize

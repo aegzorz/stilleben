@@ -9,8 +9,6 @@ public extension SizingStrategy where Self == DynamicHeightStrategy {
 /// Sizing strategy that keeps the width of the snapshot's ``Device`` and fits the height to the content,
 /// including the full content of vertically scrolling views.
 public struct DynamicHeightStrategy: SizingStrategy {
-  public init() {}
-
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
     let width = context.device.size.width

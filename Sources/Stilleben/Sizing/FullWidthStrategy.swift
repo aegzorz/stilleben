@@ -10,8 +10,6 @@ public extension SizingStrategy where Self == FullWidthStrategy {
 /// Sizing strategy that keeps the width of the snapshot's ``Device`` and fits the height to the content.
 /// Unlike ``DynamicHeightStrategy`` it doesn't expand scroll views to their full content.
 public struct FullWidthStrategy: SizingStrategy {
-  public init() {}
-
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
     let width = context.device.size.width
