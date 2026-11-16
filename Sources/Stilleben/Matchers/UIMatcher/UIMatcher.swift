@@ -20,10 +20,6 @@ public struct UIMatcher: Sendable {
   public var locales: [Locale] = [Locale(identifier: "en-US")]
   /// Devices to permute when taking snapshots. The device's ``Device/name`` is part of each snapshot's name.
   public var devices: [Device] = [.iPhone18Pro]
-  /// Whether snapshots ignore the device's safe area. When `nil`, the sizing strategy decides with
-  /// ``SizingStrategy/includesDeviceSafeArea``: full screen `.device` snapshots get the safe area, content sized
-  /// snapshots like `.dynamicHeight` or `.intrinsic` don't.
-  public var ignoresSafeArea: Bool?
   /// The simulator snapshots have to be taken on. On any other simulator the test fails without comparing or
   /// recording anything, so references aren't overwritten with a different rendering.
   public var simulator: SimulatorRequirement?
@@ -68,19 +64,10 @@ extension UIMatcher {
     Modifier(base: self).devices(value)
   }
 
-  public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
-    Modifier(base: self).ignoresSafeArea(ignore)
-  }
-
   /// Requires snapshots to be taken on a simulator with this model identifier (like `iPhone19,2`) and iOS version
   /// (matched as a prefix, like `27.2`)
   public func assertSimulator(modelIdentifier: String? = nil, osVersion: String? = nil) -> Self {
     Modifier(base: self).simulator(SimulatorRequirement(modelIdentifier: modelIdentifier, osVersion: osVersion))
-  }
-
-  /// Whether snapshots ignore the device's safe area, from ``ignoresSafeArea`` or else the sizing strategy
-  var resolvedIgnoresSafeArea: Bool {
-    ignoresSafeArea ?? !sizing.includesDeviceSafeArea
   }
 
   /// Throws a ``ConfigurationError`` when the matcher can't take meaningful snapshots: when a permutation is empty,

@@ -36,7 +36,6 @@ final class SwiftUITests: XCTestCase {
 
   func testShortScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match {
         ItemList(count: 3)
           .background(.background)
@@ -45,7 +44,6 @@ final class SwiftUITests: XCTestCase {
 
   func testLongScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match {
         ItemList(count: 12)
           .background(.background)

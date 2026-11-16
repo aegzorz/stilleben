@@ -41,7 +41,6 @@ final class UIKitTests: XCTestCase {
 
   func testShortScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match { @MainActor () -> UIViewController in
         ItemListViewController(count: 3)
       }
@@ -49,7 +48,6 @@ final class UIKitTests: XCTestCase {
 
   func testLongScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match { @MainActor () -> UIViewController in
         ItemListViewController(count: 12)
       }

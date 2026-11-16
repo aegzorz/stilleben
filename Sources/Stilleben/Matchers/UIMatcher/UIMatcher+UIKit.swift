@@ -39,7 +39,7 @@ extension UIMatcher {
         .recordingNameComponent(add: colorScheme)
         .recordingNameComponent(add: dynamicTypeSize)
         .recordingNameComponent(add: locale)
-        .ignoresSafeArea(ignore: resolvedIgnoresSafeArea)
+        .ignoresSafeArea(ignore: !sizing.includesSafeArea)
         .diffUIKit(
           file: file,
           line: line,
