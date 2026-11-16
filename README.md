@@ -27,7 +27,7 @@ which stays the same when a preset moves to a newer model.
 ## Requirements
 
 - iOS 26 and Swift 6.4 (Xcode 27).
-- UI snapshots are rendered in a window of the app's window scene, so the tests must be hosted in an app (set a test host).
+- UI snapshots work in tests hosted in an app and in tests of Swift packages; see the tradeoffs below.
 - Stilleben runs on the main actor: mark snapshot test classes `@MainActor`.
 
 ## Hosted and unhosted tests
@@ -162,4 +162,5 @@ With `.failed`, a changed snapshot shows up as a diff in git, ready to review an
 ## Development
 
 Tools are pinned with [mise](https://mise.jdx.dev). `scripts/verify.sh` formats the code, fails if that leaves changes,
-and runs the tests in the `TestHost` app (generated with Tuist). CI runs the same script.
+and runs the tests twice: unhosted as package tests, and hosted in the `TestHost` app (generated with Tuist).
+CI runs the same script.
