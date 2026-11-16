@@ -47,14 +47,14 @@ final class UIKitTests: XCTestCase {
     await matcher
       .ignoresSafeArea()
       .match { @MainActor () -> UIViewController in
-        ItemListViewController(count: 25)
+        ItemListViewController(count: 12)
       }
   }
 
   func testLongScrollviewInNavigationController() async throws {
     await matcher.match { @MainActor () -> UIViewController in
       UINavigationController(
-        rootViewController: ItemListViewController(count: 25),
+        rootViewController: ItemListViewController(count: 12),
       )
     }
   }

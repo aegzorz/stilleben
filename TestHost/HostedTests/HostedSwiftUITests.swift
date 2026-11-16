@@ -14,7 +14,7 @@ final class HostedSwiftUITests: XCTestCase {
     await matcher.match {
       NavigationView {
         ScrollView {
-          ItemList(count: 25)
+          ItemList(count: 12)
         }
         .navigationTitle("List of items")
       }
@@ -26,7 +26,7 @@ final class HostedSwiftUITests: XCTestCase {
       TabView {
         NavigationView {
           ScrollView {
-            ItemList(count: 25)
+            ItemList(count: 12)
           }
           .navigationTitle("List of items")
         }

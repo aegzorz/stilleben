@@ -39,6 +39,11 @@ class ItemListViewController: UIViewController {
       stackView.addArrangedSubview(ItemView(index: index))
     }
 
+    // Empty space below the last item, so the tab bar's glass doesn't render on top of it
+    let spacing = ItemView(index: count)
+    spacing.alpha = 0
+    stackView.addArrangedSubview(spacing)
+
     view.addSubview(scrollView)
     scrollView.constrainToEdges(of: view)
   }

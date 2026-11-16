@@ -9,6 +9,8 @@ struct ItemList: View {
       ForEach(0..<count, id: \.self) { index in
         Item(index: index)
       }
+      // Empty space below the last item, so the tab bar's glass doesn't render on top of it
+      Item(index: count).hidden()
     }
   }
 }

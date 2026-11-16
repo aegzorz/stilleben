@@ -44,7 +44,7 @@ final class SwiftUITests: XCTestCase {
     await matcher
       .ignoresSafeArea()
       .match {
-        ItemList(count: 25)
+        ItemList(count: 12)
           .background(.background)
       }
   }

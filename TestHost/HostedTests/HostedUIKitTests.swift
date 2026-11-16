@@ -14,7 +14,7 @@ final class HostedUIKitTests: XCTestCase {
       let controller = UITabBarController()
       controller.viewControllers = [
         UINavigationController(
-          rootViewController: ItemListViewController(count: 25),
+          rootViewController: ItemListViewController(count: 12),
         ),
       ]
       return controller
