@@ -48,6 +48,7 @@ final class SwiftUITests: XCTestCase {
   }
 
   func testLongScrollviewInNavigationView() async throws {
+    try skipUnlessHosted()
     await matcher.match {
       NavigationView {
         ScrollView {
@@ -58,7 +59,8 @@ final class SwiftUITests: XCTestCase {
     }
   }
 
-  func testLongScrollviewInTabView() async {
+  func testLongScrollviewInTabView() async throws {
+    try skipUnlessHosted()
     await matcher.match {
       TabView {
         NavigationView {

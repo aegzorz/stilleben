@@ -58,7 +58,8 @@ final class UIKitTests: XCTestCase {
     }
   }
 
-  func testLongScrollviewInTabBarController() async {
+  func testLongScrollviewInTabBarController() async throws {
+    try skipUnlessHosted()
     await matcher.match { @MainActor () -> UIViewController in
       let controller = UITabBarController()
       controller.viewControllers = [

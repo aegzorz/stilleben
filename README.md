@@ -19,6 +19,22 @@ Snapshots can be configured to use the following:
 - `RenderingStrategy` strategy used for rendering UI snapshots.
 - `SizingStrategy` strategy used for sizing views before snapshotting.
 
+## Hosted and unhosted tests
+
+UI snapshots work both in tests hosted in an app and in tests of Swift packages, which run without an app.
+Which one to use is up to you:
+
+| | Hosted (test host app) | Unhosted (Swift package tests) |
+|---|---|---|
+| Setup | Needs an app target as test host | Works in any package test target |
+| Window | In the app's window scene | Standalone window without a scene |
+| Rendering | Draws the view hierarchy, like the screen | Renders the layer tree |
+| Liquid Glass (tab bars, glass buttons and bars) | Rendered | Glass content is missing, only its outline is drawn |
+| Everything else | Rendered | Identical to hosted |
+
+References are recorded in the mode the tests run in, so keep each test target in one mode. Snapshot views that use
+Liquid Glass in hosted tests if the glass itself matters.
+
 ## Examples
 
 Example of snapshot testing a SwiftUI view:

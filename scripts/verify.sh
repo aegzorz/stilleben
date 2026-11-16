@@ -19,16 +19,22 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 DESTINATION="${DESTINATION:-platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2}"
+rm -rf .build/TestResults-*.xcresult
 
-# Snapshots render in a window scene, so the tests run hosted in the TestHost app
+echo "✅ Testing unhosted, as a Swift package, on ${DESTINATION}"
+xcodebuild test \
+  -scheme Stilleben \
+  -destination "$DESTINATION" \
+  -resultBundlePath .build/TestResults-unhosted.xcresult \
+  | mise exec -- xcbeautify
+
 echo "🏗️ Generating test host"
 (cd TestHost && mise exec -- tuist generate --no-open)
 
-echo "✅ Testing on ${DESTINATION}"
-rm -rf .build/TestResults.xcresult
+echo "✅ Testing hosted, in the TestHost app, on ${DESTINATION}"
 xcodebuild test \
   -workspace TestHost/StillebenTestHost.xcworkspace \
   -scheme StillebenTests \
   -destination "$DESTINATION" \
-  -resultBundlePath .build/TestResults.xcresult \
+  -resultBundlePath .build/TestResults-hosted.xcresult \
   | mise exec -- xcbeautify

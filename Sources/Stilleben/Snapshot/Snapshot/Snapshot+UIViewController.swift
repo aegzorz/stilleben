@@ -1,14 +1,8 @@
 import UIKit
 
-/// Thrown when there is no window scene to render snapshots in
-public struct MissingWindowSceneError: LocalizedError {
-  public var errorDescription: String? {
-    "Stilleben renders snapshots in a window, which needs a UIWindowScene. Run the tests hosted in an app (set a test host)."
-  }
-}
-
 public extension Snapshot where Value: UIViewController {
-  /// Places the `UIViewController` in a window of the configured ``Device``, attached to the app's window scene.
+  /// Places the `UIViewController` in a window of the configured ``Device``. Tests hosted in an app use a window in
+  /// the app's window scene; tests of Swift packages have no scene and get a standalone window.
   /// The window is released again after rendering.
   func inWindow() -> Self {
     map { viewController in
@@ -38,14 +32,10 @@ extension Snapshot {
   func attachToWindow(_ viewController: UIViewController) throws {
     guard viewController.view.window == nil else { return }
 
-    let scene = try UIApplication.shared.connectedScenes
-      .lazy
-      .compactMap { $0 as? UIWindowScene }
-      .first
-      .unwrap(error: MissingWindowSceneError())
     let device = context.device
+    let scene = UIApplication.shared.connectedScenes.lazy.compactMap { $0 as? UIWindowScene }.first
 
-    let window = UIWindow(windowScene: scene)
+    let window = scene.map(UIWindow.init(windowScene:)) ?? makeWindowWithoutScene()
     window.frame = CGRect(origin: .zero, size: device.size)
     window.traitOverrides.displayScale = device.scale
     window.traitOverrides.userInterfaceIdiom = device.idiom
@@ -55,6 +45,13 @@ extension Snapshot {
     window.isHidden = false
     window.layoutIfNeeded()
   }
+}
+
+/// Tests of Swift packages run without an app, so there is no window scene. A window created without a scene is
+/// still rendered correctly with `CALayer.render(in:)`, but its only initializers are deprecated since iOS 26.
+@diagnose(DeprecatedDeclaration, as: ignored)
+private func makeWindowWithoutScene() -> UIWindow {
+  UIWindow(frame: .zero)
 }
 
 extension UIViewController {

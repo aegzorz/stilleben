@@ -30,6 +30,21 @@ let package = Package(
         .linkedFramework("XCTest"),
       ],
     ),
+    .testTarget(
+      name: "StillebenTests",
+      dependencies: [
+        "Stilleben",
+      ],
+      exclude: [
+        "Snapshots",
+      ],
+      resources: [
+        .process("Resources"),
+      ],
+      swiftSettings: [
+        .treatAllWarnings(as: .error),
+      ],
+    ),
   ],
   swiftLanguageModes: [.v6],
 )

@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 public extension RenderingStrategy where Self == DefaultRenderingStrategy {
-  /// Default rendering strategy, draws the view hierarchy at the display scale of the snapshot's ``Device``
+  /// Default rendering strategy, renders the view at the display scale of the snapshot's ``Device``
   static var `default`: Self {
     DefaultRenderingStrategy()
   }
@@ -16,8 +16,13 @@ public struct DefaultRenderingStrategy: RenderingStrategy {
     format.scale = context.device.scale
 
     let view = viewController.view!
-    return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { _ in
-      view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    return UIGraphicsImageRenderer(size: view.bounds.size, format: format).image { rendererContext in
+      // Windows without an app scene (tests of Swift packages) get a fallback scene that drawHierarchy renders blank
+      if let scene = view.window?.windowScene, UIApplication.shared.connectedScenes.contains(scene) {
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+      } else {
+        view.layer.render(in: rendererContext.cgContext)
+      }
     }
   }
 }
