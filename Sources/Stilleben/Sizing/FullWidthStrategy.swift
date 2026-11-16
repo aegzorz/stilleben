@@ -12,7 +12,7 @@ public extension SizingStrategy where Self == FullWidthStrategy {
 public struct FullWidthStrategy: SizingStrategy {
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
-    let width = context.device.size.width
+    let width = try context.device.size.width
     let fitting = view.systemLayoutSizeFitting(
       CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
       withHorizontalFittingPriority: .required,

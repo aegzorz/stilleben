@@ -14,7 +14,7 @@ extension Snapshot where Value: UIViewController {
 
       if let window = viewController.view.window {
         window.frame = CGRect(origin: .zero, size: size)
-        applySafeArea(to: viewController)
+        try applySafeArea(to: viewController)
       }
       return viewController
     }

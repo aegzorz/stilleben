@@ -43,17 +43,17 @@ extension Snapshot {
     window.traitOverrides.verticalSizeClass = device.verticalSizeClass
     window.rootViewController = viewController
     window.isHidden = false
-    applySafeArea(to: viewController)
+    try applySafeArea(to: viewController)
   }
 
   /// Makes the view controller see the safe area of the snapshot's ``Device`` (or none when ignoring the safe area),
   /// regardless of the insets of the simulator that runs the tests. Needs to be reapplied when the window is resized.
-  func applySafeArea(to viewController: UIViewController) {
+  func applySafeArea(to viewController: UIViewController) throws {
     guard let window = viewController.view.window else { return }
     window.layoutIfNeeded()
 
     let actual = window.safeAreaInsets
-    let expected = context.value(for: .ignoresSafeArea) == true ? .zero : context.device.safeAreaInsets
+    let expected = context.value(for: .ignoresSafeArea) == true ? .zero : try context.device.safeAreaInsets
     viewController.additionalSafeAreaInsets = UIEdgeInsets(
       top: expected.top - actual.top,
       left: expected.left - actual.left,

@@ -11,7 +11,7 @@ public extension SizingStrategy where Self == DynamicHeightStrategy {
 public struct DynamicHeightStrategy: SizingStrategy {
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
-    let width = context.device.size.width
+    let width = try context.device.size.width
 
     if let scrollView = view.findScrollView() {
       view.layoutIfNeeded()

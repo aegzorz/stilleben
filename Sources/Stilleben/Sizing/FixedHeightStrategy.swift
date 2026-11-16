@@ -11,7 +11,7 @@ public extension SizingStrategy where Self == FixedHeightStrategy {
 public struct FixedHeightStrategy: SizingStrategy {
   let height: CGFloat
 
-  public func size(viewController: UIViewController, context: SnapshotContext) -> CGSize {
-    CGSize(width: context.device.size.width, height: height)
+  public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
+    try CGSize(width: context.device.size.width, height: height)
   }
 }
