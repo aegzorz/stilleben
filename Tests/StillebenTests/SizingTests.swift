@@ -46,6 +46,41 @@ final class SizingTests: XCTestCase {
     XCTAssertEqual(metrics.measuredContentInset, metrics.finalContentInset, "Height measured with stale scroll view insets")
   }
 
+  func testStrategiesChooseWhetherToIgnoreTheSafeArea() {
+    let strategies: [(SizingStrategy, Bool)] = [
+      (.device, false),
+      (.device(ignoresSafeArea: true), true),
+      (.dynamicHeight, true),
+      (.dynamicHeight(ignoresSafeArea: false), false),
+      (.fullWidth, true),
+      (.fullWidth(ignoresSafeArea: false), false),
+      (.intrinsic, true),
+      (.intrinsic(ignoresSafeArea: false), false),
+      (.fixedHeight(80), true),
+      (.fixedHeight(80, ignoresSafeArea: false), false),
+      (CustomSizingStrategy(), true),
+    ]
+    for (strategy, ignoresSafeArea) in strategies {
+      XCTAssertEqual(strategy.ignoresSafeArea, ignoresSafeArea, "\(strategy)")
+    }
+  }
+
+  func testStrategyThatKeepsTheSafeAreaGetsTheDeviceSafeArea() async throws {
+    let sizing: SizingStrategy = .dynamicHeight(ignoresSafeArea: false)
+    let snapshot = Snapshot {
+      Color.red.frame(height: 50)
+    }
+    .device(.iPhone18Pro)
+    .ignoresSafeArea(ignore: sizing.ignoresSafeArea)
+    .inHostingController()
+    .inWindow()
+    .size(using: sizing)
+    _ = try await snapshot.produce()
+
+    let metrics = try XCTUnwrap(snapshot.context.value(for: .sizingMetrics))
+    XCTAssertEqual(metrics.safeAreaInsets, UIEdgeInsets(top: 62, left: 0, bottom: 34, right: 0))
+  }
+
   private func render(ignoresSafeArea: Bool, sizing: SizingStrategy = .dynamicHeight) async throws -> UIImage {
     try await Snapshot {
       Color.red.frame(height: 50)
@@ -57,5 +92,12 @@ final class SizingTests: XCTestCase {
     .size(using: sizing)
     .render(using: .default)
     .produce()
+  }
+}
+
+/// A strategy that doesn't say whether it ignores the safe area, like most custom strategies
+private struct CustomSizingStrategy: SizingStrategy {
+  func size(viewController: UIViewController, context: SnapshotContext) -> CGSize {
+    CGSize(width: 100, height: 100)
   }
 }

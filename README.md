@@ -1,4 +1,5 @@
 ![Verify](https://github.com/aegzorz/stilleben/actions/workflows/verify.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aegzorz/stilleben/metrics/coverage.json)
 ![License](https://img.shields.io/github/license/aegzorz/stilleben)
 ![Version](https://img.shields.io/github/v/release/aegzorz/stilleben)
 

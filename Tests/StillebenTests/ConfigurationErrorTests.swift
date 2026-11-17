@@ -15,6 +15,16 @@ final class ConfigurationErrorTests: XCTestCase {
       }
   }
 
+  func testEmptyPermutationFailsWithoutSnapshotsInUIKit() async {
+    XCTExpectFailure { $0.compactDescription.contains("devices is empty, so no snapshots would be taken") }
+
+    await UIMatcher()
+      .devices()
+      .match { @MainActor () -> UIView in
+        UIView()
+      }
+  }
+
   func testMatcherValidatesEveryPermutation() {
     XCTAssertThrowsError(try UIMatcher().colorSchemes().validate()) { error in
       XCTAssertEqual(error as? ConfigurationError, .emptyPermutation("colorSchemes"))
