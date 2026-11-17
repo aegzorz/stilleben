@@ -20,8 +20,6 @@ public struct UIMatcher: Sendable {
   public var locales: [Locale] = [Locale(identifier: "en-US")]
   /// Devices to permute when taking snapshots. The device's ``Device/name`` is part of each snapshot's name.
   public var devices: [Device] = [.iPhone18Pro]
-  /// Ignores safe area while sizing if set to `true`
-  public var ignoresSafeArea = false
   /// The simulator snapshots have to be taken on. On any other simulator the test fails without comparing or
   /// recording anything, so references aren't overwritten with a different rendering.
   public var simulator: SimulatorRequirement?
@@ -64,10 +62,6 @@ extension UIMatcher {
 
   public func devices(_ value: Device...) -> Self {
     Modifier(base: self).devices(value)
-  }
-
-  public func ignoresSafeArea(_ ignore: Bool = true) -> Self {
-    Modifier(base: self).ignoresSafeArea(ignore)
   }
 
   /// Requires snapshots to be taken on a simulator with this model identifier (like `iPhone19,2`) and iOS version

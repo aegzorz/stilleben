@@ -14,7 +14,12 @@ extension Snapshot where Value: UIViewController {
 
       if let window = viewController.view.window {
         window.frame = CGRect(origin: .zero, size: size)
-        window.layoutIfNeeded()
+        try applySafeArea(to: viewController)
+      }
+      context.updateSizingMetrics { metrics in
+        metrics.size = size
+        metrics.safeAreaInsets = viewController.view.safeAreaInsets
+        metrics.finalContentInset = viewController.view.findScrollView()?.adjustedContentInset
       }
       return viewController
     }

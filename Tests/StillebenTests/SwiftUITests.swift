@@ -10,8 +10,7 @@ final class SwiftUITests: XCTestCase {
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  // Disabled: applying the device safe area to intrinsic sizing renders the snapshot blank
-  func disabled_testSimpleText() async throws {
+  func testSimpleText() async throws {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)
@@ -37,7 +36,6 @@ final class SwiftUITests: XCTestCase {
 
   func testShortScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match {
         ItemList(count: 3)
           .background(.background)
@@ -46,7 +44,6 @@ final class SwiftUITests: XCTestCase {
 
   func testLongScrollview() async throws {
     await matcher
-      .ignoresSafeArea()
       .match {
         ItemList(count: 12)
           .background(.background)

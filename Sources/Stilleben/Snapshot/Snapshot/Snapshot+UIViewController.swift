@@ -43,7 +43,36 @@ extension Snapshot {
     window.traitOverrides.verticalSizeClass = device.verticalSizeClass
     window.rootViewController = viewController
     window.isHidden = false
+    try applySafeArea(to: viewController)
+  }
+
+  /// Makes the view controller see the safe area of the snapshot's ``Device`` (or none when ignoring the safe area),
+  /// regardless of the insets of the simulator that runs the tests. Needs to be reapplied when the window is resized.
+  func applySafeArea(to viewController: UIViewController) throws {
+    guard let window = viewController.view.window else { return }
     window.layoutIfNeeded()
+
+    let actual = window.safeAreaInsets
+    let expected = context.value(for: .ignoresSafeArea) == true ? .zero : try context.device.safeAreaInsets
+    viewController.additionalSafeAreaInsets = UIEdgeInsets(
+      top: expected.top - actual.top,
+      left: expected.left - actual.left,
+      bottom: expected.bottom - actual.bottom,
+      right: expected.right - actual.right,
+    )
+    // Containers like navigation and tab bar controllers only update the insets of their scroll views when their
+    // own views lay out, which a changed safe area of a parent view controller doesn't trigger
+    viewController.setNeedsLayoutOfDescendants()
+    window.layoutIfNeeded()
+  }
+}
+
+private extension UIViewController {
+  func setNeedsLayoutOfDescendants() {
+    for child in children {
+      child.viewIfLoaded?.setNeedsLayout()
+      child.setNeedsLayoutOfDescendants()
+    }
   }
 }
 

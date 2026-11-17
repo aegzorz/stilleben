@@ -1,42 +1,40 @@
 import UIKit
 
 public extension SizingStrategy where Self == DynamicHeightStrategy {
+  /// Keeps the width of the snapshot's ``Device`` and fits the height to the content, without the safe area
   static var dynamicHeight: Self {
-    DynamicHeightStrategy()
+    DynamicHeightStrategy(ignoresSafeArea: true)
+  }
+
+  /// Keeps the width of the snapshot's ``Device`` and fits the height to the content
+  /// - Parameter ignoresSafeArea: Whether the snapshot ignores the device's safe area
+  static func dynamicHeight(ignoresSafeArea: Bool) -> Self {
+    DynamicHeightStrategy(ignoresSafeArea: ignoresSafeArea)
   }
 }
 
-/// Sizing strategy that dynamically calculates the required size to fit vertically scrolling content
-/// in the snapshot.
+/// Sizing strategy that keeps the width of the snapshot's ``Device`` and fits the height to the content,
+/// including the full content of vertically scrolling views.
 public struct DynamicHeightStrategy: SizingStrategy {
+  public let ignoresSafeArea: Bool
+
   public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
     let view = try viewController.view.unwrap()
-    let ignoresSafeArea = context.value(for: .ignoresSafeArea)
+    let width = try context.device.size.width
 
     if let scrollView = view.findScrollView() {
-      if ignoresSafeArea {
-        scrollView.contentInsetAdjustmentBehavior = .never
-      }
-
-      return CGSize(
-        width: view.bounds.width,
-        height: view.bounds.height + scrollView.contentSize.height + scrollView.adjustedContentInset.top + scrollView.adjustedContentInset.bottom - scrollView.frame.height,
-      )
-    } else {
-      let height = view.systemLayoutSizeFitting(view.bounds.size).height
-      let safeAreaHeight = ignoresSafeArea ? 0 : view.safeAreaInsets.top + view.safeAreaInsets.bottom
-
-      if height > 0 {
-        return CGSize(
-          width: view.bounds.width,
-          height: height + safeAreaHeight,
-        )
-      } else {
-        return CGSize(
-          width: view.bounds.width,
-          height: view.bounds.height + safeAreaHeight,
-        )
-      }
+      view.layoutIfNeeded()
+      let insets = scrollView.adjustedContentInset
+      context.updateSizingMetrics { $0.measuredContentInset = insets }
+      let hiddenContent = scrollView.contentSize.height + insets.top + insets.bottom - scrollView.frame.height
+      return CGSize(width: width, height: view.bounds.height + hiddenContent)
     }
+
+    let fitting = view.systemLayoutSizeFitting(
+      CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+      withHorizontalFittingPriority: .required,
+      verticalFittingPriority: .fittingSizeLevel,
+    )
+    return CGSize(width: width, height: fitting.height > 0 ? fitting.height : view.bounds.height)
   }
 }

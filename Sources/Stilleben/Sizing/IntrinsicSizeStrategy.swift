@@ -1,23 +1,28 @@
 import UIKit
 
 public extension SizingStrategy where Self == IntrinsicSizeStrategy {
+  /// Sizes snapshots to the intrinsic size of the view controller's view, without the safe area
   static var intrinsic: IntrinsicSizeStrategy {
-    IntrinsicSizeStrategy()
+    IntrinsicSizeStrategy(ignoresSafeArea: true)
+  }
+
+  /// Sizes snapshots to the intrinsic size of the view controller's view
+  /// - Parameter ignoresSafeArea: Whether the snapshot ignores the device's safe area
+  static func intrinsic(ignoresSafeArea: Bool) -> IntrinsicSizeStrategy {
+    IntrinsicSizeStrategy(ignoresSafeArea: ignoresSafeArea)
   }
 }
 
 /// Sizing strategy that sizes the snapshots according to the intrinsic size of the supplied view controller
 public struct IntrinsicSizeStrategy: SizingStrategy {
-  public func size(viewController: UIViewController, context: SnapshotContext) -> CGSize {
-    let insets = viewController.view.safeAreaInsets
-    viewController.additionalSafeAreaInsets = UIEdgeInsets(top: -insets.top, left: 0, bottom: -insets.bottom, right: 0)
+  public let ignoresSafeArea: Bool
 
-    var size = viewController.view.intrinsicContentSize
-    size.height -= insets.top + insets.bottom
+  public func size(viewController: UIViewController, context: SnapshotContext) throws -> CGSize {
+    let view = try viewController.view.unwrap()
+    let size = view.intrinsicContentSize
 
-    // If size is not useful, try system sizing
-    if size.height <= 0 || size.width <= 0 {
-      return viewController.view.systemLayoutSizeFitting(.zero)
+    if size.width <= 0 || size.height <= 0 || size.width == UIView.noIntrinsicMetric || size.height == UIView.noIntrinsicMetric {
+      return view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
     return size
   }

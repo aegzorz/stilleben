@@ -2,7 +2,8 @@ import Stilleben
 import SwiftUI
 import XCTest
 
-/// Snapshots that need a window scene, like Liquid Glass bars, so they run hosted in the TestHost app
+/// Snapshots that render differently without a window scene (Liquid Glass bars, rounded corners of grouped lists),
+/// so they run hosted in the TestHost app
 @MainActor
 final class HostedSwiftUITests: XCTestCase {
   private let matcher = UIMatcher()
@@ -11,8 +12,23 @@ final class HostedSwiftUITests: XCTestCase {
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  // Disabled: applying the device safe area to dynamic height sizing renders accessibility sizes blank
-  func disabled_testLongScrollviewInNavigationView() async throws {
+  func testListOnFoldable() async throws {
+    await matcher
+      .devices(.iPhoneDuo, .iPhoneDuoFolded)
+      .sizing(.device)
+      .colorSchemes(.light)
+      .dynamicTypeSizes(.large)
+      .match {
+        NavigationStack {
+          List(1...20, id: \.self) { index in
+            Text("Row \(index)")
+          }
+          .navigationTitle("Foldable")
+        }
+      }
+  }
+
+  func testLongScrollviewInNavigationView() async throws {
     await matcher.match {
       NavigationView {
         ScrollView {
