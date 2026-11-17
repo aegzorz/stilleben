@@ -25,9 +25,8 @@ extension UIMatcher {
 
     for device in devices {
       for (colorScheme, locale, dynamicTypeSize) in permutations {
+        Bundle.overrideLocale = locale
         await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
-          Bundle.overrideLocale = locale
-
           let viewController = try await TraitsViewController(content: produce())
           viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
           viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
@@ -52,6 +51,7 @@ extension UIMatcher {
         .match(file: file, line: line)
       }
     }
+    Bundle.overrideLocale = nil
   }
 
   /// Matches a UIView to the reference image stored by the ``RecordingStrategy``

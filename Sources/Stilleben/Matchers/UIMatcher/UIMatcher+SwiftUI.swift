@@ -26,7 +26,6 @@ extension UIMatcher {
     for device in devices {
       for (colorScheme, locale, dynamicTypeSize) in permutations {
         Bundle.overrideLocale = locale
-
         await Snapshot(file: file, function: function, line: line) {
           try await produce()
             .deferredEnvironment(\.colorScheme, colorScheme)
@@ -51,5 +50,6 @@ extension UIMatcher {
         .match(file: file, line: line)
       }
     }
+    Bundle.overrideLocale = nil
   }
 }

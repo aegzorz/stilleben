@@ -30,10 +30,27 @@ let package = Package(
         .linkedFramework("XCTest"),
       ],
     ),
+    // Localized modules for the localization tests, set up like the feature modules of an app
+    .target(
+      name: "CatalogFixtures",
+      path: "Tests/Fixtures/CatalogFixtures",
+      resources: [
+        .process("Localizable.xcstrings"),
+      ],
+    ),
+    .target(
+      name: "StringsFixtures",
+      path: "Tests/Fixtures/StringsFixtures",
+      resources: [
+        .process("Resources"),
+      ],
+    ),
     .testTarget(
       name: "StillebenTests",
       dependencies: [
         "Stilleben",
+        "CatalogFixtures",
+        "StringsFixtures",
       ],
       exclude: [
         "Snapshots",
