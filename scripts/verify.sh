@@ -36,3 +36,14 @@ xcodebuild test \
 
 echo "📊 Code coverage"
 xcrun xccov view --report --only-targets .build/TestResults.xcresult
+
+# Coverage of the Stilleben library as a shields.io endpoint, published to the metrics branch by CI
+mkdir -p .build/metrics
+xcrun xccov view --report --json .build/TestResults.xcresult | python3 -c '
+import json, sys
+target = next(t for t in json.load(sys.stdin)["targets"] if t["name"] == "Stilleben")
+percent = target["lineCoverage"] * 100
+color = next(c for limit, c in [(90, "brightgreen"), (80, "green"), (70, "yellowgreen"), (60, "yellow"), (0, "red")] if percent >= limit)
+print(json.dumps({"schemaVersion": 1, "label": "coverage", "message": f"{percent:.1f}%", "color": color}))
+' > .build/metrics/coverage.json
+cat .build/metrics/coverage.json
