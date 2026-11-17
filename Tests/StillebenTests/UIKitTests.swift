@@ -18,7 +18,7 @@ final class UIKitTests: XCTestCase {
       .dynamicTypeSizes(.large, .accessibility5)
       .match { @MainActor () -> UIView in
         let label = TestLabel()
-        label.text = String(localized: LocalizedStringResource("Hello World!", locale: SnapshotEnvironment.locale, bundle: .atURL(Bundle.module.bundleURL)))
+        label.text = NSLocalizedString("Hello World!", bundle: .module, comment: "")
         label.backgroundColor = .systemBackground
         return label
       }

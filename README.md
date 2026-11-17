@@ -49,12 +49,10 @@ Liquid Glass in hosted tests if the glass itself matters.
 
 ## Localization
 
-`UIMatcher().locales(...)` takes a snapshot per locale. SwiftUI views get it through the `\.locale` environment,
-so `Text` is localized automatically. UIKit code can read `SnapshotEnvironment.locale` while the snapshot is produced:
-
-```swift
-label.text = String(localized: LocalizedStringResource("Hello", locale: SnapshotEnvironment.locale, bundle: .main))
-```
+`UIMatcher().locales(...)` takes a snapshot per locale, and strings are localized however the views look them up:
+SwiftUI `Text` through the `\.locale` environment, and `NSLocalizedString`, `String(localized:)`,
+`LocalizedStringResource` and `Bundle.localizedString` through `Bundle`, for String Catalogs and `.strings` files in
+the app or in Swift packages alike. Number and date formatting that uses `Locale.current` is not changed.
 
 ## Simulator
 

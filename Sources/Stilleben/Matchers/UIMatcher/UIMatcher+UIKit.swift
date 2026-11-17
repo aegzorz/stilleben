@@ -25,33 +25,33 @@ extension UIMatcher {
 
     for device in devices {
       for (colorScheme, locale, dynamicTypeSize) in permutations {
-        await SnapshotEnvironment.$locale.withValue(locale) {
-          await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
-            let viewController = try await TraitsViewController(content: produce())
-            viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
-            viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
+        Bundle.overrideLocale = locale
+        await Snapshot(file: file, function: function, line: line) { @MainActor () -> UIViewController in
+          let viewController = try await TraitsViewController(content: produce())
+          viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
+          viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
 
-            return viewController
-          }
-          .device(device)
-          .recordingNameComponent(add: device.name)
-          .recordingNameComponent(add: colorScheme)
-          .recordingNameComponent(add: dynamicTypeSize)
-          .recordingNameComponent(add: locale)
-          .ignoresSafeArea(ignore: sizing.ignoresSafeArea)
-          .diffUIKit(
-            file: file,
-            line: line,
-            sizing: sizing,
-            rendering: rendering,
-            diffing: diffing,
-            recording: recording,
-            record: record,
-          )
-          .match(file: file, line: line)
+          return viewController
         }
+        .device(device)
+        .recordingNameComponent(add: device.name)
+        .recordingNameComponent(add: colorScheme)
+        .recordingNameComponent(add: dynamicTypeSize)
+        .recordingNameComponent(add: locale)
+        .ignoresSafeArea(ignore: sizing.ignoresSafeArea)
+        .diffUIKit(
+          file: file,
+          line: line,
+          sizing: sizing,
+          rendering: rendering,
+          diffing: diffing,
+          recording: recording,
+          record: record,
+        )
+        .match(file: file, line: line)
       }
     }
+    Bundle.overrideLocale = nil
   }
 
   /// Matches a UIView to the reference image stored by the ``RecordingStrategy``
