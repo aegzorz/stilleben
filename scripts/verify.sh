@@ -33,3 +33,6 @@ xcodebuild test \
   -destination "$DESTINATION" \
   -resultBundlePath .build/TestResults.xcresult \
   | mise exec -- xcbeautify
+
+echo "📊 Code coverage"
+xcrun xccov view --report --only-targets .build/TestResults.xcresult
