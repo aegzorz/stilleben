@@ -66,11 +66,19 @@ final class LocalizedStringsViewController: UIViewController {
     lookups = LocalizedLookups(bundle: bundle).strings()
 
     let stack = UIStackView(arrangedSubviews: lookups.map { lookup in
-      let label = UILabel()
-      label.numberOfLines = 0
-      label.font = .preferredFont(forTextStyle: .body)
-      label.text = "\(lookup.api)\n\(lookup.text)"
-      return label
+      let api = UILabel()
+      api.font = .preferredFont(forTextStyle: .caption1)
+      api.textColor = .secondaryLabel
+      api.text = lookup.api
+
+      let text = UILabel()
+      text.numberOfLines = 0
+      text.font = .preferredFont(forTextStyle: .body)
+      text.text = lookup.text
+
+      let row = UIStackView(arrangedSubviews: [api, text])
+      row.axis = .vertical
+      return row
     })
     stack.axis = .vertical
     stack.spacing = 8
