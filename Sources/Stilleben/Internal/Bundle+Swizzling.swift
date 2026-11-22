@@ -7,26 +7,28 @@ import Foundation
 ///   `LocalizedStringResource`. It's looked up by name and skipped when it doesn't exist.
 ///
 /// SwiftUI `Text` doesn't use either, it follows the `\.locale` environment that the matchers set.
-/// The swizzled methods run on whatever thread asks for a string, so their state is guarded by a lock.
+///
+/// The locale is a task-local value, so it only applies to lookups made by the snapshot that set it, and to tasks it
+/// starts. Tests running in parallel each see their own locale, and lookups outside a snapshot aren't changed.
 nonisolated extension Bundle {
-  private static let localeOverride = LockedValue<(locale: Locale?, swizzled: Bool)>((nil, false))
+  /// The locale whose language strings are looked up in, while a snapshot is taken
+  @TaskLocal static var overrideLocale: Locale?
+
+  /// Exchanges the lookup methods the first time it's read
+  private static let swizzle: Void = {
+    exchange(#selector(localizedString(forKey:value:table:)), with: #selector(customLocalizedString(forKey:value:table:)))
+    exchange(localizationsSelector, with: #selector(customLocalizedString(forKey:value:table:localizations:)))
+  }()
+
   private static let localizationsSelector = NSSelectorFromString("_localizedStringForKey:value:table:localizations:")
 
-  static var overrideLocale: Locale? {
-    get {
-      localeOverride.value.locale
-    }
-    set {
-      let needsSwizzling = localeOverride.withValue { state in
-        state.locale = newValue
-        defer { state.swizzled = true }
-        return !state.swizzled
-      }
-      if needsSwizzling {
-        exchange(#selector(localizedString(forKey:value:table:)), with: #selector(customLocalizedString(forKey:value:table:)))
-        exchange(localizationsSelector, with: #selector(customLocalizedString(forKey:value:table:localizations:)))
-      }
-    }
+  /// Runs `operation` with strings looked up in the language of `locale`
+  nonisolated(nonsending) static func withOverrideLocale<Result>(
+    _ locale: Locale,
+    operation: nonisolated(nonsending) () async throws -> Result,
+  ) async rethrows -> Result {
+    swizzle
+    return try await $overrideLocale.withValue(locale, operation: operation)
   }
 
   /// Language code of the overriding locale when this bundle is localized in it

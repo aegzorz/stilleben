@@ -1,5 +1,5 @@
 import Foundation
-import XCTest
+import Testing
 
 /// Generic type that describes a `Snapshot` of a `Value`
 public struct Snapshot<Value> {
@@ -10,13 +10,13 @@ public struct Snapshot<Value> {
   /// Context of the current snapshot
   public let context: SnapshotContext
 
-  public init(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Produce) {
+  public init(function: StaticString = #function, sourceLocation: SourceLocation = #_sourceLocation, produce: @escaping Produce) {
     self.produce = produce
     // Create a context that can be used to pass values when mapping into other snapshots
     context = SnapshotContext()
 
     // Store the callsite in the context
-    let callsite = Callsite(file: file, function: function, line: line)
+    let callsite = Callsite(function: function, sourceLocation: sourceLocation)
     context.set(value: callsite, for: .callsite)
 
     let testName = callsite.functionName

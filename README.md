@@ -29,7 +29,8 @@ which stays the same when a preset moves to a newer model.
 
 - iOS 26 and Swift 6.4 (Xcode 27).
 - UI snapshots work in tests hosted in an app and in tests of Swift packages; see the tradeoffs below.
-- Stilleben runs on the main actor: mark snapshot test classes `@MainActor`.
+- Tests use Swift Testing: failures are recorded as issues, with the actual, expected and diff snapshots attached.
+- Stilleben runs on the main actor: mark snapshot suites `@MainActor`.
 
 ## Hosted and unhosted tests
 
@@ -66,18 +67,19 @@ recorded, so references are never overwritten with a different rendering.
 
 Example of snapshot testing a SwiftUI view:
 ```swift
-import XCTest
 import Stilleben
+import Testing
 
 @MainActor
-final class SomeViewTests: XCTestCase {
+struct SomeViewTests {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
         .devices(.iPhone18Pro)
         .sizing(.dynamicHeight)
         .dynamicTypeSizes(.large)
 
-    func testSomeView() async throws {
+    @Test
+    func someView() async throws {
         await matcher
             .colorSchemes(.light)
             .match {
@@ -97,24 +99,26 @@ final class SomeViewTests: XCTestCase {
 It also supports snapshot testing UIKit view controllers or views:
 
 ```swift
-import XCTest
 import Stilleben
+import Testing
 
 @MainActor
-final class SomeViewControllerTests: XCTestCase {
+struct SomeViewControllerTests {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
         .devices(.iPhone18Pro, .iPadPro13)
         .sizing(.device)
 
-    func testSomeViewController() async throws {
+    @Test
+    func someViewController() async throws {
         await matcher
             .match { () -> UIViewController in
                 SomeViewController()
             }
     }
 
-    func testSomeView() async throws {
+    @Test
+    func someView() async throws {
         await matcher
             .sizing(.intrinsic)
             .match { () -> UIView in
@@ -127,14 +131,15 @@ final class SomeViewControllerTests: XCTestCase {
 Support for snapshotting reflections of your models:
 
 ```swift
-import XCTest
 import Stilleben
+import Testing
 
 @MainActor
-final class ReflectionTests: XCTestCase {
+struct ReflectionTests {
     let matcher = ReflectionMatcher()
 
-    func testSimpleModel() async {
+    @Test
+    func simpleModel() async {
         struct Model {
             let text = "Hello World!"
         }

@@ -1,12 +1,14 @@
 import Foundation
 import Stilleben
-import XCTest
+import Testing
 
 @MainActor
-final class ReflectionTests: XCTestCase {
+@Suite
+struct ReflectionTests {
   let matcher = ReflectionMatcher()
 
-  func testSimpleModel() async {
+  @Test
+  func simpleModel() async {
     struct Model {
       let text = "Hello World!"
     }
@@ -16,7 +18,8 @@ final class ReflectionTests: XCTestCase {
     }
   }
 
-  func testComplexModel() async {
+  @Test
+  func complexModel() async {
     struct Car<T> {
       let manufacturer: Manufacturer
       let model: String

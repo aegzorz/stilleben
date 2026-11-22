@@ -1,18 +1,20 @@
 import Stilleben
 import SwiftUI
-import XCTest
+import Testing
 
 /// Snapshots that render differently without a window scene (Liquid Glass bars, rounded corners of grouped lists),
 /// so they run hosted in the TestHost app
 @MainActor
-final class HostedSwiftUITests: XCTestCase {
+@Suite
+struct HostedSwiftUITests {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  func testListOnFoldable() async throws {
+  @Test
+  func listOnFoldable() async throws {
     await matcher
       .devices(.iPhoneDuo, .iPhoneDuoFolded)
       .sizing(.device)
@@ -28,7 +30,8 @@ final class HostedSwiftUITests: XCTestCase {
       }
   }
 
-  func testLongScrollviewInNavigationView() async throws {
+  @Test
+  func longScrollviewInNavigationView() async throws {
     await matcher.match {
       NavigationView {
         ScrollView {
@@ -39,7 +42,8 @@ final class HostedSwiftUITests: XCTestCase {
     }
   }
 
-  func testLongScrollviewInTabView() async throws {
+  @Test
+  func longScrollviewInTabView() async throws {
     await matcher.match {
       TabView {
         NavigationView {

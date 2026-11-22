@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import XCTest
 
 public extension Snapshot where Value == Data {
   /// Error used when there is no reference to compare to

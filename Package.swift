@@ -26,8 +26,8 @@ let package = Package(
         .treatAllWarnings(as: .error),
       ],
       linkerSettings: [
-        // Stilleben reports failures through XCTest, so it must be linked with the test frameworks
-        .linkedFramework("XCTest"),
+        // Stilleben reports failures through Swift Testing, so it must be linked with the test frameworks
+        .linkedFramework("Testing"),
       ],
     ),
     // Localized modules for the localization tests, set up like the feature modules of an app

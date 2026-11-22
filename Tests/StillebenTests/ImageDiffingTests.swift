@@ -1,52 +1,58 @@
+import Testing
 import UIKit
-import XCTest
 @testable import Stilleben
 
 /// Image diffing strategies report identical images as the same, and attach the images when they differ
 @MainActor
-final class ImageDiffingTests: XCTestCase {
+@Suite
+struct ImageDiffingTests {
   private let red = image(.red)
   private let blue = image(.blue)
 
-  func testSameImageMatchesIdenticalImages() async throws {
+  @Test
+  func sameImageMatchesIdenticalImages() async throws {
     let diff = try await ImageDiffingStrategy.sameImage.diff(actual: red, expected: image(.red))
 
-    XCTAssertEqual(attachmentNames(diff), [])
+    #expect(attachmentNames(diff) == [])
   }
 
-  func testSameImageReportsDifferentImages() async throws {
+  @Test
+  func sameImageReportsDifferentImages() async throws {
     let diff = try await ImageDiffingStrategy.sameImage.diff(actual: red, expected: blue)
 
-    XCTAssertEqual(attachmentNames(diff), ["Actual", "Expected"])
+    #expect(attachmentNames(diff) == ["Actual", "Expected"])
   }
 
-  func testLabDeltaMatchesIdenticalImages() async throws {
+  @Test
+  func labDeltaMatchesIdenticalImages() async throws {
     let diff = try await ImageDiffingStrategy.labDelta.diff(actual: red, expected: image(.red))
 
-    XCTAssertEqual(attachmentNames(diff), [])
+    #expect(attachmentNames(diff) == [])
   }
 
-  func testLabDeltaReportsDifferentImages() async throws {
+  @Test
+  func labDeltaReportsDifferentImages() async throws {
     let diff = try await ImageDiffingStrategy.labDelta.diff(actual: red, expected: blue)
 
-    XCTAssertEqual(attachmentNames(diff), ["Actual", "Expected", "LabDelta"])
+    #expect(attachmentNames(diff) == ["Actual", "Expected", "LabDelta"])
     if case let .different(description, _) = diff {
-      XCTAssertTrue(description.contains("delta value"), description)
+      #expect(description.contains("delta value"), "\(description)")
     }
   }
 
-  func testLabDeltaIgnoresDifferencesBelowItsThreshold() async throws {
+  @Test
+  func labDeltaIgnoresDifferencesBelowItsThreshold() async throws {
     let almostRed = image(UIColor(red: 0.99, green: 0, blue: 0, alpha: 1))
     let diff = try await ImageDiffingStrategy.labDelta(threshold: 10).diff(actual: red, expected: almostRed)
 
-    XCTAssertEqual(attachmentNames(diff), [])
+    #expect(attachmentNames(diff) == [])
   }
 
   /// Names of the attachments of a difference, or none when the images are the same
   private func attachmentNames(_ diff: Diff) -> [String] {
     switch diff {
     case .same: []
-    case let .different(_, attachments): attachments.compactMap(\.name)
+    case let .different(_, attachments): attachments.map(\.name)
     }
   }
 }

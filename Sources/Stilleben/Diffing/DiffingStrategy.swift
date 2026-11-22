@@ -1,5 +1,4 @@
 import Foundation
-import XCTest
 
 /// Defines how values of the associated type `Value` should be diffed.
 public protocol DiffingStrategy: Sendable {
@@ -18,8 +17,8 @@ public enum Diff {
   case same
   /// Represents values that are considered to be different.
   /// - Parameter description: Description of difference
-  /// - Parameter attachments: Array of `XCTAttachment` which can be seen in the test report.
-  case different(description: String, attachments: [XCTAttachment])
+  /// - Parameter attachments: Values attached to the test report, such as the actual and expected snapshots.
+  case different(description: String, attachments: [DiffAttachment])
 }
 
 public extension Snapshot {

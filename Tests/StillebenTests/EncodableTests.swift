@@ -1,12 +1,14 @@
 import Foundation
 import Stilleben
-import XCTest
+import Testing
 
 @MainActor
-final class EncodableTests: XCTestCase {
+@Suite
+struct EncodableTests {
   let matcher = EncodableMatcher()
 
-  func testSimpleEncodable() async {
+  @Test
+  func simpleEncodable() async {
     struct Model: Encodable {
       let text = "Hello World!"
     }
@@ -16,7 +18,8 @@ final class EncodableTests: XCTestCase {
     }
   }
 
-  func testNonTrivialEncodable() async {
+  @Test
+  func nonTrivialEncodable() async {
     let encoder = JSONEncoder()
     encoder.keyEncodingStrategy = .convertToSnakeCase
     encoder.dateEncodingStrategy = .iso8601

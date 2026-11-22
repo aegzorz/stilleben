@@ -1,46 +1,55 @@
 import SwiftUI
-import XCTest
+import Testing
 @testable import Stilleben
 
 @MainActor
-final class SimulatorRequirementTests: XCTestCase {
+@Suite
+struct SimulatorRequirementTests {
   private let iPhone18Pro = ["SIMULATOR_MODEL_IDENTIFIER": "iPhone19,2"]
   private let iOS27_2 = OperatingSystemVersion(majorVersion: 27, minorVersion: 2, patchVersion: 0)
 
-  func testMatchingSimulator() {
+  @Test
+  func matchingSimulator() throws {
     let requirement = SimulatorRequirement(modelIdentifier: "iPhone19,2", osVersion: "27.2")
 
-    XCTAssertNoThrow(try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2))
+    try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2)
   }
 
-  func testVersionIsMatchedAsPrefix() {
+  @Test
+  func versionIsMatchedAsPrefix() throws {
     let patched = OperatingSystemVersion(majorVersion: 27, minorVersion: 2, patchVersion: 1)
     let later = OperatingSystemVersion(majorVersion: 27, minorVersion: 20, patchVersion: 0)
 
-    XCTAssertNoThrow(try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: patched))
-    XCTAssertThrowsError(try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: later))
-  }
-
-  func testWrongModel() {
-    let requirement = SimulatorRequirement(modelIdentifier: "iPhone19,4")
-
-    XCTAssertThrowsError(try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2)) { error in
-      XCTAssertEqual(error as? ConfigurationError, .wrongSimulator(expected: "iPhone19,4", actual: "iPhone19,2 on iOS 27.2.0"))
+    try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: patched)
+    #expect(throws: ConfigurationError.self) {
+      try SimulatorRequirement(osVersion: "27.2").validate(environment: iPhone18Pro, operatingSystemVersion: later)
     }
   }
 
-  func testWrongSimulatorDoesNotRecord() async {
+  @Test
+  func wrongModel() {
+    let requirement = SimulatorRequirement(modelIdentifier: "iPhone19,4")
+
+    #expect(throws: ConfigurationError.wrongSimulator(expected: "iPhone19,4", actual: "iPhone19,2 on iOS 27.2.0")) {
+      try requirement.validate(environment: iPhone18Pro, operatingSystemVersion: iOS27_2)
+    }
+  }
+
+  @Test
+  func wrongSimulatorDoesNotRecord() async {
     let recording = CountingRecordingStrategy()
-    XCTExpectFailure { $0.compactDescription.contains("Nothing was compared or recorded") }
+    await withKnownIssue {
+      await UIMatcher()
+        .assertSimulator(osVersion: "1.0")
+        .recording(recording)
+        .match {
+          Text("Never rendered")
+        }
+    } matching: { issue in
+      issue.mentions("Nothing was compared or recorded")
+    }
 
-    await UIMatcher()
-      .assertSimulator(osVersion: "1.0")
-      .recording(recording)
-      .match {
-        Text("Never rendered")
-      }
-
-    XCTAssertEqual(recording.reads + recording.writes, 0)
+    #expect(recording.reads + recording.writes == 0)
   }
 }
 

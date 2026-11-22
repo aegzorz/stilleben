@@ -13,8 +13,6 @@ public extension Snapshot where Value: View {
 
   /// Convenience function for diffing `SwiftUI` views.
   func diffSwiftUI(
-    file: StaticString = #filePath,
-    line: UInt = #line,
     sizing: SizingStrategy = .device,
     rendering: RenderingStrategy = .default,
     diffing: ImageDiffingStrategy = .labDelta,

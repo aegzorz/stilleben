@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import XCTest
 
 extension DiffingStrategy where Self == TextDiffingStrategy {
   public static var text: TextDiffingStrategy {
@@ -17,8 +16,8 @@ public struct TextDiffingStrategy: DiffingStrategy {
       return .different(
         description: "Snapshots did not match\nExpected: \(expected)\nActual: \(actual)",
         attachments: [
-          XCTAttachment(string: actual).named("Actual"),
-          XCTAttachment(string: expected).named("Expected"),
+          .text(actual, named: "Actual"),
+          .text(expected, named: "Expected"),
         ],
       )
     }

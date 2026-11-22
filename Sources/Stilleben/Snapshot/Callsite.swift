@@ -1,14 +1,16 @@
 import Foundation
+import Testing
 
 /// Struct used to store the callsite of the snapshot from a test.
 public struct Callsite {
   public let fileUrl: URL
   public let functionName: String
-  public let line: UInt
+  /// Where failures are reported in the test
+  public let sourceLocation: SourceLocation
 
-  public init(file: StaticString, function: StaticString, line: UInt) {
-    fileUrl = URL(fileURLWithPath: "\(file)")
+  public init(function: StaticString, sourceLocation: SourceLocation) {
+    fileUrl = URL(fileURLWithPath: sourceLocation.filePath)
     functionName = "\(function)"
-    self.line = line
+    self.sourceLocation = sourceLocation
   }
 }

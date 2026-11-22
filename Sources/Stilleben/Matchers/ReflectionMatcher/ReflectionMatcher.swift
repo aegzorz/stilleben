@@ -1,4 +1,5 @@
 import Foundation
+import Testing
 
 /// Snapshot matcher for reflected values
 public struct ReflectionMatcher: Sendable {
@@ -14,20 +15,19 @@ public struct ReflectionMatcher: Sendable {
 
 extension ReflectionMatcher {
   public func match<Value>(
-    file: StaticString = #filePath,
     function: StaticString = #function,
-    line: UInt = #line,
+    sourceLocation: SourceLocation = #_sourceLocation,
     produce: @escaping Snapshot<Value>.Produce,
   )
     async {
-    await Snapshot(file: file, function: function, line: line) {
+    await Snapshot(function: function, sourceLocation: sourceLocation) {
       try await produce()
     }
     .reflect()
     .record(using: recording)
     .diff(using: diffing)
     .recordMode(record)
-    .match(file: file, line: line)
+    .match(sourceLocation: sourceLocation)
   }
 }
 

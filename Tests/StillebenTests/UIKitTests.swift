@@ -1,16 +1,18 @@
 import SwiftUI
-import XCTest
+import Testing
 @testable import Stilleben
 
 @MainActor
-final class UIKitTests: XCTestCase {
+@Suite
+struct UIKitTests {
   private let matcher = UIMatcher()
     .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
     .sizing(.dynamicHeight)
     .colorSchemes(.light)
     .dynamicTypeSizes(.large)
 
-  func testSimpleLabel() async throws {
+  @Test
+  func simpleLabel() async throws {
     await matcher
       .sizing(.intrinsic)
       .locales(.english, .swedish)
@@ -24,7 +26,8 @@ final class UIKitTests: XCTestCase {
       }
   }
 
-  func testNavigation() async throws {
+  @Test
+  func navigation() async throws {
     await matcher
       .sizing(.device)
       .match { @MainActor () -> UIViewController in
@@ -39,21 +42,24 @@ final class UIKitTests: XCTestCase {
       }
   }
 
-  func testShortScrollview() async throws {
+  @Test
+  func shortScrollview() async throws {
     await matcher
       .match { @MainActor () -> UIViewController in
         ItemListViewController(count: 3)
       }
   }
 
-  func testLongScrollview() async throws {
+  @Test
+  func longScrollview() async throws {
     await matcher
       .match { @MainActor () -> UIViewController in
         ItemListViewController(count: 12)
       }
   }
 
-  func testLongScrollviewInNavigationController() async throws {
+  @Test
+  func longScrollviewInNavigationController() async throws {
     await matcher.match { @MainActor () -> UIViewController in
       UINavigationController(
         rootViewController: ItemListViewController(count: 12),
