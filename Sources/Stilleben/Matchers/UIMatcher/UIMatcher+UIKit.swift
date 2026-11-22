@@ -26,31 +26,31 @@ extension UIMatcher {
 
     for device in devices {
       for (colorScheme, locale, dynamicTypeSize) in permutations {
-        Bundle.overrideLocale = locale
-        await Snapshot(function: function, sourceLocation: sourceLocation) { @MainActor () -> UIViewController in
-          let viewController = try await TraitsViewController(content: produce())
-          viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
-          viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
+        await Bundle.withOverrideLocale(locale) {
+          await Snapshot(function: function, sourceLocation: sourceLocation) { @MainActor () -> UIViewController in
+            let viewController = try await TraitsViewController(content: produce())
+            viewController.interfaceStyle = UIUserInterfaceStyle(colorScheme)
+            viewController.contentSizeCategory = UIContentSizeCategory(dynamicTypeSize)
 
-          return viewController
+            return viewController
+          }
+          .device(device)
+          .recordingNameComponent(add: device.name)
+          .recordingNameComponent(add: colorScheme)
+          .recordingNameComponent(add: dynamicTypeSize)
+          .recordingNameComponent(add: locale)
+          .ignoresSafeArea(ignore: sizing.ignoresSafeArea)
+          .diffUIKit(
+            sizing: sizing,
+            rendering: rendering,
+            diffing: diffing,
+            recording: recording,
+            record: record,
+          )
+          .match(sourceLocation: sourceLocation)
         }
-        .device(device)
-        .recordingNameComponent(add: device.name)
-        .recordingNameComponent(add: colorScheme)
-        .recordingNameComponent(add: dynamicTypeSize)
-        .recordingNameComponent(add: locale)
-        .ignoresSafeArea(ignore: sizing.ignoresSafeArea)
-        .diffUIKit(
-          sizing: sizing,
-          rendering: rendering,
-          diffing: diffing,
-          recording: recording,
-          record: record,
-        )
-        .match(sourceLocation: sourceLocation)
       }
     }
-    Bundle.overrideLocale = nil
   }
 
   /// Matches a UIView to the reference image stored by the ``RecordingStrategy``

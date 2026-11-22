@@ -1,2 +1,2 @@
-  ▿ StillebenTests.SerialTests.ReflectionTests.?.?.Model
+  ▿ StillebenTests.ReflectionTests.?.?.Model
     - text: "Hello World!"

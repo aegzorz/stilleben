@@ -31,8 +31,6 @@ which stays the same when a preset moves to a newer model.
 - UI snapshots work in tests hosted in an app and in tests of Swift packages; see the tradeoffs below.
 - Tests use Swift Testing: failures are recorded as issues, with the actual, expected and diff snapshots attached.
 - Stilleben runs on the main actor: mark snapshot suites `@MainActor`.
-- Snapshots share the window they render in and the language of localized strings, so run them one at a time: mark
-  suites `.serialized`, or nest them in one serialized suite.
 
 ## Hosted and unhosted tests
 
@@ -73,7 +71,6 @@ import Stilleben
 import Testing
 
 @MainActor
-@Suite(.serialized)
 struct SomeViewTests {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
@@ -106,7 +103,6 @@ import Stilleben
 import Testing
 
 @MainActor
-@Suite(.serialized)
 struct SomeViewControllerTests {
     private let matcher = UIMatcher()
         .assertSimulator(modelIdentifier: "iPhone19,2", osVersion: "27.2")
