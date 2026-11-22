@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import Testing
 
 /// Snapshot matcher for Encodable snapshots
 public struct EncodableMatcher: Sendable {
@@ -16,15 +17,15 @@ public struct EncodableMatcher: Sendable {
 }
 
 extension EncodableMatcher {
-  public func match<Value: Encodable>(file: StaticString = #filePath, function: StaticString = #function, line: UInt = #line, produce: @escaping Snapshot<Value>.Produce) async {
-    await Snapshot(file: file, function: function, line: line) {
+  public func match<Value: Encodable>(function: StaticString = #function, sourceLocation: SourceLocation = #_sourceLocation, produce: @escaping Snapshot<Value>.Produce) async {
+    await Snapshot(function: function, sourceLocation: sourceLocation) {
       try await produce()
     }
     .encodeJson(encoder: encoder)
     .record(using: recording)
     .diff(using: diffing)
     .recordMode(record)
-    .match(file: file, line: line)
+    .match(sourceLocation: sourceLocation)
   }
 }
 

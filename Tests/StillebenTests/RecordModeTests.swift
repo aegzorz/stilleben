@@ -1,61 +1,81 @@
+import Foundation
 import Stilleben
-import XCTest
+import Testing
 
-@MainActor
-final class RecordModeTests: XCTestCase {
-  func testFailedReRecordsMismatch() async {
-    let storage = InMemoryRecordingStrategy(reference: Data("old".utf8))
-    XCTExpectFailure { $0.compactDescription.contains("re-recorded") }
+extension SerialTests {
+  @MainActor
+  @Suite
+  struct RecordModeTests {
+    @Test
+    func failedReRecordsMismatch() async {
+      let storage = InMemoryRecordingStrategy(reference: Data("old".utf8))
 
-    await snapshot("new", storage: storage, mode: .failed)
+      await withKnownIssue {
+        await snapshot("new", storage: storage, mode: .failed)
+      } matching: { issue in
+        issue.mentions("re-recorded")
+      }
 
-    XCTAssertEqual(storage.reference, Data("new".utf8))
-  }
-
-  func testMissingKeepsMismatchingReference() async {
-    let storage = InMemoryRecordingStrategy(reference: Data("old".utf8))
-    XCTExpectFailure { $0.compactDescription.contains("did not match") }
-
-    await snapshot("new", storage: storage, mode: .missing)
-
-    XCTAssertEqual(storage.reference, Data("old".utf8))
-  }
-
-  func testNeverDoesNotRecordMissingReference() async {
-    let storage = InMemoryRecordingStrategy(reference: nil)
-    XCTExpectFailure { $0.compactDescription.contains("doesn't allow recording") }
-
-    await snapshot("new", storage: storage, mode: .never)
-
-    XCTAssertNil(storage.reference)
-  }
-
-  func testAllRecordsMatchingSnapshot() async {
-    let storage = InMemoryRecordingStrategy(reference: Data("same".utf8))
-    storage.writes = 0
-    XCTExpectFailure { $0.compactDescription.contains("record mode is .all") }
-
-    await snapshot("same", storage: storage, mode: .all)
-
-    XCTAssertEqual(storage.writes, 1)
-  }
-
-  func testMatchingSnapshotDoesNotRecord() async {
-    let storage = InMemoryRecordingStrategy(reference: Data("same".utf8))
-
-    await snapshot("same", storage: storage, mode: .failed)
-
-    XCTAssertEqual(storage.writes, 0)
-  }
-
-  private func snapshot(_ text: String, storage: InMemoryRecordingStrategy, mode: RecordMode) async {
-    await Snapshot {
-      Data(text.utf8)
+      #expect(storage.reference == Data("new".utf8))
     }
-    .record(using: storage)
-    .diff(using: .text)
-    .recordMode(mode)
-    .match()
+
+    @Test
+    func missingKeepsMismatchingReference() async {
+      let storage = InMemoryRecordingStrategy(reference: Data("old".utf8))
+
+      await withKnownIssue {
+        await snapshot("new", storage: storage, mode: .missing)
+      } matching: { issue in
+        issue.mentions("did not match")
+      }
+
+      #expect(storage.reference == Data("old".utf8))
+    }
+
+    @Test
+    func neverDoesNotRecordMissingReference() async {
+      let storage = InMemoryRecordingStrategy(reference: nil)
+
+      await withKnownIssue {
+        await snapshot("new", storage: storage, mode: .never)
+      } matching: { issue in
+        issue.mentions("doesn't allow recording")
+      }
+
+      #expect(storage.reference == nil)
+    }
+
+    @Test
+    func allRecordsMatchingSnapshot() async {
+      let storage = InMemoryRecordingStrategy(reference: Data("same".utf8))
+
+      await withKnownIssue {
+        await snapshot("same", storage: storage, mode: .all)
+      } matching: { issue in
+        issue.mentions("record mode is .all")
+      }
+
+      #expect(storage.writes == 1)
+    }
+
+    @Test
+    func matchingSnapshotDoesNotRecord() async {
+      let storage = InMemoryRecordingStrategy(reference: Data("same".utf8))
+
+      await snapshot("same", storage: storage, mode: .failed)
+
+      #expect(storage.writes == 0)
+    }
+
+    private func snapshot(_ text: String, storage: InMemoryRecordingStrategy, mode: RecordMode) async {
+      await Snapshot {
+        Data(text.utf8)
+      }
+      .record(using: storage)
+      .diff(using: .text)
+      .recordMode(mode)
+      .match()
+    }
   }
 }
 

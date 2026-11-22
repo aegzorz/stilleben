@@ -1,5 +1,4 @@
 import UIKit
-import XCTest
 
 extension DiffingStrategy where Self == ImageDiffingStrategy {
   /// Diffing strategy for comparing that the two images have the same PNG representation, i.e. are exactly the same.
@@ -11,8 +10,8 @@ extension DiffingStrategy where Self == ImageDiffingStrategy {
         return .different(
           description: "Snapshots did not match",
           attachments: [
-            XCTAttachment(image: actual).named("Actual"),
-            XCTAttachment(image: expected).named("Expected"),
+            .image(actual, named: "Actual"),
+            .image(expected, named: "Expected"),
           ],
         )
       }

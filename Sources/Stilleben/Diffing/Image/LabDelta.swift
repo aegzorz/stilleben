@@ -1,6 +1,5 @@
 import CoreImage.CIFilterBuiltins
 import UIKit
-import XCTest
 
 extension DiffingStrategy where Self == ImageDiffingStrategy {
   /// Image diffiing strategy that creates a delta image using `CILabDeltaE` filter from `CoreImage`.
@@ -26,9 +25,9 @@ extension DiffingStrategy where Self == ImageDiffingStrategy {
         return .different(
           description: "Snapshots did not match, delta value: \(diff)",
           attachments: [
-            XCTAttachment(image: actual).named("Actual"),
-            XCTAttachment(image: expected).named("Expected"),
-            XCTAttachment(image: UIImage(ciImage: deltaImage)).named("LabDelta"),
+            .image(actual, named: "Actual"),
+            .image(expected, named: "Expected"),
+            .image(deltaImage, named: "LabDelta"),
           ],
         )
       } else {
